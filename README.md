@@ -92,7 +92,7 @@ Options for controlling the SIP compilation process.
                                     Level 2 - Level 1 and type constraints being unified.
                                     Level 3 - Level 2 and union-find solving steps.
 ```
-By default it will accept a `.sip` file, parse it, perform a series of semantic analyses to determine if it is a legal SIP program, generate LLVM bitcode, and emit a `.bc` file which is a binary encoding of the bitcodes.  You can see a human readable version of the bitcodes by running `llvm-dis` on the `.bc` file.
+By default it will accept a `.tip` file, parse it, perform a series of semantic analyses to determine if it is a legal SIP program, generate LLVM bitcode, and emit a `.bc` file which is a binary encoding of the bitcodes.  You can see a human readable version of the bitcodes by running `llvm-dis` on the `.bc` file.
 
 To produce an executable version of a SIP program, the `.bc` file must be linked with the bitcode for [sip_rtlib.c](rtlib/sip_rtlib.c).  Running the `build.sh` script in the [rtlib](rtlib) directory once will create that library bitcode file.
 
@@ -101,12 +101,12 @@ The link step is performed using `clang` which will include additional libraries
 For convenience, we provide a script [build.sh](bin/build.sh) that will compile the sip program and perform the link step.  The script can be used within this git repository, or if you define the shell variable `SIPDIR` to the path to the root of the repository you can run it from any location as follows:
 ```
 $ cd
-$ more hello.sip
+$ more hello.tip
 main() { return 42; }
-$ $HOME/sipc/bin/build.sh hello.sip
+$ $HOME/sipc/bin/build.sh hello.tip
 $ ./hello
 Program output: 42
-$ $HOME/sipc/bin/build.sh -pp -pt hello.sip
+$ $HOME/sipc/bin/build.sh -pp -pt hello.tip
 main() 
 {
   return 42;
@@ -251,9 +251,9 @@ access(r) { return r.f; }
 The record expression default initializes `f` to `0` and this is the value that is accessed and returned from the call to `access` and then from `main`.  
 
 Second, SIP allows memory allocation, yet its runtime system does not include a garbage collector.  
-The SIP program [recordLeak.sip](test/system/leak/recordLeak.sip), shown below, leaks memory because the `alloc` constructor causes the record to be allocated on the heap:
+The SIP program [recordLeak.tip](test/system/leak/recordLeak.tip), shown below, leaks memory because the `alloc` constructor causes the record to be allocated on the heap:
 ```
-// recordLeak.sip
+// recordLeak.tip
 foo(x,y,z){
     var rec;
     rec = alloc {l: x, m: y, n: z};
@@ -277,12 +277,12 @@ main(){
 ```
 This is a valid sip program which can be compiled into an executable using and observe it's memory usage using:
 ```
-/path/to/sipc/bin/build.sh --do test/system/leak/recordLeak.sip
+/path/to/sipc/bin/build.sh --do test/system/leak/recordLeak.tip
 ./recordLeak &; top
 ```
-You can then kill top using `Ctrl+C` and then kill the ./recordleak with `fg` and `Ctrl+C`. It's important that you disable the optimizer with the `--do` flag. Otherwise, the optimizer would be smart enough to simply return the `y` parameter's value. If we remove the alloc from `foo`, as we do in [recordNoLeak.sip](test/system/leak/recordNoLeak.sip), then the record is allocated on the call stack and it is reclained when the call to `foo` returns:
+You can then kill top using `Ctrl+C` and then kill the ./recordleak with `fg` and `Ctrl+C`. It's important that you disable the optimizer with the `--do` flag. Otherwise, the optimizer would be smart enough to simply return the `y` parameter's value. If we remove the alloc from `foo`, as we do in [recordNoLeak.tip](test/system/leak/recordNoLeak.tip), then the record is allocated on the call stack and it is reclained when the call to `foo` returns:
 ```
-// recordNoLeak.sip
+// recordNoLeak.tip
 foo(x,y,z){
     var rec;
     rec = {l: x, m: y, n: z};
