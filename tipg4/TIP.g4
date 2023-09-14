@@ -43,10 +43,15 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | '&' expr					#refExpr
      | expr op=(MUL | DIV) expr 		#multiplicativeExpr
      | expr op=(ADD | SUB) expr 		#additiveExpr
-     | expr op=GT expr 				#relationalExpr
+     | expr op=(MOD) expr 			#remainderExpr
+     | expr op=(GT | LT | GTE | LTE) expr 				#relationalExpr
      | expr op=(EQ | NE) expr 			#equalityExpr
+     | expr op=(AND | OR) expr					#binaryExpr
+     | op=(NOT) expr 			#notExpr
+     | op=(SUB) expr 			#negationExpr
      | IDENTIFIER				#varExpr
      | NUMBER					#numExpr
+     | BOOLEAN					#boolExpr
      | KINPUT					#inputExpr
      | KALLOC expr				#allocExpr
      | KNULL					#nullExpr
@@ -66,6 +71,10 @@ statement : blockStmt
     | ifStmt
     | outputStmt
     | errorStmt
+    | forItrStmt
+    | forRngStmt
+    | incrStmt
+    | decrStmt
 ;
 
 assignStmt : expr '=' expr ';' ;
@@ -76,9 +85,19 @@ whileStmt : KWHILE '(' expr ')' statement ;
 
 ifStmt : KIF '(' expr ')' statement (KELSE statement)? ;
 
+ternaryIfStmt : expr '?' expr ':' expr ';' ;
+
 outputStmt : KOUTPUT expr ';'  ;
 
+incrStmt : expr '+' '+' ';' ;
+
+decrStmt : expr '-' '-' ';' ;
+
 errorStmt : KERROR expr ';'  ;
+
+forItrStmt : KFOR '(' expr ':' expr ')' statement ;
+
+forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
 
@@ -92,11 +111,18 @@ DIV : '/' ;
 ADD : '+' ;
 SUB : '-' ;
 GT  : '>' ;
+GTE  : '>=' ;
+LT  : '<' ;
+LTE  : '<=' ;
 EQ  : '==' ;
 NE  : '!=' ;
+NOT : 'not';
+MOD : '%';
+AND : 'and';
+OR  : 'or';
 
 NUMBER : [0-9]+ ;
-
+BOOLEAN: 'true'|'false';
 // Placing the keyword definitions first causes ANTLR4 to prioritize
 // their matching relative to IDENTIFIER (which comes later).
 KALLOC  : 'alloc' ;
@@ -106,6 +132,8 @@ KIF     : 'if' ;
 KELSE   : 'else' ;
 KVAR    : 'var' ;
 KRETURN : 'return' ;
+KFOR    : 'for' ;
+KBY     : 'by' ;
 KNULL   : 'null' ;
 KOUTPUT : 'output' ;
 KERROR  : 'error' ;
