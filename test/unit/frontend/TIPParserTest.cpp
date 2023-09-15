@@ -4,6 +4,7 @@
 #include "ParserHelper.h"
 
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
 
 TEST_CASE("TIP Parser: conditionals", "[TIP Parser]") {
   std::stringstream stream;
@@ -266,24 +267,25 @@ TEST_CASE("TIP Parser: keywords as ids", "[TIP Parser]") {
 
   REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
+/* <= is now a valid comparison token
+//TEST_CASE("TIP Lexer: illegal comparison token", "[TIP Lexer]") {
+//  std::stringstream stream;
+//  stream << R"(
+//      operators() { var x; if (x <= 0) x = x + 1; return x; }
+//    )";
+//
+//  REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+//}
 
-TEST_CASE("TIP Lexer: illegal comparison token", "[TIP Lexer]") {
-  std::stringstream stream;
-  stream << R"(
-      operators() { var x; if (x <= 0) x = x + 1; return x; }
-    )";
-
-  REQUIRE_FALSE(ParserHelper::is_parsable(stream));
-}
-
-TEST_CASE("TIP Lexer: illegal operator token", "[TIP Lexer]") {
-  std::stringstream stream;
-  stream << R"(
-      operators() { var x; if (x == 0) x = x % 2; return x; }
-    )";
-
-  REQUIRE_FALSE(ParserHelper::is_parsable(stream));
-}
+/* Modulo is now a permitted operation*/
+//TEST_CASE("TIP Lexer: illegal operator token", "[TIP Lexer]") {
+//  std::stringstream stream;
+//  stream << R"(
+//      operators() { var x; if (x == 0) x = x % 2; return x; }
+//    )";
+//
+//  REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+//}
 
 TEST_CASE("TIP Lexer: illegal identifier token", "[TIP Lexer]") {
   std::stringstream stream;
