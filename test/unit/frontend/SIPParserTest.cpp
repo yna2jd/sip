@@ -8,10 +8,11 @@
 TEST_CASE("SIP Parser: conditional >=", "[SIP Parser]") {
     std::stringstream stream;
     stream << R"(
-      conditional(){
+      conditional(in){
         var x;
         x = (3 >= 4);
         if(x>=4) x = 0;
+        return in;
       }
     )";
     REQUIRE(ParserHelper::is_parsable(stream));
@@ -20,12 +21,13 @@ TEST_CASE("SIP Parser: conditional >=", "[SIP Parser]") {
 TEST_CASE("SIP Parser: <= conditional", "[SIP Parser]") {
     std::stringstream stream;
     stream << R"(
-      conditional() {
+      conditional(in) {
         var x;
         x = 0;
         if(x <= 4){
             x = (1 <= 2);
         }
+        return in;
       }
     )";
 
@@ -35,12 +37,13 @@ TEST_CASE("SIP Parser: <= conditional", "[SIP Parser]") {
 TEST_CASE("SIP Parser: < conditional", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
-        a(){
+        conditional(in){
             var x;
             x = 8;
             if(x<10){
                 x = 0 < (1 < x);
             }
+            return in;
         }
     )";
     REQUIRE(ParserHelper::is_parsable(stream));
