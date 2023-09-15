@@ -43,12 +43,12 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | '&' expr					#refExpr
      | expr op=(MUL | DIV) expr 		#multiplicativeExpr
      | expr op=(ADD | SUB) expr 		#additiveExpr
-     | expr op=(MOD) expr 			#remainderExpr
+     | expr op= MOD expr 			#remainderExpr
      | expr op=(GT | LT | GTE | LTE) expr 				#relationalExpr
      | expr op=(EQ | NE) expr 			#equalityExpr
      | expr op=(AND | OR) expr					#binaryExpr
-     | op=(NOT) expr 			#notExpr
-     | op=(SUB) expr 			#negationExpr
+     | op=NOT expr 			#notExpr
+     | op=SUB expr 			#negationExpr
      | IDENTIFIER				#varExpr
      | NUMBER					#numExpr
      | BOOLEAN					#boolExpr
@@ -89,9 +89,9 @@ ternaryIfStmt : expr '?' expr ':' expr ';' ;
 
 outputStmt : KOUTPUT expr ';'  ;
 
-incrStmt : expr '+' '+' ';' ;
+incrStmt : expr '++' ';' ;
 
-decrStmt : expr '-' '-' ';' ;
+decrStmt : expr '--' ';' ;
 
 errorStmt : KERROR expr ';'  ;
 
