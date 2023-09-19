@@ -3,8 +3,7 @@ grammar TIP;
 
 ////////////////////// TIP Programs ////////////////////////// 
 
-program : (function)+
-;
+program : (function)+;
 
 function : nameDeclaration 
            '(' (nameDeclaration (',' nameDeclaration)*)? ')'
@@ -41,6 +40,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | '*' expr 				#deRefExpr
      | SUB NUMBER				#negNumber
      | '&' expr					#refExpr
+     | condition = expr '?' (trueExpr = expr ':' falseExpr = expr)  #ternaryExpr
      | expr op=(MUL | DIV) expr 		#multiplicativeExpr
      | expr op=(ADD | SUB) expr 		#additiveExpr
      | expr op= MOD expr 			#remainderExpr
@@ -51,17 +51,23 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | op=SUB expr 			#negationExpr
      | IDENTIFIER				#varExpr
      | NUMBER					#numExpr
-     | BOOLEAN					#boolExpr
+     | BOOL_LITERAL			    #boolLiteralExpr
      | KINPUT					#inputExpr
      | KALLOC expr				#allocExpr
      | KNULL					#nullExpr
      | recordExpr				#recordRule
      | '(' expr ')'				#parenExpr
+
 ;
+
+//ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
+
+
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
 
 fieldExpr : IDENTIFIER ':' expr ;
+
 
 ////////////////////// TIP Statements ////////////////////////// 
 
@@ -73,6 +79,7 @@ statement : blockStmt
     | errorStmt
     | forItrStmt
     | forRngStmt
+    | forRngStmtOptional
     | incrStmt
     | decrStmt
 ;
@@ -85,8 +92,6 @@ whileStmt : KWHILE '(' expr ')' statement ;
 
 ifStmt : KIF '(' expr ')' statement (KELSE statement)? ;
 
-ternaryIfStmt : expr '?' expr ':' expr ';' ;
-
 outputStmt : KOUTPUT expr ';'  ;
 
 incrStmt : expr '++' ';' ;
@@ -97,6 +102,7 @@ errorStmt : KERROR expr ';'  ;
 
 forItrStmt : KFOR '(' expr ':' expr ')' statement ;
 
+forRngStmtOptional : KFOR '(' expr ':' expr '..' expr ')' statement ;
 forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
@@ -121,8 +127,9 @@ MOD : '%';
 AND : 'and';
 OR  : 'or';
 
+
 NUMBER : [0-9]+ ;
-BOOLEAN: 'true'|'false';
+BOOL_LITERAL: 'true'|'false';
 // Placing the keyword definitions first causes ANTLR4 to prioritize
 // their matching relative to IDENTIFIER (which comes later).
 KALLOC  : 'alloc' ;
