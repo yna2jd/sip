@@ -5,8 +5,115 @@
 #include <catch2/catch_test_macros.hpp>
 #include <sstream> //basically just to get JetBrains to be quiet
 
-//Conditionals
+/* Template:
+ TEST_CASE("SIP Parser: test name", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
 
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+*/
+
+//Boolean literal type
+TEST_CASE("SIP Parser: Boolean literals", "[SIP Parser]") {
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var out;
+        if(true){
+            while(in == false){
+                if(in > 0){
+                    in = true;
+                }else{
+                    in = in + 1;
+                }
+            }
+        }else{
+            out = false;
+        }
+        out = true;
+        return out;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+//Unary
+TEST_CASE("SIP Parser: Unary negation", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = not in;
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+TEST_CASE("SIP Parser: ! Binary Operator", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = !true;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
+
+//Binary operator
+TEST_CASE("SIP Parser: and/or Binary Operator", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = 1 and 1;
+        in = 0 or 1;
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+//Array
+
+//Array Length
+
+//Arithmetic
+TEST_CASE("SIP Parser: Arithmetic modulo", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var x;
+        x = 3 % in;
+    return x;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+TEST_CASE("SIP Parser: Arithmetic modulo equals not supported", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in %= 10;
+        return in;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
+TEST_CASE("SIP Parser: Arithmetic negation ", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+//Relational Operators
 TEST_CASE("SIP Parser: conditional >=", "[SIP Parser]") {
     std::stringstream stream;
     stream << R"(
@@ -86,8 +193,49 @@ TEST_CASE("SIP Parser: extraction stream modifiers are not supported", "[SIP Par
     REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
 
-//Increment/Decrement
 
+//Ternary operator
+TEST_CASE("SIP Parser: Single ternary operator", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var x;
+        x = in > 4 ? 5 : 7;
+        return x;
+    }
+        )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+TEST_CASE("SIP Parser: Nested Ternary", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var v, w, x, y, z;
+        w = 1009;
+        x = 123;
+        y = 3;
+        z = 2123;
+        v = x >
+            in < 4
+                ? 10
+                : 11
+            ? x <= 5
+                ? 6
+                : 7
+            : y < 1203
+                ? 8
+                :  w >= 10
+                    ? 21
+                    : 18
+        ;
+        return x;
+    }
+        )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+
+//Increment/Decrement
 TEST_CASE("SIP Parser: increment", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
@@ -134,56 +282,68 @@ TEST_CASE("SIP Parser: Incorrectly written decrement", "[SIP Parser]"){
     REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
 
-//Boolean type
-TEST_CASE("SIP Parser: Boolean case", "[SIP Parser]"){
+//For loop iterator
+TEST_CASE("SIP Parser: For Loop Iterator", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
-        var out;
-        if(true){
-            while(in == false){
-                if(in > 0){
-                    in = true;
-                }else{
-                    in = in + 1;
-                }
-            }
-        }else{
-            out = false;
+        for(i : in){
+            output i;
         }
-        out = true;
-        return out;
+        return in;
     }
     )";
     REQUIRE(ParserHelper::is_parsable(stream));
 }
+TEST_CASE("SIP Parser: For Loop traditional iterator", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        for(i = 0; i > 5; i++){
+            output i;
+        }
+        return in;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
 
-
-
-//Ternary type
-TEST_CASE("SIP Parser: Single ternary operator", "[SIP Parser]"){
+//For loop range
+TEST_CASE("SIP Parser: For Loop Range - all", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
         var x;
-        x = in > 4 ? 5 : 7;
-        return x;
+        for(x : 10 .. 1 by -1){
+            output in + x;
+        }
+        return in;
     }
-        )";
+    )";
     REQUIRE(ParserHelper::is_parsable(stream));
 }
-
-TEST_CASE("SIP Parser: Nested Ternary", "[SIP Parser]"){
+TEST_CASE("SIP Parser: For Loop Range - optional", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
-        var w, x, y, z;
-        x = 123;
-        y = 3;
-        z = 2123;
-        w = in > 4 ? x <= 5 ? y < 1203 ? z == -1 : 5 : 6: 7;
-        return x;
+        var x;
+        for(x : 2 .. 5){
+            output in + x;
+        }
+        return in;
     }
-        )";
+    )";
     REQUIRE(ParserHelper::is_parsable(stream));
+}
+TEST_CASE("SIP Parser: For Loop traditional range", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        for i in range(10){
+            output i;
+        }
+        return in;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }

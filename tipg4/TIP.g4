@@ -40,6 +40,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | '*' expr 				#deRefExpr
      | SUB NUMBER				#negNumber
      | '&' expr					#refExpr
+     | condition = expr '?' (trueExpr = expr ':' falseExpr = expr)  #ternaryExpr
      | expr op=(MUL | DIV) expr 		#multiplicativeExpr
      | expr op=(ADD | SUB) expr 		#additiveExpr
      | expr op= MOD expr 			#remainderExpr
@@ -56,7 +57,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | KNULL					#nullExpr
      | recordExpr				#recordRule
      | '(' expr ')'				#parenExpr
-     | booleanExpr = expr '?' trueExpr = expr ':' falseExpr = expr  #ternaryExpr
+
 ;
 
 //ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
@@ -78,6 +79,7 @@ statement : blockStmt
     | errorStmt
     | forItrStmt
     | forRngStmt
+    | forRngStmtOptional
     | incrStmt
     | decrStmt
 ;
@@ -100,6 +102,7 @@ errorStmt : KERROR expr ';'  ;
 
 forItrStmt : KFOR '(' expr ':' expr ')' statement ;
 
+forRngStmtOptional : KFOR '(' expr ':' expr '..' expr ')' statement ;
 forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
