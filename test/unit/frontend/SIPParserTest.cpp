@@ -149,11 +149,41 @@ TEST_CASE("SIP Parser: Boolean case", "[SIP Parser]"){
                 }
             }
         }else{
-            out = not true;
+            out = false;
         }
-    out = true;
-    return out;
+        out = true;
+        return out;
     }
     )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+
+
+//Ternary type
+TEST_CASE("SIP Parser: Single ternary operator", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var x;
+        x = in > 4 ? 5 : 7;
+        return x;
+    }
+        )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+TEST_CASE("SIP Parser: Nested Ternary", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var w, x, y, z;
+        x = 123;
+        y = 3;
+        z = 2123;
+        w = in > 4 ? x <= 5 ? y < 1203 ? z == -1 : 5 : 6: 7;
+        return x;
+    }
+        )";
     REQUIRE(ParserHelper::is_parsable(stream));
 }
