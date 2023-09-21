@@ -38,8 +38,9 @@ nameDeclaration : IDENTIFIER ;
 expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | expr '.' IDENTIFIER 			#accessExpr
      | '*' expr 				#deRefExpr
-     | SUB NUMBER				#negNumber
+     | SUB expr				#negExpr
      | '&' expr					#refExpr
+     | '#' expr					#lengthExpr
      | condition = expr '?' (trueExpr = expr ':' falseExpr = expr)  #ternaryExpr
      | expr op=(MUL | DIV) expr 		#multiplicativeExpr
      | expr op=(ADD | SUB) expr 		#additiveExpr
@@ -49,10 +50,12 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | expr op=(AND | OR) expr					#binaryExpr
      | op=NOT expr 			#notExpr
      | op=SUB expr 			#negationExpr
+     | expr '[' expr ']'					#arrayIndexExpr
      | IDENTIFIER				#varExpr
      | NUMBER					#numExpr
      | BOOL_LITERAL			    #boolLiteralExpr
      | KINPUT					#inputExpr
+     | (ARRAY | BYARRAY)					#arrayExpr
      | KALLOC expr				#allocExpr
      | KNULL					#nullExpr
      | recordExpr				#recordRule
@@ -61,7 +64,6 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
 ;
 
 //ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
-
 
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
@@ -79,7 +81,6 @@ statement : blockStmt
     | errorStmt
     | forItrStmt
     | forRngStmt
-    | forRngStmtOptional
     | incrStmt
     | decrStmt
 ;
@@ -102,8 +103,9 @@ errorStmt : KERROR expr ';'  ;
 
 forItrStmt : KFOR '(' expr ':' expr ')' statement ;
 
-forRngStmtOptional : KFOR '(' expr ':' expr '..' expr ')' statement ;
-forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
+forRngOptionalStmt : KFOR '(' expr ':' expr '..' expr ')' statement ;
+
+forRngOptionalStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
 
@@ -130,6 +132,8 @@ OR  : 'or';
 
 NUMBER : [0-9]+ ;
 BOOL_LITERAL: 'true'|'false';
+ARRAY : '[' (expr (',' expr)*)? ']';
+BYARRAY : '[' expr KBY expr ']' ;
 // Placing the keyword definitions first causes ANTLR4 to prioritize
 // their matching relative to IDENTIFIER (which comes later).
 KALLOC  : 'alloc' ;
