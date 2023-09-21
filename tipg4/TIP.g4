@@ -103,9 +103,9 @@ errorStmt : KERROR expr ';'  ;
 
 forItrStmt : KFOR '(' expr ':' expr ')' statement ;
 
-forRngOptionalStmt : KFOR '(' expr ':' expr '..' expr ')' statement ;
+forRngStmtOptional : KFOR '(' expr ':' expr '..' expr ')' statement ;
 
-forRngOptionalStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
+forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
 
