@@ -35,32 +35,34 @@ nameDeclaration : IDENTIFIER ;
 // issues elsewhere in the compiler, e.g.,  introducing an assignable expr
 // weeding pass. 
 //
-expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr\
-     | expr '[' expr ']'					#arrayIndexExpr
-     | expr '.' IDENTIFIER 			#accessExpr
-     | '*' expr 				#deRefExpr
-     | SUB expr				#negExpr
-     | '&' expr					#refExpr
-     | '#' expr					#lengthExpr
-     | condition = expr '?' (trueExpr = expr ':' falseExpr = expr)  #ternaryExpr
-     | expr op=(MUL | DIV) expr 		#multiplicativeExpr
-     | expr op=(ADD | SUB) expr 		#additiveExpr
-     | expr op= MOD expr 			#remainderExpr
-     | expr op=(GT | LT | GTE | LTE) expr 				#relationalExpr
-     | expr op=(EQ | NE) expr 			#equalityExpr
-     | expr op=(AND | OR) expr					#binaryExpr
-     | op=NOT expr 			#notExpr
-     | op=SUB expr 			#negationExpr
-     | IDENTIFIER				#varExpr
-     | NUMBER					#numExpr
-     | BOOL_LITERAL			    #boolLiteralExpr
-     | KINPUT					#inputExpr
-     | '[' (expr (',' expr)*)? ']'					#arrayExpr
-     | '[' expr KBY expr ']'					#byArrayExpr
-     | KALLOC expr				#allocExpr
-     | KNULL					#nullExpr
-     | recordExpr				#recordRule
-     | '(' expr ')'				#parenExpr
+
+expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
+    | expr '[' expr ']'					    #arrayIndexExpr
+    | SUB NUMBER				            #negNumber //this can be removed after modifying AST
+    | expr '.' IDENTIFIER 			        #accessExpr
+    | <assoc=right> op=SUB expr		        #unaryMinusExpr
+    | <assoc=right> op=NOT expr 		    #logicalNotExpr
+    | <assoc=right> '(' expr ')'	        #parenExpr
+    | <assoc=right> '*' expr 		        #deRefExpr
+    | <assoc=right> '&' expr		        #refExpr
+    | '#' expr					            #lengthExpr
+    | <assoc=right> KALLOC expr		        #allocExpr
+    | expr op=(MUL | DIV) expr 		        #multiplicativeExpr
+    | expr op= MOD expr 			        #remainderExpr
+    | expr op=(ADD | SUB) expr 		        #additiveExpr
+    | expr op=(GT | LT | GTE | LTE) expr    #relationalExpr
+    | expr op=(EQ | NE) expr 		        #equalityExpr
+    | expr op=AND expr					    #andExpr
+    | expr op=OR expr					    #orExpr
+    | <assoc=right> cond=expr '?' (trueExpr=expr ':' falseExpr=expr)  #ternaryExpr
+    | recordExpr				            #recordRule
+    | arrayExpr                             #arrayRule
+    | byArrayExpr           				#byArrayRule
+    | IDENTIFIER				            #varExpr
+    | NUMBER					            #numExpr
+    | BOOL_LITERAL			                #boolLiteralExpr
+    | KINPUT					            #inputExpr
+    | KNULL					                #nullExpr
 
 ;
 
@@ -69,22 +71,29 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr\
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
 
+arrayExpr: '[' (expr (',' expr)*)? ']';
+
+byArrayExpr: '[' expr KBY expr ']';
+
 fieldExpr : IDENTIFIER ':' expr ;
 
 
 ////////////////////// TIP Statements ////////////////////////// 
 
 statement : blockStmt
-    | assignStmt
     | whileStmt
     | ifStmt
     | outputStmt
     | errorStmt
     | forItrStmt
     | forRngStmt
+    | forRngStmtOptional
+    | assignStmt
     | incrStmt
     | decrStmt
+
 ;
+
 
 assignStmt : expr '=' expr ';' ;
 

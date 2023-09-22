@@ -193,7 +193,6 @@ TEST_CASE("SIP Parser: extraction stream modifiers are not supported", "[SIP Par
     REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
 
-
 //Ternary operator
 TEST_CASE("SIP Parser: Single ternary operator", "[SIP Parser]"){
     std::stringstream stream;
@@ -218,22 +217,21 @@ TEST_CASE("SIP Parser: Nested Ternary", "[SIP Parser]"){
         v = x >
             in < 4
                 ? 10
-                : 11
+                : true
             ? x <= 5
                 ? 6
                 : 7
             : y < 1203
-                ? 8
+                ? test(4)
                 :  w >= 10
                     ? 21
-                    : 18
+                    : x
         ;
         return x;
     }
         )";
     REQUIRE(ParserHelper::is_parsable(stream));
 }
-
 
 //Increment/Decrement
 TEST_CASE("SIP Parser: increment", "[SIP Parser]"){
