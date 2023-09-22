@@ -36,7 +36,7 @@ nameDeclaration : IDENTIFIER ;
 // weeding pass. 
 //
 expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
-    //array
+    | expr '[' expr ']'					    #arrayIndexExpr
     | SUB NUMBER				            #negNumber //this can be removed after modifying AST
     | expr '.' IDENTIFIER 			        #accessExpr
     | <assoc=right> op=SUB expr		        #unaryMinusExpr
@@ -44,6 +44,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | <assoc=right> '(' expr ')'	        #parenExpr
     | <assoc=right> '*' expr 		        #deRefExpr
     | <assoc=right> '&' expr		        #refExpr
+    | '#' expr					            #lengthExpr
     | <assoc=right> KALLOC expr		        #allocExpr
     | expr op=(MUL | DIV) expr 		        #multiplicativeExpr
     | expr op= MOD expr 			        #remainderExpr
@@ -54,6 +55,8 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr op=OR expr					    #orExpr
     | <assoc=right> cond=expr '?' (trueExpr=expr ':' falseExpr=expr)  #ternaryExpr
     | recordExpr				            #recordRule
+    | arrayExpr                             #arrayRule
+    | byArrayExpr           				#byArrayRule
     | IDENTIFIER				            #varExpr
     | NUMBER					            #numExpr
     | BOOL_LITERAL			                #boolLiteralExpr
@@ -66,6 +69,10 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
 
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
+
+arrayExpr: '[' (expr (',' expr)*)? ']';
+
+byArrayExpr: '[' expr KBY expr ']';
 
 fieldExpr : IDENTIFIER ':' expr ;
 
