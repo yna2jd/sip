@@ -36,28 +36,29 @@ nameDeclaration : IDENTIFIER ;
 // weeding pass. 
 //
 expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
-     | expr '.' IDENTIFIER 			#accessExpr
-     | '*' expr 				#deRefExpr
-     | SUB NUMBER				#negNumber
-     | '&' expr					#refExpr
-     | condition = expr '?' (trueExpr = expr ':' falseExpr = expr)  #ternaryExpr
-     | expr op=(MUL | DIV) expr 		#multiplicativeExpr
-     | expr op=(ADD | SUB) expr 		#additiveExpr
-     | expr op= MOD expr 			#remainderExpr
-     | expr op=(GT | LT | GTE | LTE) expr 				#relationalExpr
-     | expr op=(EQ | NE) expr 			#equalityExpr
-     | expr op=(AND | OR) expr					#binaryExpr
-     | op=NOT expr 			#notExpr
-     | op=SUB expr 			#negationExpr
-     | IDENTIFIER				#varExpr
-     | NUMBER					#numExpr
-     | BOOL_LITERAL			    #boolLiteralExpr
-     | KINPUT					#inputExpr
-     | KALLOC expr				#allocExpr
-     | KNULL					#nullExpr
-     | recordExpr				#recordRule
-     | '(' expr ')'				#parenExpr
-
+    //array
+    | SUB NUMBER				            #negNumber //this can be removed after modifying AST
+    | expr '.' IDENTIFIER 			        #accessExpr
+    | <assoc=right> op=SUB expr		        #unaryMinusExpr
+    | <assoc=right> op=NOT expr 		    #logicalNotExpr
+    | <assoc=right> '(' expr ')'	        #parenExpr
+    | <assoc=right> '*' expr 		        #deRefExpr
+    | <assoc=right> '&' expr		        #refExpr
+    | <assoc=right> KALLOC expr		        #allocExpr
+    | expr op=(MUL | DIV) expr 		        #multiplicativeExpr
+    | expr op= MOD expr 			        #remainderExpr
+    | expr op=(ADD | SUB) expr 		        #additiveExpr
+    | expr op=(GT | LT | GTE | LTE) expr    #relationalExpr
+    | expr op=(EQ | NE) expr 		        #equalityExpr
+    | expr op=AND expr					    #andExpr
+    | expr op=OR expr					    #orExpr
+    | <assoc=right> cond=expr '?' (trueExpr=expr ':' falseExpr=expr)  #ternaryExpr
+    | recordExpr				            #recordRule
+    | IDENTIFIER				            #varExpr
+    | NUMBER					            #numExpr
+    | BOOL_LITERAL			                #boolLiteralExpr
+    | KINPUT					            #inputExpr
+    | KNULL					                #nullExpr
 ;
 
 //ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
@@ -72,7 +73,6 @@ fieldExpr : IDENTIFIER ':' expr ;
 ////////////////////// TIP Statements ////////////////////////// 
 
 statement : blockStmt
-    | assignStmt
     | whileStmt
     | ifStmt
     | outputStmt
@@ -80,9 +80,12 @@ statement : blockStmt
     | forItrStmt
     | forRngStmt
     | forRngStmtOptional
+    | assignStmt
     | incrStmt
     | decrStmt
+
 ;
+
 
 assignStmt : expr '=' expr ';' ;
 
