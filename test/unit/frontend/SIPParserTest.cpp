@@ -415,7 +415,7 @@ TEST_CASE("SIP Parser: Empty array", "[SIP Parser]"){
     REQUIRE(ParserHelper::is_parsable(stream));
 }
 
- TEST_CASE("SIP Parser: Index of array", "[SIP Parser]"){
+ TEST_CASE("SIP Parser: Bad index of array", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
