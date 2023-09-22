@@ -35,7 +35,8 @@ nameDeclaration : IDENTIFIER ;
 // issues elsewhere in the compiler, e.g.,  introducing an assignable expr
 // weeding pass. 
 //
-expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
+expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr\
+     | expr '[' expr ']'					#arrayIndexExpr
      | expr '.' IDENTIFIER 			#accessExpr
      | '*' expr 				#deRefExpr
      | SUB expr				#negExpr
@@ -50,12 +51,12 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
      | expr op=(AND | OR) expr					#binaryExpr
      | op=NOT expr 			#notExpr
      | op=SUB expr 			#negationExpr
-     | expr '[' expr ']'					#arrayIndexExpr
      | IDENTIFIER				#varExpr
      | NUMBER					#numExpr
      | BOOL_LITERAL			    #boolLiteralExpr
      | KINPUT					#inputExpr
-     | (ARRAY | BYARRAY)					#arrayExpr
+     | '[' (expr (',' expr)*)? ']'					#arrayExpr
+     | '[' expr KBY expr ']'					#byArrayExpr
      | KALLOC expr				#allocExpr
      | KNULL					#nullExpr
      | recordExpr				#recordRule
@@ -132,8 +133,6 @@ OR  : 'or';
 
 NUMBER : [0-9]+ ;
 BOOL_LITERAL: 'true'|'false';
-ARRAY : '[' (expr (',' expr)*)? ']';
-BYARRAY : '[' expr KBY expr ']' ;
 // Placing the keyword definitions first causes ANTLR4 to prioritize
 // their matching relative to IDENTIFIER (which comes later).
 KALLOC  : 'alloc' ;
