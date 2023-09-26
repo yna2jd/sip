@@ -345,3 +345,104 @@ TEST_CASE("SIP Parser: For Loop traditional range", "[SIP Parser]"){
     )";
     REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
+//Array tests
+TEST_CASE("SIP Parser: Empty array", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = [];
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Array initializer", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = [6, 3, 5];
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Bad array initializer", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = [6, 3,];
+        return in;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: By array initializer", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = [6 by 3];
+        return in;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Bad by array initializer", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        in = [6 by];
+        return in;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Index of array", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var b;
+	b = in[0];
+        return b;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Bad index of array", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+        var b;
+	b = [0]in;
+        return b;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Length of array", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+	b = #in;
+        return b;
+    }
+    )";
+    REQUIRE(ParserHelper::is_parsable(stream));
+}
+
+ TEST_CASE("SIP Parser: Bad length of array", "[SIP Parser]"){
+    std::stringstream stream;
+    stream << R"(
+    test(in){
+	b = in#;
+        return b;
+    }
+    )";
+    REQUIRE_FALSE(ParserHelper::is_parsable(stream));
+}
