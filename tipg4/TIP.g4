@@ -35,6 +35,7 @@ nameDeclaration : IDENTIFIER ;
 // issues elsewhere in the compiler, e.g.,  introducing an assignable expr
 // weeding pass. 
 //
+
 expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr '[' expr ']'					    #arrayIndexExpr
     | SUB NUMBER				            #negNumber //this can be removed after modifying AST
@@ -62,10 +63,10 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | BOOL_LITERAL			                #boolLiteralExpr
     | KINPUT					            #inputExpr
     | KNULL					                #nullExpr
+
 ;
 
 //ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
-
 
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
@@ -113,6 +114,7 @@ errorStmt : KERROR expr ';'  ;
 forItrStmt : KFOR '(' expr ':' expr ')' statement ;
 
 forRngStmtOptional : KFOR '(' expr ':' expr '..' expr ')' statement ;
+
 forRngStmt : KFOR '(' expr ':' expr '..' expr KBY expr ')' statement ;
 
 returnStmt : KRETURN expr ';'  ;
