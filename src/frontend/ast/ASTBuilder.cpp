@@ -25,6 +25,15 @@ std::string ASTBuilder::opString(int op) {
   case TIPParser::SUB:
     opStr = "-";
     break;
+  case TIPParser::GTE:
+    opStr = ">=";
+    break;
+  case TIPParser::LT:
+    opStr = "<";
+    break;
+  case TIPParser::LTE:
+    opStr = "<=";
+    break;
   case TIPParser::GT:
     opStr = ">";
     break;
@@ -33,6 +42,18 @@ std::string ASTBuilder::opString(int op) {
     break;
   case TIPParser::NE:
     opStr = "!=";
+    break;
+  case TIPParser::AND:
+    opStr = "and";
+    break;
+  case TIPParser::OR:
+    opStr = "or";
+    break;
+  case TIPParser::NOT:
+    opStr = "not";
+    break;
+  case TIPParser::MOD:
+    opStr = "%";
     break;
   default:
     throw std::runtime_error(
