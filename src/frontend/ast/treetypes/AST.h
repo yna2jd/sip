@@ -10,6 +10,8 @@
 
 #include "ASTAccessExpr.h"
 #include "ASTAllocExpr.h"
+#include "ASTArrayIndexExpr.h"
+#include "ASTArrayListExpr.h"
 #include "ASTArrayOfExpr.h"
 #include "ASTAssignStmt.h"
 #include "ASTBinaryExpr.h"
@@ -24,6 +26,7 @@
 #include "ASTFunction.h"
 #include "ASTIfStmt.h"
 #include "ASTInputExpr.h"
+#include "ASTLengthExpr.h"
 #include "ASTNode.h"
 #include "ASTNullExpr.h"
 #include "ASTNumberExpr.h"

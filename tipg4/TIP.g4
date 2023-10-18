@@ -66,9 +66,6 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
 
 ;
 
-//ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
-
-
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
 
 fieldExpr : IDENTIFIER ':' expr ;

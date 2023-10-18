@@ -360,6 +360,37 @@ Any ASTBuilder::visitAccessExpr(TIPParser::AccessExprContext *ctx) {
   return "";
 }
 
+Any ASTBuilder::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
+    visit(ctx->expr(0));
+    auto array = visitedExpr;
+    visit(ctx->expr(1));
+    auto subscript = visitedExpr;
+    visitedExpr = std::make_shared<ASTArrayOfExpr>(array, subscript);
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    // Set source location
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+}
+
+Any ASTBuilder::visitArrayListExpr(TIPParser::ArrayListExprContext *ctx) {
+    std::vector<std::shared_ptr<ASTExpr>> aElements;
+    for (auto en : ctx->expr()) {
+        visit(en);
+        aElements.push_back(visitedExpr);
+    }
+
+    visitedExpr = std::make_shared<ASTArrayListExpr>(aElements);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    // Set source location
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+}
+
 Any ASTBuilder::visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) {
     visit(ctx->expr(0));
     auto left = visitedExpr;
@@ -389,6 +420,17 @@ Any ASTBuilder::visitTernaryExpr(TIPParser::TernaryExprContext *ctx) {
                              ctx->getStart()->getCharPositionInLine());
     return " ";
 }
+
+Any ASTBuilder::visitLengthExpr(TIPParser::LengthExprContext *ctx) {
+    visit(ctx->expr());
+    visitedExpr = std::make_shared<ASTLengthExpr>(visitedExpr);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+} // LCOV_EXCL_LINE
 
 Any ASTBuilder::visitDeclaration(TIPParser::DeclarationContext *ctx) {
   std::vector<std::shared_ptr<ASTDeclNode>> dVars;
