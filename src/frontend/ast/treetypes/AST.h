@@ -10,6 +10,7 @@
 
 #include "ASTAccessExpr.h"
 #include "ASTAllocExpr.h"
+#include "ASTArrayOfExpr.h"
 #include "ASTAssignStmt.h"
 #include "ASTBinaryExpr.h"
 #include "ASTBlockStmt.h"
@@ -32,5 +33,6 @@
 #include "ASTRefExpr.h"
 #include "ASTReturnStmt.h"
 #include "ASTStmt.h"
+#include "ASTTernaryExpr.h"
 #include "ASTVariableExpr.h"
 #include "ASTWhileStmt.h"

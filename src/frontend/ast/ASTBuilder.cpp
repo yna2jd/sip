@@ -360,6 +360,36 @@ Any ASTBuilder::visitAccessExpr(TIPParser::AccessExprContext *ctx) {
   return "";
 }
 
+Any ASTBuilder::visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) {
+    visit(ctx->expr(0));
+    auto left = visitedExpr;
+    visit(ctx->expr(1));
+    auto right = visitedExpr;
+    visitedExpr = std::make_shared<ASTArrayOfExpr>(left, right);
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    // Set source location
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+}
+
+Any ASTBuilder::visitTernaryExpr(TIPParser::TernaryExprContext *ctx) {
+    visit(ctx->expr(0));
+    auto falseExpr = visitedExpr;
+    visit(ctx->expr(1));
+    auto trueExpr = visitedExpr;
+    visit(ctx->expr(2));
+    auto condition = visitedExpr;
+    visitedExpr = std::make_shared<ASTTernaryExpr>(condition, trueExpr, falseExpr);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return " ";
+}
+
 Any ASTBuilder::visitDeclaration(TIPParser::DeclarationContext *ctx) {
   std::vector<std::shared_ptr<ASTDeclNode>> dVars;
   for (auto decl : ctx->nameDeclaration()) {
@@ -498,3 +528,5 @@ std::string ASTBuilder::generateSHA256(std::string tohash) {
   picosha2::hash256(tohash.begin(), tohash.end(), hash.begin(), hash.end());
   return picosha2::bytes_to_hex_string(hash.begin(), hash.end());
 }
+
+

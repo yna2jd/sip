@@ -10,6 +10,8 @@
 
 using namespace antlrcpp;
 
+class AccessExprContext;
+
 /*! \brief Parse tree visitor that generates a program AST.
  *
  * This is an ANTLR4 parse tree visitor, not to be confused with an ASTVisitor.
@@ -43,8 +45,7 @@ public:
   Any visitNegNumber(TIPParser::NegNumberContext *ctx) override;
   Any visitAdditiveExpr(TIPParser::AdditiveExprContext *ctx) override;
   Any visitRelationalExpr(TIPParser::RelationalExprContext *ctx) override;
-  Any visitMultiplicativeExpr(
-      TIPParser::MultiplicativeExprContext *ctx) override;
+  Any visitMultiplicativeExpr(TIPParser::MultiplicativeExprContext *ctx) override;
   Any visitEqualityExpr(TIPParser::EqualityExprContext *ctx) override;
   Any visitParenExpr(TIPParser::ParenExprContext *ctx) override;
   Any visitNumExpr(TIPParser::NumExprContext *ctx) override;
@@ -58,6 +59,8 @@ public:
   Any visitRecordExpr(TIPParser::RecordExprContext *ctx) override;
   Any visitFieldExpr(TIPParser::FieldExprContext *ctx) override;
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
+  Any visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) override;
+  Any visitTernaryExpr(TIPParser::TernaryExprContext *ctx) override;
   Any visitDeclaration(TIPParser::DeclarationContext *ctx) override;
   Any visitNameDeclaration(TIPParser::NameDeclarationContext *ctx) override;
   Any visitAssignStmt(TIPParser::AssignStmtContext *ctx) override;
