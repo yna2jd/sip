@@ -18,3 +18,7 @@ std::vector<std::shared_ptr<ASTNode>> ASTDecrStmt::getChildren() {
   children.push_back(EXPR);
   return children;
 }
+
+llvm::Value *ASTDecrStmt::codegen() {
+    return nullptr;
+}

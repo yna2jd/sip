@@ -40,7 +40,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr '[' expr ']'					    #arrayIndexExpr
     | SUB NUMBER				            #negNumber //this can be removed after modifying AST
     | expr '.' IDENTIFIER 			        #accessExpr
-    | <assoc=right> op=SUB expr		        #unaryMinusExpr
+    | <assoc=right> op=SUB expr		        #negationExpr
     | <assoc=right> op=NOT expr 		    #logicalNotExpr
     | <assoc=right> '(' expr ')'	        #parenExpr
     | <assoc=right> '*' expr 		        #deRefExpr
