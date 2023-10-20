@@ -62,7 +62,7 @@ TEST_CASE("ASTPrinterTest: statement printers", "[ASTNodePrint]") {
         { 
            x = y + z; 
            y = 13;
-        } 
+        }
         error       z;
         return z;
       }
