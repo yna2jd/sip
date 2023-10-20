@@ -365,7 +365,7 @@ Any ASTBuilder::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
     auto array = visitedExpr;
     visit(ctx->expr(1));
     auto subscript = visitedExpr;
-    visitedExpr = std::make_shared<ASTArrayOfExpr>(array, subscript);
+    visitedExpr = std::make_shared<ASTArrayIndexExpr>(array, subscript);
     LOG_S(1) << "Built AST node " << *visitedExpr;
 
     // Set source location
@@ -407,11 +407,11 @@ Any ASTBuilder::visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) {
 
 Any ASTBuilder::visitTernaryExpr(TIPParser::TernaryExprContext *ctx) {
     visit(ctx->expr(0));
-    auto falseExpr = visitedExpr;
+    auto condition = visitedExpr;
     visit(ctx->expr(1));
     auto trueExpr = visitedExpr;
     visit(ctx->expr(2));
-    auto condition = visitedExpr;
+    auto falseExpr = visitedExpr;
     visitedExpr = std::make_shared<ASTTernaryExpr>(condition, trueExpr, falseExpr);
 
     LOG_S(1) << "Built AST node " << *visitedExpr;

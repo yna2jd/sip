@@ -9,7 +9,7 @@ void ASTLengthExpr::accept(ASTVisitor *visitor) {
 }
 
 std::ostream &ASTLengthExpr::print(std::ostream &out) const {
-  out << "(#" << *getCollection() << ")";
+  out << "#" << *getCollection() << "";
   return out;
 } // LCOV_EXCL_LINE
 

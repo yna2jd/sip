@@ -10,7 +10,7 @@ void ASTArrayIndexExpr::accept(ASTVisitor *visitor) {
 }
 
 std::ostream &ASTArrayIndexExpr::print(std::ostream &out) const {
-  out << *getArray() << "[" << *getSubscript() << "]";
+  out << "(" << *getArray() << ")[" << *getSubscript() << "]";
   return out;
 } // LCOV_EXCL_LINE
 
