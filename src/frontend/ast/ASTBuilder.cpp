@@ -25,6 +25,15 @@ std::string ASTBuilder::opString(int op) {
   case TIPParser::SUB:
     opStr = "-";
     break;
+  case TIPParser::GTE:
+    opStr = ">=";
+    break;
+  case TIPParser::LT:
+    opStr = "<";
+    break;
+  case TIPParser::LTE:
+    opStr = "<=";
+    break;
   case TIPParser::GT:
     opStr = ">";
     break;
@@ -33,6 +42,18 @@ std::string ASTBuilder::opString(int op) {
     break;
   case TIPParser::NE:
     opStr = "!=";
+    break;
+  case TIPParser::AND:
+    opStr = "and";
+    break;
+  case TIPParser::OR:
+    opStr = "or";
+    break;
+  case TIPParser::NOT:
+    opStr = "not";
+    break;
+  case TIPParser::MOD:
+    opStr = "%";
     break;
   default:
     throw std::runtime_error(
@@ -571,4 +592,106 @@ std::string ASTBuilder::generateSHA256(std::string tohash) {
   return picosha2::bytes_to_hex_string(hash.begin(), hash.end());
 }
 
+Any ASTBuilder::visitBoolLiteralExpr(TIPParser::BoolLiteralExprContext *ctx) {
+  std::string val = ctx->expr()->getText();
+  visitedExpr = std::make_shared<ASTBoolLiteralExpr>(val);
+
+  LOG_S(1) << "Built AST node " << *visitedExpr;
+
+  // Set source location
+  visitedExpr->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+  return "";
+}
+
+Any ASTBuilder::visitLogicalNotExpr(TIPParser::LogicalNotExprContext *ctx) {
+    visit(ctx->expr());
+    visitedExpr = std::make_shared<ASTLogicalNotExpr>(visitedExpr);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+} 
+
+void ASTBuilder::visitAndExpr(T *ctx, const std::string &op) {
+  visit(ctx->expr(0));
+  auto lhs = visitedExpr;
+
+  visit(ctx->expr(1));
+  auto rhs = visitedExpr;
+
+  visitedExpr = std::make_shared<ASTAndExpr>(lhs, rhs);
+
+  LOG_S(1) << "Built AST node " << *visitedExpr;
+
+  // Set source location
+  visitedExpr->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+}
+
+void ASTBuilder::visitOrExpr(T *ctx, const std::string &op) {
+  visit(ctx->expr(0));
+  auto lhs = visitedExpr;
+
+  visit(ctx->expr(1));
+  auto rhs = visitedExpr;
+
+  visitedExpr = std::make_shared<ASTOrExpr>(lhs, rhs);
+
+  LOG_S(1) << "Built AST node " << *visitedExpr;
+
+  // Set source location
+  visitedExpr->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+}
+
+Any ASTBuilder::visitRemainderExpr(TIPParser::RemainderExprContext *ctx) {
+    visit(ctx->expr());
+    visitedExpr = std::make_shared<ASTRemainderExpr>(visitedExpr);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+} 
+
+Any ASTBuilder::visitNegationExpr(TIPParser::NegationExprContext *ctx) {
+    visit(ctx->expr());
+    visitedExpr = std::make_shared<ASTNegationExpr>(visitedExpr);
+
+    LOG_S(1) << "Built AST node " << *visitedExpr;
+
+    visitedExpr->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+} 
+
+Any ASTBuilder::visitIncrStmt(TIPParser::IncrStmtContext *ctx) {
+  visit(ctx->expr());
+  auto expression = visitedExpr;
+  visitedStmt = std::make_shared<ASTIncrStmt>(expression);
+
+  LOG_S(1) << "Built AST node " << *visitedStmt;
+
+  // Set source location
+  visitedStmt->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+  return "";
+}
+
+Any ASTBuilder::visitDecrStmt(TIPParser::IncrStmtContext *ctx) {
+  visit(ctx->expr());
+  auto expression = visitedExpr;
+  visitedStmt = std::make_shared<ASTDecrStmt>(expression);
+
+  LOG_S(1) << "Built AST node " << *visitedStmt;
+
+  // Set source location
+  visitedStmt->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+  return "";
+}
 

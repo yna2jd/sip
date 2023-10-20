@@ -66,6 +66,22 @@ target_sources(
           ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTVariableExpr.h
           ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTWhileStmt.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTWhileStmt.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTIncrStmt.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTIncrStmt.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTDecrStmt.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTDecrStmt.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTBoolLiteralExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTBoolLiteralExpr.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTNotExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTNotExpr.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTAndExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTAndExpr.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTOrExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTOrExpr.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTRemainderExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTRemainderExpr.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTNegationExpr.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/treetypes/ASTNegationExpr.h
           ${CMAKE_CURRENT_SOURCE_DIR}/ASTVisitor.h
           ${CMAKE_CURRENT_SOURCE_DIR}/ASTBuilder.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/ASTBuilder.h
