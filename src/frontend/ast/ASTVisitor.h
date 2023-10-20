@@ -46,6 +46,8 @@ public:
   virtual void endVisit(ASTNullExpr *element) {}
   virtual bool visit(ASTFieldExpr *element) { return true; }
   virtual void endVisit(ASTFieldExpr *element) {}
+  virtual bool visit(ASTForItrStmt *element) { return true; }
+  virtual void endVisit(ASTForItrStmt *element) {}
   virtual bool visit(ASTRecordExpr *element) { return true; }
   virtual void endVisit(ASTRecordExpr *element) {}
   virtual bool visit(ASTAccessExpr *element) { return true; }
@@ -68,4 +70,32 @@ public:
   virtual void endVisit(ASTErrorStmt *element) {}
   virtual bool visit(ASTBlockStmt *element) { return true; }
   virtual void endVisit(ASTBlockStmt *element) {}
+  virtual bool visit(ASTBoolLiteralExpr *element) { return true; }
+  virtual void endVisit(ASTBoolLiteralExpr *element) {}
+  virtual bool visit(ASTLogicalNotExpr *element) { return true; }
+  virtual void endVisit(ASTLogicalNotExpr *element) {}
+  virtual bool visit(ASTAndExpr *element) { return true; }
+  virtual void endVisit(ASTAndExpr *element) {}
+  virtual bool visit(ASTOrExpr *element) { return true; }
+  virtual void endVisit(ASTOrExpr *element) {}
+  virtual bool visit(ASTRemainderExpr *element) { return true; }
+  virtual void endVisit(ASTRemainderExpr *element) {}
+  virtual bool visit(ASTNegationExpr *element) { return true; }
+  virtual void endVisit(ASTNegationExpr *element) {}
+  virtual bool visit(ASTIncrStmt *element) { return true; }
+  virtual void endVisit(ASTIncrStmt *element) {}
+  virtual bool visit(ASTDecrStmt *element) { return true; }
+  virtual void endVisit(ASTDecrStmt *element) {}
+  virtual bool visit(ASTArrayOfExpr *element) { return true; }
+  virtual void endVisit(ASTArrayOfExpr *element) {}
+  virtual bool visit(ASTTernaryExpr *element) { return true; }
+  virtual void endVisit(ASTTernaryExpr *element) {}
+  virtual bool visit(ASTArrayIndexExpr *element) { return true; }
+  virtual void endVisit(ASTArrayIndexExpr *element) {}
+  virtual bool visit(ASTLengthExpr *element) { return true; }
+  virtual void endVisit(ASTLengthExpr *element) {}
+  virtual bool visit(ASTArrayListExpr *element) { return true; }
+  virtual void endVisit(ASTArrayListExpr *element) {}
+  virtual bool visit(ASTForRngStmt *element) { return true; }
+  virtual void endVisit(ASTForRngStmt *element) {}
 };

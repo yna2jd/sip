@@ -111,6 +111,11 @@ TEST_CASE("ASTPrinterTest: expression printers", "[ASTNodePrint]") {
         x = &z;
         z = -3;
         z = (42);
+        y = [43, z, foo(12), z-3];
+        z = [4        of y];
+        x = #foo(z);
+        y = z[x-1];
+        z = x ? y-23 : 5;
         x = alloc null;
         y = x + y - z * 3 / 1;
         y = foo(x);
@@ -126,6 +131,11 @@ TEST_CASE("ASTPrinterTest: expression printers", "[ASTNodePrint]") {
                                     "&z",
                                     "-3",
                                     "42",
+                                    "[43,z,foo(12),(z-3)]",
+                                    "[4 of y]",
+                                    "#foo(z)",
+                                    "(z)[(x-1)]",
+                                    "(x?(y-23):5)",
                                     "alloc null",
                                     "((x+y)-((z*3)/1))",
                                     "foo(x)"};

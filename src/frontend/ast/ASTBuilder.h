@@ -10,6 +10,8 @@
 
 using namespace antlrcpp;
 
+class AccessExprContext;
+
 /*! \brief Parse tree visitor that generates a program AST.
  *
  * This is an ANTLR4 parse tree visitor, not to be confused with an ASTVisitor.
@@ -43,13 +45,13 @@ public:
   Any visitNegNumber(TIPParser::NegNumberContext *ctx) override;
   Any visitAdditiveExpr(TIPParser::AdditiveExprContext *ctx) override;
   Any visitRelationalExpr(TIPParser::RelationalExprContext *ctx) override;
-  Any visitMultiplicativeExpr(
-      TIPParser::MultiplicativeExprContext *ctx) override;
+  Any visitMultiplicativeExpr(TIPParser::MultiplicativeExprContext *ctx) override;
   Any visitEqualityExpr(TIPParser::EqualityExprContext *ctx) override;
   Any visitParenExpr(TIPParser::ParenExprContext *ctx) override;
   Any visitNumExpr(TIPParser::NumExprContext *ctx) override;
   Any visitVarExpr(TIPParser::VarExprContext *ctx) override;
   Any visitInputExpr(TIPParser::InputExprContext *ctx) override;
+  Any visitForItrStmt(TIPParser::InputExprContext *ctx) override;
   Any visitFunAppExpr(TIPParser::FunAppExprContext *ctx) override;
   Any visitAllocExpr(TIPParser::AllocExprContext *ctx) override;
   Any visitRefExpr(TIPParser::RefExprContext *ctx) override;
@@ -58,6 +60,11 @@ public:
   Any visitRecordExpr(TIPParser::RecordExprContext *ctx) override;
   Any visitFieldExpr(TIPParser::FieldExprContext *ctx) override;
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
+  Any visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) override;
+  Any visitArrayListExpr(TIPParser::ArrayListExprContext *ctx) override;
+  Any visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) override;
+  Any visitLengthExpr(TIPParser::LengthExprContext *ctx) override;
+  Any visitTernaryExpr(TIPParser::TernaryExprContext *ctx) override;
   Any visitDeclaration(TIPParser::DeclarationContext *ctx) override;
   Any visitNameDeclaration(TIPParser::NameDeclarationContext *ctx) override;
   Any visitAssignStmt(TIPParser::AssignStmtContext *ctx) override;
@@ -67,4 +74,15 @@ public:
   Any visitOutputStmt(TIPParser::OutputStmtContext *ctx) override;
   Any visitErrorStmt(TIPParser::ErrorStmtContext *ctx) override;
   Any visitReturnStmt(TIPParser::ReturnStmtContext *ctx) override;
+  Any visitForRngStmt(TIPParser::ForRngStmtContext *ctx) override;
+  Any visitForRngStmtOptional(TIPParser::ForRngStmtOptionalContext *ctx) override;
+  Any visitBoolLiteralExpr(TIPParser::BoolLiteralExprContext *ctx) override;
+  Any visitLogicalNotExpr(TIPParser::LogicalNotExprContext *ctx) override;
+  Any visitAndExpr(TIPParser::AndExprContext *ctx) override;
+  Any visitOrExpr(TIPParser::OrExprContext *ctx) override;
+  Any visitRemainderExpr(TIPParser::RemainderExprContext *ctx) override;
+  Any visitNegationExpr(TIPParser::NegationExprContext *ctx) override;
+  Any visitIncrStmt(TIPParser::IncrStmtContext *ctx) override;
+  Any visitDecrStmt(TIPParser::DecrStmtContext *ctx) override;
+
 };

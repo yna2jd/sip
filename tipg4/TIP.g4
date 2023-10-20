@@ -40,7 +40,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr '[' expr ']'					    #arrayIndexExpr
     | SUB NUMBER				            #negNumber //this can be removed after modifying AST
     | expr '.' IDENTIFIER 			        #accessExpr
-    | <assoc=right> op=SUB expr		        #unaryMinusExpr
+    | <assoc=right> op=SUB expr		        #negationExpr
     | <assoc=right> op=NOT expr 		    #logicalNotExpr
     | <assoc=right> '(' expr ')'	        #parenExpr
     | <assoc=right> '*' expr 		        #deRefExpr
@@ -56,8 +56,8 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr op=OR expr					    #orExpr
     | <assoc=right> cond=expr '?' (trueExpr=expr ':' falseExpr=expr)  #ternaryExpr
     | recordExpr				            #recordRule
-    | arrayExpr                             #arrayRule
-    | byArrayExpr           				#byArrayRule
+    | '[' (expr (',' expr)*)? ']'           #arrayListExpr
+    | '[' expr KOF expr ']'           		#arrayOfExpr
     | IDENTIFIER				            #varExpr
     | NUMBER					            #numExpr
     | BOOL_LITERAL			                #boolLiteralExpr
@@ -66,14 +66,7 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
 
 ;
 
-//ternaryExpr: booltern=expr op='?' (trueExpr = expr op=':' falseExpr = expr);
-
-
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
-
-arrayExpr: '[' (expr (',' expr)*)? ']';
-
-byArrayExpr: '[' expr KBY expr ']';
 
 fieldExpr : IDENTIFIER ':' expr ;
 
@@ -152,6 +145,7 @@ KELSE   : 'else' ;
 KVAR    : 'var' ;
 KRETURN : 'return' ;
 KFOR    : 'for' ;
+KOF     : 'of' ;
 KBY     : 'by' ;
 KNULL   : 'null' ;
 KOUTPUT : 'output' ;
