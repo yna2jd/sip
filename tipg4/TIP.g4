@@ -56,8 +56,8 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
     | expr op=OR expr					    #orExpr
     | <assoc=right> cond=expr '?' (trueExpr=expr ':' falseExpr=expr)  #ternaryExpr
     | recordExpr				            #recordRule
-    | arrayExpr                             #arrayRule
-    | byArrayExpr           				#byArrayRule
+    | '[' (expr (',' expr)*)? ']'           #arrayListExpr
+    | '[' expr KOF expr ']'           		#arrayOfExpr
     | IDENTIFIER				            #varExpr
     | NUMBER					            #numExpr
     | BOOL_LITERAL			                #boolLiteralExpr
@@ -70,10 +70,6 @@ expr : expr '(' (expr (',' expr)*)? ')' 	#funAppExpr
 
 
 recordExpr : '{' (fieldExpr (',' fieldExpr)*)? '}' ;
-
-arrayExpr: '[' (expr (',' expr)*)? ']';
-
-byArrayExpr: '[' expr KBY expr ']';
 
 fieldExpr : IDENTIFIER ':' expr ;
 
@@ -152,6 +148,7 @@ KELSE   : 'else' ;
 KVAR    : 'var' ;
 KRETURN : 'return' ;
 KFOR    : 'for' ;
+KOF     : 'of' ;
 KBY     : 'by' ;
 KNULL   : 'null' ;
 KOUTPUT : 'output' ;

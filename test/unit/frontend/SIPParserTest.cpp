@@ -379,11 +379,11 @@ TEST_CASE("SIP Parser: Empty array", "[SIP Parser]"){
     REQUIRE_FALSE(ParserHelper::is_parsable(stream));
 }
 
- TEST_CASE("SIP Parser: By array initializer", "[SIP Parser]"){
+ TEST_CASE("SIP Parser: Of array initializer", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
-        in = [6 by 3];
+        in = [6 of 3];
         return in;
     }
     )";
@@ -394,7 +394,7 @@ TEST_CASE("SIP Parser: Empty array", "[SIP Parser]"){
     std::stringstream stream;
     stream << R"(
     test(in){
-        in = [6 by];
+        in = [6 of];
         return in;
     }
     )";

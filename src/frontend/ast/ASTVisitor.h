@@ -84,4 +84,9 @@ public:
   virtual void endVisit(ASTIncrStmt *element) {}
   virtual bool visit(ASTDecrStmt *element) { return true; }
   virtual void endVisit(ASTDecrStmt *element) {}
+  virtual bool visit(ASTArrayOfExpr *element) { return true; }
+  virtual void endVisit(ASTArrayOfExpr *element) {}
+  virtual bool visit(ASTTernaryExpr *element) { return true; }
+  virtual void endVisit(ASTTernaryExpr *element) {}
+
 };
