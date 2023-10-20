@@ -5,11 +5,11 @@
 /*! \brief Class for referencing a variable.
  */
 class ASTBoolLiteralExpr : public ASTExpr {
-  bool VALUE;
+  std::string VALUE;
 
 public:
   ASTBoolLiteralExpr(bool VALUE) : VALUE(VALUE) {}
-  bool getVALUE() const { return VALUE; }
+  std::string getVALUE() const { return VALUE; }
   void accept(ASTVisitor *visitor) override;
   llvm::Value *codegen() override;
 
