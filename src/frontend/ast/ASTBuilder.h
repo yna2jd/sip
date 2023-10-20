@@ -59,7 +59,10 @@ public:
   Any visitRecordExpr(TIPParser::RecordExprContext *ctx) override;
   Any visitFieldExpr(TIPParser::FieldExprContext *ctx) override;
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
+  Any visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) override;
+  Any visitArrayListExpr(TIPParser::ArrayListExprContext *ctx) override;
   Any visitArrayOfExpr(TIPParser::ArrayOfExprContext *ctx) override;
+  Any visitLengthExpr(TIPParser::LengthExprContext *ctx) override;
   Any visitTernaryExpr(TIPParser::TernaryExprContext *ctx) override;
   Any visitDeclaration(TIPParser::DeclarationContext *ctx) override;
   Any visitNameDeclaration(TIPParser::NameDeclarationContext *ctx) override;

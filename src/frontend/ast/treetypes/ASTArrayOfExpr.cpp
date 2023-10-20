@@ -10,7 +10,7 @@ void ASTArrayOfExpr::accept(ASTVisitor *visitor) {
 }
 
 std::ostream &ASTArrayOfExpr::print(std::ostream &out) const {
-    out << "[ " << *getLeft() << " of " << *getRight() << " ]";
+    out << "[" << *getLeft() << " of " << *getRight() << "]";
   return out;
 } // LCOV_EXCL_LINE
 

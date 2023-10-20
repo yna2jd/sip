@@ -88,5 +88,10 @@ public:
   virtual void endVisit(ASTArrayOfExpr *element) {}
   virtual bool visit(ASTTernaryExpr *element) { return true; }
   virtual void endVisit(ASTTernaryExpr *element) {}
-
+  virtual bool visit(ASTArrayIndexExpr *element) { return true; }
+  virtual void endVisit(ASTArrayIndexExpr *element) {}
+  virtual bool visit(ASTLengthExpr *element) { return true; }
+  virtual void endVisit(ASTLengthExpr *element) {}
+  virtual bool visit(ASTArrayListExpr *element) { return true; }
+  virtual void endVisit(ASTArrayListExpr *element) {}
 };
