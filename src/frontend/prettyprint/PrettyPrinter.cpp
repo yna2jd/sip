@@ -312,6 +312,30 @@ void PrettyPrinter::endVisit(ASTForItrStmt *element) {
   visitResults.push_back(forItrString);
 }
 
+bool PrettyPrinter::visit(ASTForRngStmt *element) {
+  indentLevel++;
+  return true;
+}
+
+void PrettyPrinter::endVisit(ASTForRngStmt *element) {
+  std::string bodyString = visitResults.back();
+  visitResults.pop_back();
+  std::string byString = visitResults.back();
+  visitResults.pop_back();
+  std::string maxString = visitResults.back();
+  visitResults.pop_back();
+  std::string startString = visitResults.back();
+  visitResults.pop_back();
+  std::string varString = visitResults.back();
+  visitResults.pop_back();
+
+  indentLevel--;
+
+  std::string forRngString =
+      indent() + "for (" + varString +" : "+ startString + " .. "+maxString+" by " +byString+") \n" + bodyString;
+  visitResults.push_back(forRngString);
+}
+
 bool PrettyPrinter::visit(ASTIfStmt *element) {
   indentLevel++;
   return true;
