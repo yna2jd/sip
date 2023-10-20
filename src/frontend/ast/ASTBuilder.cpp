@@ -361,6 +361,23 @@ Any ASTBuilder::visitFieldExpr(TIPParser::FieldExprContext *ctx) {
   return "";
 }
 
+Any ASTBuilder::visitForItrStmt(TIPParser::ForItrStmtContext *ctx) {
+  visit(ctx->expr(0));
+  auto left = visitedExpr;
+  visit(ctx->expr(1));
+  auto right = visitedExpr;
+  visit(ctx->statement());
+  auto body = visitedStmt;
+  visitedStmt = std::make_shared<ASTForIStmt>(left,right, body);
+
+  LOG_S(1) << "Built AST node " << *visitedStmt;
+
+  // Set source location
+  visitedStmt->setLocation(ctx->getStart()->getLine(),
+                           ctx->getStart()->getCharPositionInLine());
+  return "";
+}
+
 Any ASTBuilder::visitAccessExpr(TIPParser::AccessExprContext *ctx) {
   std::string fName = ctx->IDENTIFIER()->getText();
 
