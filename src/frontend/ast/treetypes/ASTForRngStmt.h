@@ -8,35 +8,38 @@
  */
 class ASTForRngStmt : public ASTStmt {
     std::shared_ptr<ASTExpr> VAR;
-    std::shared_ptr<ASTExpr> START;
+    std::shared_ptr<ASTExpr> BEGIN;
     std::shared_ptr<ASTExpr> END;
-    std::shared_ptr<ASTExpr> BY;
+    std::shared_ptr<ASTExpr> INCR;
     std::shared_ptr<ASTStmt> BODY;
-
 public:
     std::vector<std::shared_ptr<ASTNode>> getChildren() override;
     ASTForRngStmt(std::shared_ptr<ASTExpr> VAR
-                  , std::shared_ptr<ASTExpr>
+                  , std::shared_ptr<ASTExpr> BEGIN
                   , std::shared_ptr<ASTExpr> END
-                  , std::shared_ptr<ASTExpr> BY
+                  , std::shared_ptr<ASTExpr> INCR
                   , std::shared_ptr<ASTStmt> BODY):
-                  VAR(VAR)
-                  , START(START)
+                    VAR(VAR)
+                  , BEGIN(BEGIN)
                   , END(END)
-                  , BY(BY)
-                  , BODY(BODY) {
-        if(BY == nullptr){
-            BY = std::make_shared<ASTNumberExpr>(1);
-        }
-    }
+                  , INCR(INCR)
+                  , BODY(BODY) {}
+    ASTForRngStmt(std::shared_ptr<ASTExpr> VAR
+            , std::shared_ptr<ASTExpr> BEGIN
+            , std::shared_ptr<ASTExpr> END
+            , std::shared_ptr<ASTStmt> BODY):
+            VAR(VAR)
+            , BEGIN(BEGIN)
+            , END(END)
+            , INCR(std::make_shared<ASTNumberExpr>(1))
+            , BODY(BODY) {}
     ASTExpr *getVar() const { return VAR.get(); }
-    ASTExpr *getStart() const { return START.get(); }
+    ASTExpr *getBegin() const { return BEGIN.get(); }
     ASTExpr *getEnd() const { return END.get(); }
-    ASTExpr *getBy() const { return BY.get(); }
+    ASTExpr *getIncr() const { return (INCR.get()); }
     ASTStmt *getBody() const { return BODY.get(); }
     void accept(ASTVisitor *visitor) override;
     llvm::Value *codegen() override;
 
-protected:
-  std::ostream &print(std::ostream &out) const override;
+    std::ostream &print(std::ostream &out) const override;
 };

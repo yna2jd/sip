@@ -3,9 +3,9 @@
 
 void ASTTernaryExpr::accept(ASTVisitor *visitor) {
   if (visitor->visit(this)) {
+    getCondition()->accept(visitor);
     getTrue()->accept(visitor);
     getFalse()->accept(visitor);
-    getCondition()->accept(visitor);
   }
   visitor->endVisit(this);
 }
