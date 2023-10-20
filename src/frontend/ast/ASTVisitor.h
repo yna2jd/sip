@@ -94,4 +94,6 @@ public:
   virtual void endVisit(ASTLengthExpr *element) {}
   virtual bool visit(ASTArrayListExpr *element) { return true; }
   virtual void endVisit(ASTArrayListExpr *element) {}
+  virtual bool visit(ASTForRngStmt *element) { return true; }
+  virtual void endVisit(ASTForRngStmt *element) {}
 };

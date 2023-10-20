@@ -25,6 +25,7 @@
 #include "ASTErrorStmt.h"
 #include "ASTExpr.h"
 #include "ASTFieldExpr.h"
+#include "ASTForRngStmt.h"
 #include "ASTFunAppExpr.h"
 #include "ASTFunction.h"
 #include "ASTIfStmt.h"

@@ -73,6 +73,8 @@ public:
   Any visitOutputStmt(TIPParser::OutputStmtContext *ctx) override;
   Any visitErrorStmt(TIPParser::ErrorStmtContext *ctx) override;
   Any visitReturnStmt(TIPParser::ReturnStmtContext *ctx) override;
+  Any visitForRngStmt(TIPParser::ForRngStmtContext *ctx) override;
+  Any visitForRngStmtOptional(TIPParser::ForRngStmtOptionalContext *ctx) override;
   Any visitBoolLiteralExpr(TIPParser::BoolLiteralExprContext *ctx) override;
   Any visitLogicalNotExpr(TIPParser::LogicalNotExprContext *ctx) override;
   Any visitAndExpr(TIPParser::AndExprContext *ctx) override;

@@ -567,6 +567,48 @@ Any ASTBuilder::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
   return "";
 } // LCOV_EXCL_LINE
 
+Any ASTBuilder::visitForRngStmt(TIPParser::ForRngStmtContext *ctx) {
+    visit(ctx->expr(0));
+    auto var = visitedExpr;
+    visit(ctx->expr(1));
+    auto start = visitedExpr;
+    visit(ctx->expr(2));
+    auto end = visitedExpr;
+    visit(ctx->expr(3));
+    auto by = visitedExpr;
+    visit(ctx->statement());
+    auto body = visitedStmt;
+    visitedStmt = std::make_shared<ASTForRngStmt>(var, start, end, by, body);
+
+    LOG_S(1) << "Built AST node " << *visitedStmt;
+
+    // Set source location
+    visitedStmt->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+}
+
+Any ASTBuilder::visitForRngStmtOptional(TIPParser::ForRngStmtOptionalContext *ctx) {
+    visit(ctx->expr(0));
+    auto var = visitedExpr;
+    visit(ctx->expr(1));
+    auto start = visitedExpr;
+    visit(ctx->expr(2));
+    auto end = visitedExpr;
+    //by set to 1
+    auto by = std::make_shared<ASTNumberExpr>(1);
+    visit(ctx->statement());
+    auto body = visitedStmt;
+    visitedStmt = std::make_shared<ASTForRngStmt>(var, start, end, by, body);
+
+    LOG_S(1) << "Built AST node " << *visitedStmt;
+
+    // Set source location
+    visitedStmt->setLocation(ctx->getStart()->getLine(),
+                             ctx->getStart()->getCharPositionInLine());
+    return "";
+}
+
 Any ASTBuilder::visitAssignStmt(TIPParser::AssignStmtContext *ctx) {
   visit(ctx->expr(0));
   auto lhs = visitedExpr;
@@ -626,6 +668,7 @@ Any ASTBuilder::visitAndExpr(TIPParser::AndExprContext *ctx) {
   // Set source location
   visitedExpr->setLocation(ctx->getStart()->getLine(),
                            ctx->getStart()->getCharPositionInLine());
+  return "";
 }
 
 Any ASTBuilder::visitOrExpr(TIPParser::OrExprContext *ctx) {
