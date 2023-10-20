@@ -2,6 +2,7 @@
 
 #include "ASTStmt.h"
 #include "ASTExpr.h"
+#include "ASTNumberExpr.h"
 
 /*! \brief Class for block of statements
  */
@@ -23,7 +24,11 @@ public:
                   , START(START)
                   , END(END)
                   , BY(BY)
-                  , BODY(BODY) {}
+                  , BODY(BODY) {
+        if(BY == nullptr){
+            BY = std::make_shared<ASTNumberExpr>(1);
+        }
+    }
     ASTExpr *getVar() const { return VAR.get(); }
     ASTExpr *getStart() const { return START.get(); }
     ASTExpr *getEnd() const { return END.get(); }

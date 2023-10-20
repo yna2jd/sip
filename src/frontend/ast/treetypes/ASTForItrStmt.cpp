@@ -22,3 +22,7 @@ std::vector<std::shared_ptr<ASTNode>> ASTForItrStmt::getChildren() {
   children.push_back(BODY);
   return children;
 }
+
+llvm::Value *ASTForItrStmt::codegen() {
+    return nullptr;
+}

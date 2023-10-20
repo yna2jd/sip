@@ -42,7 +42,6 @@ public:
   virtual void endVisit(ASTArrayIndexExpr *element) override;
   virtual void endVisit(ASTTernaryExpr *element) override;
   virtual void endVisit(ASTLengthExpr *element) override;
-  virtual void endVisit(ASTRemainderExpr *element) override;
   virtual void endVisit(ASTIncrStmt *element) override;
   virtual void endVisit(ASTDecrStmt *element) override;
   virtual void endVisit(ASTBinaryExpr *element) override;
@@ -54,7 +53,6 @@ public:
   virtual void endVisit(ASTNullExpr *element) override;
   virtual void endVisit(ASTFieldExpr *element) override;
   virtual void endVisit(ASTRecordExpr *element) override;
-  //virtual void endVisit(ASTArrayListExpr *element) override;
   virtual void endVisit(ASTAccessExpr *element) override;
   virtual void endVisit(ASTDeclNode *element) override;
   virtual void endVisit(ASTDeclStmt *element) override;

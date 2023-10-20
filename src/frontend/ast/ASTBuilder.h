@@ -51,7 +51,7 @@ public:
   Any visitNumExpr(TIPParser::NumExprContext *ctx) override;
   Any visitVarExpr(TIPParser::VarExprContext *ctx) override;
   Any visitInputExpr(TIPParser::InputExprContext *ctx) override;
-  Any visitForItrStmt(TIPParser::InputExprContext *ctx) override;
+  Any visitForItrStmt(TIPParser::ForItrStmtContext *ctx) override;
   Any visitFunAppExpr(TIPParser::FunAppExprContext *ctx) override;
   Any visitAllocExpr(TIPParser::AllocExprContext *ctx) override;
   Any visitRefExpr(TIPParser::RefExprContext *ctx) override;

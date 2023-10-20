@@ -386,3 +386,5 @@ void PrettyPrinter::endVisit(ASTReturnStmt *element) {
 std::string PrettyPrinter::indent() const {
   return std::string(indentLevel * indentSize, indentChar);
 }
+
+
