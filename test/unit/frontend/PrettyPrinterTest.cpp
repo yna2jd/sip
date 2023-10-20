@@ -207,6 +207,112 @@ TEST_CASE("PrettyPrinter: Test paren expr", "[PrettyPrinter]") {
   REQUIRE(ppString == expected);
 }
 
+TEST_CASE("PrettyPrinter: Test and, or and not printing", "[PrettyPrinter]") {
+  std::stringstream stream;
+  stream << R"(prog() { var x, y, z; output x and y;  output x or y; return not z; })";
+
+  std::string expected = R"(prog() 
+{
+  var x, y, z;
+  output (x and y);
+  output (x or y);
+  return (not z);
+}
+)";
+
+  std::stringstream pp;
+  auto ast = ASTHelper::build_ast(stream);
+  PrettyPrinter::print(ast.get(), pp, ' ', 2);
+  std::string ppString = GeneralHelper::removeTrailingWhitespace(pp.str());
+  expected = GeneralHelper::removeTrailingWhitespace(expected);
+  REQUIRE(ppString == expected);
+}
+
+TEST_CASE("PrettyPrinter: Test and, or and not printing", "[PrettyPrinter]") {
+  std::stringstream stream;
+  stream << R"(prog() { var x, y, z; output x?y:z; return 0; })";
+
+  std::string expected = R"(prog() 
+{
+  var x, y, z;
+  output (x ? y : z);
+  return 0;
+}
+)";
+
+  std::stringstream pp;
+  auto ast = ASTHelper::build_ast(stream);
+  PrettyPrinter::print(ast.get(), pp, ' ', 2);
+  std::string ppString = GeneralHelper::removeTrailingWhitespace(pp.str());
+  expected = GeneralHelper::removeTrailingWhitespace(expected);
+  REQUIRE(ppString == expected);
+}
+
+TEST_CASE("PrettyPrinter: Test mod, negation and bool Literal printing", "[PrettyPrinter]") {
+  std::stringstream stream;
+  stream << R"(prog() { var x, y, z; output x % y;  output true; return -z; })";
+
+  std::string expected = R"(prog() 
+{
+  var x, y, z;
+  output (x % y);
+  output true;
+  return (-z);
+}
+)";
+
+  std::stringstream pp;
+  auto ast = ASTHelper::build_ast(stream);
+  PrettyPrinter::print(ast.get(), pp, ' ', 2);
+  std::string ppString = GeneralHelper::removeTrailingWhitespace(pp.str());
+  expected = GeneralHelper::removeTrailingWhitespace(expected);
+  REQUIRE(ppString == expected);
+}
+
+TEST_CASE("PrettyPrinter: Test incr, decr, and for itr statements", "[PrettyPrinter]") {
+  std::stringstream stream;
+  stream << R"(prog() { var x, y, z; for (x:y) x++; y--; return -z; })";
+
+  std::string expected = R"(prog() 
+{
+  var x, y, z;
+  for (x : y) 
+    x++;
+  y--;
+  return y;
+}
+)";
+
+  std::stringstream pp;
+  auto ast = ASTHelper::build_ast(stream);
+  PrettyPrinter::print(ast.get(), pp, ' ', 2);
+  std::string ppString = GeneralHelper::removeTrailingWhitespace(pp.str());
+  expected = GeneralHelper::removeTrailingWhitespace(expected);
+  REQUIRE(ppString == expected);
+}
+
+TEST_CASE("PrettyPrinter: Test array printing: ArrayList, ArrayOf, ArrayIndex, and ArrayLength", "[PrettyPrinter]") {
+  std::stringstream stream;
+  stream << R"(prog() { var x, y, z; x=[1,2,3]; y=x[0]; z=[3 of 5]; return #z; })";
+
+  std::string expected = R"(prog() 
+{
+  var x, y, z;
+  x = [1, 2, 3];  
+  y = x[0];
+  z = [3 of 5];
+  return (#z);
+}
+)";
+
+  std::stringstream pp;
+  auto ast = ASTHelper::build_ast(stream);
+  PrettyPrinter::print(ast.get(), pp, ' ', 2);
+  std::string ppString = GeneralHelper::removeTrailingWhitespace(pp.str());
+  expected = GeneralHelper::removeTrailingWhitespace(expected);
+  REQUIRE(ppString == expected);
+}
+
 TEST_CASE("PrettyPrinter: Test while spacing", "[PrettyPrinter]") {
   std::stringstream stream;
   stream << R"(prog(){var x,y;while(y>0){x=x+y;y=y-1;}return x;})";
