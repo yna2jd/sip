@@ -81,6 +81,10 @@ void PrettyPrinter::endVisit(ASTNumberExpr *element) {
   visitResults.push_back(std::to_string(element->getValue()));
 }
 
+void PrettyPrinter::endVisit(ASTBoolLiteralExpr *element) {
+  visitResults.push_back(std::to_string(element->getValue()));
+}
+
 void PrettyPrinter::endVisit(ASTVariableExpr *element) {
   visitResults.push_back(element->getName());
 }
@@ -93,6 +97,67 @@ void PrettyPrinter::endVisit(ASTBinaryExpr *element) {
 
   visitResults.push_back("(" + leftString + " " + element->getOp() + " " +
                          rightString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTAndExpr *element) {
+  std::string rightString = visitResults.back();
+  visitResults.pop_back();
+  std::string leftString = visitResults.back();
+  visitResults.pop_back();
+
+  visitResults.push_back("(" + leftString + " and " +
+                         rightString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTOrExpr *element) {
+  std::string rightString = visitResults.back();
+  visitResults.pop_back();
+  std::string leftString = visitResults.back();
+  visitResults.pop_back();
+
+  visitResults.push_back("(" + leftString + " or " +
+                         rightString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTTernaryExpr *element) {
+  std::string falseString = visitResults.back();
+  visitResults.pop_back();
+  std::string trueString = visitResults.back();
+  visitResults.pop_back();
+  std::string condString = visitResults.back();
+  visitResults.pop_back();
+
+  visitResults.push_back("(" + condString + " ? " + trueString +" : "+
+                         falseString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTLogicalNotExpr *element) {
+  std::string exprString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back("(not " +
+                         exprString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTLengthExpr *element) {
+  std::string exprString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back("(#" +
+                         exprString + ")");
+}
+
+void PrettyPrinter::endVisit(ASTArrayIndexExpr *element) {
+  std::string subString = visitResults.back();
+  visitResults.pop_back();
+  std::string arrayString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back(arrayString +"["+subString + "]");
+}
+
+void PrettyPrinter::endVisit(ASTNegationExpr *element) {
+  std::string exprString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back("(-" +
+                         exprString + ")");
 }
 
 void PrettyPrinter::endVisit(ASTInputExpr *element) {
@@ -155,6 +220,20 @@ void PrettyPrinter::endVisit(ASTDeclStmt *element) {
       joinWithDelim(visitResults, ", ", element->getVars().size(), 1) + ";");
 }
 
+void PrettyPrinter::endVisit(ASTIncrStmt *element) {
+  std::string incrString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back(
+      indent() + incrString + "++;");
+}
+
+void PrettyPrinter::endVisit(ASTDecrStmt *element) {
+  std::string decrString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back(
+      indent() + decrString + "--;");
+}
+
 void PrettyPrinter::endVisit(ASTAssignStmt *element) {
   std::string rhsString = visitResults.back();
   visitResults.pop_back();
@@ -174,6 +253,20 @@ void PrettyPrinter::endVisit(ASTBlockStmt *element) {
       indent() + "{\n" +
       joinWithDelim(visitResults, "\n", element->getStmts().size(), 0) +
       indent() + "}");
+}
+
+void PrettyPrinter::endVisit(ASTArrayListExpr *element) {
+  visitResults.push_back(
+      "[" + joinWithDelim(visitResults, ", ", element->getChildren().size(), 1) + "]");
+}
+
+void PrettyPrinter::endVisit(ASTArrayOfExpr *element) {
+  std::string rightString = visitResults.back();
+  visitResults.pop_back();
+  std::string leftString = visitResults.back();
+  visitResults.pop_back();
+  visitResults.push_back(
+      "[" + leftString + " of "+ rightString+ "]");
 }
 
 /*
@@ -197,6 +290,26 @@ void PrettyPrinter::endVisit(ASTWhileStmt *element) {
   std::string whileString =
       indent() + "while (" + condString + ") \n" + bodyString;
   visitResults.push_back(whileString);
+}
+
+bool PrettyPrinter::visit(ASTForItrStmt *element) {
+  indentLevel++;
+  return true;
+}
+
+void PrettyPrinter::endVisit(ASTForItrStmt *element) {
+  std::string bodyString = visitResults.back();
+  visitResults.pop_back();
+  std::string rightString = visitResults.back();
+  visitResults.pop_back();
+  std::string leftString = visitResults.back();
+  visitResults.pop_back();
+
+  indentLevel--;
+
+  std::string forItrString =
+      indent() + "for (" + leftString +":"+ rightString + ") \n" + bodyString;
+  visitResults.push_back(forItrString);
 }
 
 bool PrettyPrinter::visit(ASTIfStmt *element) {
