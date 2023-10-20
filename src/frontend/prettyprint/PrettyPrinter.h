@@ -60,6 +60,8 @@ public:
   virtual void endVisit(ASTAssignStmt *element) override;
   virtual bool visit(ASTBlockStmt *element) override;
   virtual void endVisit(ASTBlockStmt *element) override;
+  virtual bool visit(ASTForRngStmt *element) override;
+  virtual void endVisit(ASTForRngStmt *element) override;
   virtual bool visit(ASTWhileStmt *element) override;
   virtual void endVisit(ASTWhileStmt *element) override;
   virtual bool visit(ASTIfStmt *element) override;
