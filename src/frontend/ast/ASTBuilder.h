@@ -73,4 +73,13 @@ public:
   Any visitOutputStmt(TIPParser::OutputStmtContext *ctx) override;
   Any visitErrorStmt(TIPParser::ErrorStmtContext *ctx) override;
   Any visitReturnStmt(TIPParser::ReturnStmtContext *ctx) override;
+  Any visitBoolLiteralExpr(TIPParser::BoolLiteralExprContext *ctx) override;
+  Any visitLogicalNotExpr(TIPParser::LogicalNotExprContext *ctx) override;
+  Any visitAndExpr(TIPParser::AndExprContext *ctx) override;
+  Any visitOrExpr(TIPParser::OrExprContext *ctx) override;
+  Any visitRemainderExpr(TIPParser::RemainderExprContext *ctx) override;
+  Any visitNegationExpr(TIPParser::NegationExprContext *ctx) override;
+  Any visitIncrStmt(TIPParser::IncrStmtContext *ctx) override;
+  Any visitDecrStmt(TIPParser::DecrStmtContext *ctx) override;
+
 };
