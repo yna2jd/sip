@@ -5,6 +5,7 @@
 #include "loguru.hpp"
 #include <functional>
 #include <vector>
+#include <iostream>
 
 using namespace antlrcpp;
 
@@ -368,7 +369,7 @@ Any ASTBuilder::visitForItrStmt(TIPParser::ForItrStmtContext *ctx) {
   auto right = visitedExpr;
   visit(ctx->statement());
   auto body = visitedStmt;
-  visitedStmt = std::make_shared<ASTForIStmt>(left,right, body);
+  visitedStmt = std::make_shared<ASTForItrStmt>(left,right, body);
 
   LOG_S(1) << "Built AST node " << *visitedStmt;
 
@@ -612,11 +613,9 @@ Any ASTBuilder::visitForRngStmtOptional(TIPParser::ForRngStmtOptionalContext *ct
     auto start = visitedExpr;
     visit(ctx->expr(2));
     auto end = visitedExpr;
-    //by set to 1
-    auto by = std::make_shared<ASTNumberExpr>(1);
     visit(ctx->statement());
     auto body = visitedStmt;
-    visitedStmt = std::make_shared<ASTForRngStmt>(var, start, end, by, body);
+    visitedStmt = std::make_shared<ASTForRngStmt>(var, start, end, body);
 
     LOG_S(1) << "Built AST node " << *visitedStmt;
 
