@@ -72,8 +72,8 @@ public:
   virtual void endVisit(ASTBlockStmt *element) {}
   virtual bool visit(ASTBoolLiteralExpr *element) { return true; }
   virtual void endVisit(ASTBoolLiteralExpr *element) {}
-  virtual bool visit(ASTNotExpr *element) { return true; }
-  virtual void endVisit(ASTNotExpr *element) {}
+  virtual bool visit(ASTLogicalNotExpr *element) { return true; }
+  virtual void endVisit(ASTLogicalNotExpr *element) {}
   virtual bool visit(ASTAndExpr *element) { return true; }
   virtual void endVisit(ASTAndExpr *element) {}
   virtual bool visit(ASTOrExpr *element) { return true; }
@@ -96,4 +96,6 @@ public:
   virtual void endVisit(ASTLengthExpr *element) {}
   virtual bool visit(ASTArrayListExpr *element) { return true; }
   virtual void endVisit(ASTArrayListExpr *element) {}
+  virtual bool visit(ASTForRngStmt *element) { return true; }
+  virtual void endVisit(ASTForRngStmt *element) {}
 };

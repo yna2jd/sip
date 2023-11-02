@@ -1,6 +1,5 @@
 #include "PrettyPrinter.h"
 
-#include <iostream>
 #include <sstream>
 
 void PrettyPrinter::print(ASTProgram *p, std::ostream &os, char c, int n) {
@@ -82,7 +81,9 @@ void PrettyPrinter::endVisit(ASTNumberExpr *element) {
 }
 
 void PrettyPrinter::endVisit(ASTBoolLiteralExpr *element) {
-  visitResults.push_back(std::to_string(element->getValue()));
+  std::stringstream alpha;
+  alpha << std::boolalpha << element->getValue();
+  visitResults.push_back(alpha.str());
 }
 
 void PrettyPrinter::endVisit(ASTVariableExpr *element) {
@@ -318,13 +319,14 @@ bool PrettyPrinter::visit(ASTForRngStmt *element) {
 }
 
 void PrettyPrinter::endVisit(ASTForRngStmt *element) {
+
   std::string bodyString = visitResults.back();
   visitResults.pop_back();
-  std::string byString = visitResults.back();
+  std::string incrString = visitResults.back();
   visitResults.pop_back();
-  std::string maxString = visitResults.back();
+  std::string endString = visitResults.back();
   visitResults.pop_back();
-  std::string startString = visitResults.back();
+  std::string beginString = visitResults.back();
   visitResults.pop_back();
   std::string varString = visitResults.back();
   visitResults.pop_back();
@@ -332,7 +334,7 @@ void PrettyPrinter::endVisit(ASTForRngStmt *element) {
   indentLevel--;
 
   std::string forRngString =
-      indent() + "for (" + varString +" : "+ startString + " .. "+maxString+" by " +byString+") \n" + bodyString;
+          indent() + "for (" + varString + " : " + beginString + " .. " + endString + " by " + incrString + ") \n" + bodyString;
   visitResults.push_back(forRngString);
 }
 
@@ -386,3 +388,5 @@ void PrettyPrinter::endVisit(ASTReturnStmt *element) {
 std::string PrettyPrinter::indent() const {
   return std::string(indentLevel * indentSize, indentChar);
 }
+
+
