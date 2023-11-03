@@ -439,6 +439,7 @@ TEST_CASE("TypeConstraintVisitor: access expr", "[TypeConstraintVisitor]") {
       "\u27E6r@3:14\u27E7 = \u27E6{f:4,g:13}@4:14\u27E7", // assignment
       "\u27E6r@3:14\u27E7 = "
       "{f:\u03B1<(r.g)@5:17[f]>,g:\u27E6(r.g)@5:17\u27E7}", // field access
+    "\u27E6(r.g)@5:17\u27E7 = int",                       // main return int
       "\u27E6main@2:6\u27E7 = () -> \u27E6(r.g)@5:17\u27E7" // function decl
   };
 
@@ -467,6 +468,7 @@ TEST_CASE("TypeConstraintVisitor: uber record", "[TypeConstraintVisitor]") {
       "\u27E613@5:27\u27E7 = int",                             // int constant
       "\u27E6{n:null,f:13}@5:14\u27E7 = "
       "{f:\u27E613@5:27\u27E7,g:\u25C7,n:\u27E6null@5:18\u27E7}", // uber record
+        "\u27E60@6:17\u27E7 = int",                      // main return int
       "\u27E6r@3:14\u27E7 = \u27E6{n:null,f:13}@5:14\u27E7",      // assignment
       "\u27E6foo@2:6\u27E7 = () -> \u27E60@6:17\u27E7" // function decl
   };
@@ -510,6 +512,7 @@ main() {
       "\u27E6r1@3:11\u27E7 = \u27E6((*n).p)@6:9\u27E7",         // assign
       "\u27E6r1@3:11\u27E7 = int",                              // output
       "\u27E60@8:11\u27E7 = int",                       // int constant
+        "\u27E60@8:11\u27E7 = int",                       // main return int
       "\u27E6main@2:0\u27E7 = () -> \u27E60@8:11\u27E7" // fun
                                                         // declaration
   };
@@ -552,6 +555,7 @@ main() {
       "\u03B1<((*(n.c)).a)@6:10[c]>,d:\u03B1<((*(n.c)).a)@6:10[d]>}", // access
       "\u27E6r1@3:14\u27E7 = \u27E6((*(n.c)).a)@6:10\u27E7",          // assign
       "\u27E6r1@3:14\u27E7 = int",                                    // output
+        "\u27E60@8:11\u27E7 = int",                       // main return int
       "\u27E60@8:11\u27E7 = int",                       // int constant
       "\u27E6main@2:0\u27E7 = () -> \u27E60@8:11\u27E7" // fun declaration
   };
