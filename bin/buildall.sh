@@ -3,5 +3,5 @@ cd ${ROOT_DIR}/build/
 ../bin/cleancov.sh
 cmake .. >  ${ROOT_DIR}/build/.buildall
 echo cmake done
-make -s -j6 all > ${ROOT_DIR}/build/.buildall
+make -j6 all > ${ROOT_DIR}/build/.buildall
 ${ROOT_DIR}/bin/runtests.sh

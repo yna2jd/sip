@@ -41,19 +41,25 @@ public:
   bool visit(ASTFunction *element) override;
   void endVisit(ASTAccessExpr *element) override;
   void endVisit(ASTAllocExpr *element) override;
+  void endVisit(ASTArrayIndexExpr *element) override;
+  void endVisit(ASTArrayOfExpr *element) override;
+  void endVisit(ASTArrayListExpr *element) override;
   void endVisit(ASTAssignStmt *element) override;
   void endVisit(ASTBinaryExpr *element) override;
   void endVisit(ASTDeRefExpr *element) override;
   void endVisit(ASTErrorStmt *element) override;
+  void endVisit(ASTForRngStmt *element) override;
   void endVisit(ASTFunAppExpr *element) override;
   void endVisit(ASTFunction *element) override;
   void endVisit(ASTIfStmt *element) override;
   void endVisit(ASTInputExpr *element) override;
+  void endVisit(ASTLengthExpr *element) override;
   void endVisit(ASTNullExpr *element) override;
   void endVisit(ASTNumberExpr *element) override;
   void endVisit(ASTOutputStmt *element) override;
   void endVisit(ASTRecordExpr *element) override;
   void endVisit(ASTRefExpr *element) override;
+  void endVisit(ASTTernaryExpr *element) override;
   void endVisit(ASTWhileStmt *element) override;
 
 protected:
