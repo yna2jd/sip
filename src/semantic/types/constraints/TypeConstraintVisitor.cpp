@@ -113,10 +113,10 @@ void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
     constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
     constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
   } else if (op == ">"){
-    if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
-        constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+    if (astToVar(element) == std::make_shared<TipInt>()) {
+        constraintHandler->handle(astToVar(element), std::make_shared<TipInt>());
     } else {
-        constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+        constraintHandler->handle(astToVar(element), std::make_shared<TipBool>());
     }  
     constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
     constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
