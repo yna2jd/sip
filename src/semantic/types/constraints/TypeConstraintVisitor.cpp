@@ -58,14 +58,11 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
           first = false;
       }
       formals.push_back(astToVar(f));
-      constraintHandler->handle(astToVar(f), astToVar(std::make_shared<TipArray>(ftype)));
+      constraintHandler->handle(astToVar(f), std::make_shared<TipType>(ftype));
     }
    
     // Return is the last statement and must be int
-    auto ret = dynamic_cast<ASTReturnStmt *>(element->getStmts().back());
-    constraintHandler->handle(astToVar(ret->getArg()),
-                              astToVar(std::make_shared<TipArray>(ftype)));
-        
+    auto ret = dynamic_cast<ASTReturnStmt *>(element->getStmts().back());        
 
     constraintHandler->handle(
         astToVar(element->getDecl()),
