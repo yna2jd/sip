@@ -20,7 +20,7 @@ bool TipArray::operator!=(const TipType &other) const {
 }
 
 std::ostream &TipArray::print(std::ostream &out) const {
-  out << "\u2B61" << *arguments.front();
+  out << "\u27E6array" << *arguments.front() << "\u27E7";
   return out;
 }
 

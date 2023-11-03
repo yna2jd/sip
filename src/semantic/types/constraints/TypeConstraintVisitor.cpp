@@ -251,6 +251,9 @@ void TypeConstraintVisitor::endVisit(ASTArrayListExpr *element) {
         auto firstElement = arrayElements.front();
         arrayType = astToVar(firstElement);
     }
+    for(auto arrayElement : arrayElements){
+        constraintHandler->handle(astToVar(arrayElement), arrayType);
+    }
     constraintHandler->handle(astToVar(element), std::make_shared<TipArray>(arrayType));
 }
 
@@ -290,7 +293,8 @@ void TypeConstraintVisitor::endVisit(ASTForItrStmt *element) {
  *
  */
 void TypeConstraintVisitor::endVisit(ASTForRngStmt *element) {
-    constraintHandler->handle(astToVar(element->getIncr()), std::make_shared<TipArray>(astToVar(element->getVar())));
+    constraintHandler->handle(astToVar(element->getVar()), std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element->getIncr()), std::make_shared<TipInt>());
     constraintHandler->handle(astToVar(element->getBegin()), std::make_shared<TipInt>());
     constraintHandler->handle(astToVar(element->getEnd()), std::make_shared<TipInt>());
 }
