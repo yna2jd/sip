@@ -108,11 +108,20 @@ void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
     constraintHandler->handle(astToVar(element), intType);
     constraintHandler->handle(astToVar(element->getLeft()), intType);
     constraintHandler->handle(astToVar(element->getRight()), intType);
-  } else if (op == ">" || op == "<" || op == ">=" || op == "<=") {
+  } else if (op == "<" || op == ">=" || op == "<=") {
     constraintHandler->handle(astToVar(element), std::make_shared<TipBool>());
     constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
     constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
-  } else {
+  } else if (op == ">"){
+    if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
+        constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+    } else {
+        constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+    }  
+    constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
+  }
+  else {
     auto boolType = std::make_shared<TipBool>();
     constraintHandler->handle(astToVar(element), boolType);
     constraintHandler->handle(astToVar(element->getLeft()),
@@ -328,8 +337,11 @@ void TypeConstraintVisitor::endVisit(ASTAssignStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
-    constraintHandler->handle(astToVar(element->getCondition()),
-                        std::make_shared<TipBool>());
+  if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+  } else {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+  }  
 }
 
 /*! \brief Type constraints for if statement.
@@ -338,8 +350,11 @@ void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTIfStmt *element) {
-    constraintHandler->handle(astToVar(element->getCondition()),
-                        std::make_shared<TipBool>());
+  if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+  } else {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+  }  
 }
 
 /*! \brief Type constraints for output statement.
