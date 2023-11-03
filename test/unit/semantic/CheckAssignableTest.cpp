@@ -60,6 +60,41 @@ TEST_CASE("Check Assignable: address of field", "[Symbol]") {
   REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
 }
 
+TEST_CASE("Check Assignable: array lhs", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(varlhs() { var x; x = [10]; x[0] = 1; return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
+}
+
+TEST_CASE("Check Assignable: for iter lhs", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(varlhs() { var x; x = 10; for(x : [1,2,3]){} return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
+}
+
+TEST_CASE("Check Assignable: for rng lhs", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(varlhs() { var x; x = 10; for(x : 0 .. 2 by 1){} return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
+}
+
+TEST_CASE("Check Assignable:incr lhs", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(varlhs() { var x; x++; return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
+}
+
+TEST_CASE("Check Assignable: decr lhs", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(varlhs() { var x; x--; return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
+}
+
 /************** the following are expected to fail the check ************/
 
 TEST_CASE("Check Assignable: constant lhs", "[Symbol]") {
@@ -100,6 +135,14 @@ TEST_CASE("Check Assignable: record lhs", "[Symbol]") {
   auto ast = ASTHelper::build_ast(stream);
   REQUIRE_THROWS_MATCHES(CheckAssignable::check(ast.get()), SemanticError,
                          ContainsWhat("{f:0,g:1} not an l-value"));
+}
+
+TEST_CASE("Check Assignable: array lhs false", "[Symbol]") {
+    std::stringstream stream;
+    stream << R"(decrlhs() { var x; [1, 2] = x; return 0; })";
+    auto ast = ASTHelper::build_ast(stream);
+    REQUIRE_THROWS_MATCHES(CheckAssignable::check(ast.get()), SemanticError,
+                           ContainsWhat("[1, 2] not an l-value"));
 }
 
 TEST_CASE("Check Assignable: address of pointer", "[Symbol]") {

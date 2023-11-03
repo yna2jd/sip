@@ -28,6 +28,8 @@ bool isAssignable(ASTExpr *e) {
           return true;
       } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
           return true;
+      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
+          return true;
       } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
           return true;
       } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
@@ -86,7 +88,7 @@ void CheckAssignable::endVisit(ASTArrayIndexExpr *element) {
 
     if (isAssignable(element->getArray()))
         return;
-
+    LOG_S(1) << "type: " << *element->getArray();
     std::ostringstream oss;
     oss << "Address of error on line " << element->getLine() << ": ";
     oss << *element->getArray() << " not an l-value\n";
@@ -116,3 +118,39 @@ void CheckAssignable::endVisit(ASTForRngStmt *element) {
     oss << *element->getVar() << " not an l-value\n";
     throw SemanticError(oss.str());
 }
+
+void CheckAssignable::endVisit(ASTDecrStmt *element) {
+    LOG_S(1) << "Checking assignability of " << *element;
+
+    if (isAssignable(element->getExpr()))
+        return;
+
+    std::ostringstream oss;
+    oss << "Address of error on line " << element->getLine() << ": ";
+    oss << *element->getExpr() << " not an l-value\n";
+    throw SemanticError(oss.str());
+}
+
+void CheckAssignable::endVisit(ASTIncrStmt *element) {
+    LOG_S(1) << "Checking assignability of " << *element;
+
+    if (isAssignable(element->getExpr()))
+        return;
+
+    std::ostringstream oss;
+    oss << "Address of error on line " << element->getLine() << ": ";
+    oss << *element->getExpr() << " not an l-value\n";
+    throw SemanticError(oss.str());
+}
+
+//void CheckAssignable::endVisit(ASTFunction *element) {
+//    LOG_S(1) << "Checking assignability of " << *element;
+//
+//    if (isAssignable(dynamic_cast<ASTExpr *>(element->getFormals().back())))
+//        return;
+//
+//    std::ostringstream oss;
+//    oss << "Address of error on line " << element->getLine() << ": ";
+//    oss << *element->dynamic_cast<ASTExpr *>(element->getFormals().back()) << " not an l-value\n";
+//    throw SemanticError(oss.str());
+//}
