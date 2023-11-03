@@ -13,7 +13,7 @@ bool isAssignable(ASTExpr *e) {
   if (dynamic_cast<ASTVariableExpr *>(e))
     return true;
   if (dynamic_cast<ASTAccessExpr *>(e)) {
-    ASTAccessExpr *access = dynamic_cast<ASTAccessExpr *>(e);
+    auto *access = dynamic_cast<ASTAccessExpr *>(e);
     if (dynamic_cast<ASTVariableExpr *>(access->getRecord())) {
       return true;
     } else if (dynamic_cast<ASTDeRefExpr *>(access->getRecord())) {
@@ -23,7 +23,7 @@ bool isAssignable(ASTExpr *e) {
     }
   }
   if(dynamic_cast<ASTArrayIndexExpr *>(e)){
-      ASTArrayIndexExpr *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
+      auto *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
       if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
           return true;
       } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
@@ -54,7 +54,7 @@ void CheckAssignable::endVisit(ASTAssignStmt *element) {
   std::ostringstream oss;
   oss << "Assignment error on line " << element->getLine() << ": ";
   if (dynamic_cast<ASTAccessExpr *>(element->getLHS())) {
-    ASTAccessExpr *access = dynamic_cast<ASTAccessExpr *>(element->getLHS());
+    auto *access = dynamic_cast<ASTAccessExpr *>(element->getLHS());
     oss << *access->getRecord()
         << " is an expression, and not a variable corresponding to a record\n";
   } else {
