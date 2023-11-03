@@ -53,10 +53,6 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
     bool first = true;
     std::shared_ptr<TipType> ftype = astToVar(element->getFormals().front());
     for (auto &f : element->getFormals()) {
-      if (first) {
-          ftype= astToVar(first);
-          first = false;
-      }
       formals.push_back(astToVar(f));
       constraintHandler->handle(astToVar(f), std::make_shared<TipType>(ftype));
     }
