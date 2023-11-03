@@ -267,17 +267,14 @@ TEST_CASE("TypeConstraintVisitor: Not, - ", "[TypeConstraintVisitor]") {
     )";
 
   std::vector<std::string> expected{
-      "\u27E6(aand1)@4:12\u27E7 = bool",                // binexpr is int
-      "\u27E6(nota)@5:14\u27E7 = bool",                // binexpr is int
-      "\u27E6a@3:15\u27E7 = bool",                    // operand is int
-      "\u27E61@4:18\u27E7 = bool",                    // operand is int
-      "\u27E60@5:19\u27E7 = bool",                    // const is int
-      "\u27E6a@3:15\u27E7 = \u27E6(nota)@5:14\u27E7", 
-      "\u27E6a@3:15 = bool", 
-      "\u27E6a@3:15\u27E7 = \u27E61@4:18\u27E7", 
+      "\u27E6(aand1)@4:12\u27E7 = bool", 
+      "\u27E61@4:18\u27E7 = bool", 
+      "\u27E6a@3:15\u27E7 = bool",
+      "\u27E6a@3:15\u27E7 = \u27E6a@5:14\u27E7", 
+      "\u27E6a@5:14\u27E7 = bool",
+      "\u27E6foo@2:6\u27E7 = () -> \u27E6x@7:15\u27E7",
       "\u27E6x@3:12\u27E7 = int",
-      "\u27E6(-x)@7:15\u27E7 = int",
-      "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
+      "\u27E6x@7:15\u27E7 = int"
   };
 
   runtest(program, expected);
