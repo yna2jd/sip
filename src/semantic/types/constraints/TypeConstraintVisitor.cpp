@@ -50,8 +50,8 @@ bool TypeConstraintVisitor::visit(ASTFunction *element) {
 void TypeConstraintVisitor::endVisit(ASTFunction *element) {
   if (element->getName() == "main") {
     std::vector<std::shared_ptr<TipType>> formals;
-    auto bool first = true
-    auto ftype = std::make_shared<TipInt>();
+    bool first = true
+    std::shared_ptr<TipType> ftype = element->getFormals().front();
     for (auto &f : element->getFormals()) {
       if (first) {
           ftype= astToVar(first);
