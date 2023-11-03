@@ -32,13 +32,13 @@ TEST_CASE("PrettyPrinter: Test indentation", "[PrettyPrinter]") {
   stream << R"(
       foo() {
         var x;
-        if(1) {
+        if(true) {
           x = 5;
         }
         else {
           x = 10;
         }
-        while(1) { z = 10; }
+        while(true) { z = 10; }
         {
           y = 42;
         }
@@ -166,11 +166,11 @@ TEST_CASE("PrettyPrinter: Test if print", "[PrettyPrinter]") {
 TEST_CASE("PrettyPrinter: Test nested if print", "[PrettyPrinter]") {
   std::stringstream stream;
   stream
-      << R"(prog() { var x, y; if (x) if (y) output 0; else output 1; else output 2; return 0; })";
+      << R"(prog() { var x, y; if (not false) if (y) output 0; else output 1; else output 2; return 0; })";
   std::string expected = R"(prog()
 {
   var x, y;
-  if (x) 
+  if ((not false))
     if (y) 
       output 0;
     else
