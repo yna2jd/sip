@@ -131,6 +131,105 @@ TEST_CASE("TypeConstraintVisitor: if ", "[TypeConstraintVisitor]") {
   runtest(program, expected);
 }
 
+TEST_CASE("TypeConstraintVisitor: >= ", "[TypeConstraintVisitor]") {
+  std::stringstream program;
+  program << R"(
+      foo() {
+        var x;
+        if (x >= 0) {
+          x = x + 1;
+        }
+        return x;
+      }
+    )";
+
+  /*
+   * These results do a good job of illustrating the redundancy in the
+   * constraints. This arises because each expression generates its own
+   * constraints in isolation.
+   */
+  std::vector<std::string> expected{
+      "\u27E60@4:16\u27E7 = int",                    // const is int
+      "\u27E6(x>=0)@4:12\u27E7 = bool",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operand is int
+      "\u27E60@4:16\u27E7 = int",                    // operand is int
+      "\u27E61@5:18\u27E7 = int",                    // const is int
+      "\u27E6(x+1)@5:14\u27E7 = int",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operands is int
+      "\u27E61@5:18\u27E7 = int",                    // operands is int
+      "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
+      "\u27E6x@3:12\u27E7 = \u27E60@4:16\u27E7", 
+      "\u27E6(x>=0)@4:12\u27E7 = bool",                // if condition is int
+      "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
+  };
+
+TEST_CASE("TypeConstraintVisitor: <= ", "[TypeConstraintVisitor]") {
+  std::stringstream program;
+  program << R"(
+      foo() {
+        var x;
+        if (x >= 0) {
+          x = x + 1;
+        }
+        return x;
+      }
+    )";
+
+  /*
+   * These results do a good job of illustrating the redundancy in the
+   * constraints. This arises because each expression generates its own
+   * constraints in isolation.
+   */
+  std::vector<std::string> expected{
+      "\u27E60@4:16\u27E7 = int",                    // const is int
+      "\u27E6(x<=0)@4:12\u27E7 = bool",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operand is int
+      "\u27E60@4:16\u27E7 = int",                    // operand is int
+      "\u27E61@5:18\u27E7 = int",                    // const is int
+      "\u27E6(x+1)@5:14\u27E7 = int",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operands is int
+      "\u27E61@5:18\u27E7 = int",                    // operands is int
+      "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
+      "\u27E6x@3:12\u27E7 = \u27E60@4:16\u27E7", 
+      "\u27E6(x<=0)@4:12\u27E7 = bool",                // if condition is int
+      "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
+  };
+
+TEST_CASE("TypeConstraintVisitor: Boolean Literal, == ", "[TypeConstraintVisitor]") {
+  std::stringstream program;
+  program << R"(
+      foo() {
+        var x, a;
+        if (a==true) {
+          x = x + 1;
+        }
+        return x;
+      }
+    )";
+
+  /*
+   * These results do a good job of illustrating the redundancy in the
+   * constraints. This arises because each expression generates its own
+   * constraints in isolation.
+   */
+  std::vector<std::string> expected{
+      "\u27E60@4:16\u27E7 = int",                    // const is int
+      "\u27E6(a==true)@4:12\u27E7 = bool",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operand is int
+      "\u27E6true@4:16\u27E7 = bool",                    // operand is int
+      "\u27E61@5:18\u27E7 = int",                    // const is int
+      "\u27E6(x+1)@5:14\u27E7 = int",                // binexpr is int
+      "\u27E6x@3:12\u27E7 = int",                    // operands is int
+      "\u27E61@5:18\u27E7 = int",                    // operands is int
+      "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
+      "\u27E6a@3:12\u27E7 = \u27E6true@4:16\u27E7", 
+      "\u27E6(a==true)@4:12\u27E7 = bool",                // if condition is int
+      "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
+  };
+
+  runtest(program, expected);
+}
+
 TEST_CASE("TypeConstraintVisitor: while ", "[TypeConstraintVisitor]") {
   std::stringstream program;
   program << R"(
