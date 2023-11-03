@@ -60,6 +60,7 @@ public:
   void endVisit(ASTAndExpr *element) override;
   void endVisit(ASTOrExpr *element) override;
   void endVisit(ASTLogicalNotExpr *element) override;
+  void endVisit(ASTBoolLiteralExpr *element) override;
   void endVisit(ASTNegationExpr *element) override;
   void endVisit(ASTRemainderExpr *element) override;
 
