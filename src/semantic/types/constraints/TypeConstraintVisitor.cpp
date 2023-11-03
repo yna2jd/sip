@@ -102,21 +102,15 @@ void TypeConstraintVisitor::endVisit(ASTBoolLiteralExpr *element) {
  */
 void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
   auto op = element->getOp();
-  if (op != "==" && op != "!="){
-      auto intType = std::make_shared<TipInt>();
-  } else {
-      auto intType = std::make_shared<TipBool>();
-  }
-
-  // result type is integer
-  constraintHandler->handle(astToVar(element), intType);
-
   if (op != "==" && op != "!=") {
     // operands are integer
+    auto intType = std::make_shared<TipInt>();
+    constraintHandler->handle(astToVar(element), intType);
     constraintHandler->handle(astToVar(element->getLeft()), intType);
     constraintHandler->handle(astToVar(element->getRight()), intType);
   } else {
-    // operands have the same type
+    auto boolType = std::make_shared<TipBool>();    
+    constraintHandler->handle(astToVar(element), boolType);
     constraintHandler->handle(astToVar(element->getLeft()),
                               astToVar(element->getRight()));
   }
@@ -333,10 +327,12 @@ void TypeConstraintVisitor::endVisit(ASTNegationExpr *element) {
     constraintHandler->handle(astToVar(element), intType);
     constraintHandler->handle(astToVar(element->getExpr()), intType);
 }
+
+/* Think this is included in binary 
 void TypeConstraintVisitor::endVisit(ASTRemainderExpr *element) {
     auto intType = std::make_shared<TipInt>();
     constraintHandler->handle(astToVar(element), intType);
     constraintHandler->handle(astToVar(element->getLeft()), intType);
     constraintHandler->handle(astToVar(element->getRight()), intType);
-}
+} */
 
