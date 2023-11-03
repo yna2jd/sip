@@ -3,6 +3,7 @@
 #include "TipAlpha.h"
 #include "TipFunction.h"
 #include "TipInt.h"
+#include "TipBool.h"
 #include "TipRecord.h"
 #include "TipRef.h"
 #include "TipVar.h"
@@ -86,6 +87,9 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
 void TypeConstraintVisitor::endVisit(ASTNumberExpr *element) {
   constraintHandler->handle(astToVar(element), std::make_shared<TipInt>());
 }
+void TypeConstraintVisitor::endVisit(ASTBoolLiteralExpr *element) {
+  constraintHandler->handle(astToVar(element), std::make_shared<TipBool>());
+}
 
 /*! \brief Type constraints for binary operator.
  *
@@ -98,7 +102,11 @@ void TypeConstraintVisitor::endVisit(ASTNumberExpr *element) {
  */
 void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
   auto op = element->getOp();
-  auto intType = std::make_shared<TipInt>();
+  if (op != "==" && op != "!="){
+      auto intType = std::make_shared<TipInt>();
+  } else {
+      auto intType = std::make_shared<TipBool>();
+  }
 
   // result type is integer
   constraintHandler->handle(astToVar(element), intType);
@@ -112,6 +120,26 @@ void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
     constraintHandler->handle(astToVar(element->getLeft()),
                               astToVar(element->getRight()));
   }
+}
+
+void TypeConstraintVisitor::endVisit(ASTAndExpr *element) {
+  auto boolType = std::make_shared<TipBool>();
+  constraintHandler->handle(astToVar(element), boolType);
+  constraintHandler->handle(astToVar(element->getLeft()),
+                              astToVar(element->getRight()));
+}
+
+void TypeConstraintVisitor::endVisit(ASTOrExpr *element) {
+  auto boolType = std::make_shared<TipBool>();
+  constraintHandler->handle(astToVar(element), boolType);
+  constraintHandler->handle(astToVar(element->getLeft()),
+                              astToVar(element->getRight()));
+}
+
+void TypeConstraintVisitor::endVisit(ASTLogicalNotExpr *element) {
+  auto boolType = std::make_shared<TipBool>();
+  constraintHandler->handle(astToVar(element), boolType);
+  constraintHandler->handle(astToVar(element->getExpr()), boolType);
 }
 
 /*! \brief Type constraints for input statement.
@@ -210,8 +238,8 @@ void TypeConstraintVisitor::endVisit(ASTAssignStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
-  constraintHandler->handle(astToVar(element->getCondition()),
-                            std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element->getCondition()),
+                        std::make_shared<TipBool>());
 }
 
 /*! \brief Type constraints for if statement.
@@ -220,8 +248,8 @@ void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTIfStmt *element) {
-  constraintHandler->handle(astToVar(element->getCondition()),
-                            std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element->getCondition()),
+                        std::make_shared<TipBool>());
 }
 
 /*! \brief Type constraints for output statement.
@@ -292,3 +320,23 @@ void TypeConstraintVisitor::endVisit(ASTErrorStmt *element) {
   constraintHandler->handle(astToVar(element->getArg()),
                             std::make_shared<TipInt>());
 }
+void TypeConstraintVisitor::endVisit(ASTIncrStmt *element) {
+    auto intType = std::make_shared<TipInt>();
+    constraintHandler->handle(astToVar(element->getExpr()), intType);
+}
+void TypeConstraintVisitor::endVisit(ASTDecrStmt *element) {
+    auto intType = std::make_shared<TipInt>();
+    constraintHandler->handle(astToVar(element->getExpr()), intType);
+}
+void TypeConstraintVisitor::endVisit(ASTNegationExpr *element) {
+    auto intType = std::make_shared<TipInt>();
+    constraintHandler->handle(astToVar(element), intType);
+    constraintHandler->handle(astToVar(element->getExpr()), intType);
+}
+void TypeConstraintVisitor::endVisit(ASTRemainderExpr *element) {
+    auto intType = std::make_shared<TipInt>();
+    constraintHandler->handle(astToVar(element), intType);
+    constraintHandler->handle(astToVar(element->getLeft()), intType);
+    constraintHandler->handle(astToVar(element->getRight()), intType);
+}
+
