@@ -4,17 +4,18 @@
 #include "ASTStmt.h"
 
 class ASTForItrStmt : public ASTStmt {
-  std::shared_ptr<ASTExpr> LEFT;
-  std::shared_ptr<ASTExpr> RIGHT;
+  std::shared_ptr<ASTExpr> VAR;
+  std::shared_ptr<ASTExpr> COLLECTION;
   std::shared_ptr<ASTStmt> BODY;
 
 public:
   std::vector<std::shared_ptr<ASTNode>> getChildren() override;
-    ASTForItrStmt(std::shared_ptr<ASTExpr> LEFT,std::shared_ptr<ASTExpr> RIGHT, std::shared_ptr<ASTStmt> BODY)
-      : LEFT(LEFT), RIGHT(RIGHT), BODY(BODY) {}
-  ASTExpr *getLeft() const { return LEFT.get(); }
-  ASTExpr *getRight() const { return RIGHT.get(); }
+    ASTForItrStmt(std::shared_ptr<ASTExpr> VAR, std::shared_ptr<ASTExpr> COLLECTION, std::shared_ptr<ASTStmt> BODY)
+      : VAR(VAR), COLLECTION(COLLECTION), BODY(BODY) {}
+  ASTExpr *getVar() const { return VAR.get(); }
+  ASTExpr *getCollection() const { return COLLECTION.get(); }
   ASTStmt *getBody() const { return BODY.get(); }
+  // (for right : left){ body}
   void accept(ASTVisitor *visitor) override;
   llvm::Value *codegen() override;
 

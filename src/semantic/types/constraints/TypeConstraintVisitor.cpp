@@ -214,7 +214,7 @@ void TypeConstraintVisitor::endVisit(ASTNullExpr *element) {
 
 /*! \brief Type rules for assignments.
  *
- * Type rules for "E1 = E":
+ * Type rules for "E1 = E2":
  *   [[E1]] = [[E2]]
  *
  * Type rules for "*E1 = E2":
@@ -338,7 +338,7 @@ void TypeConstraintVisitor::endVisit(ASTNegationExpr *element) {
     constraintHandler->handle(astToVar(element->getExpr()), intType);
 }
 
-/* Think this is included in binary 
+/* Think this is included in binary
 void TypeConstraintVisitor::endVisit(ASTRemainderExpr *element) {
     auto intType = std::make_shared<TipInt>();
     constraintHandler->handle(astToVar(element), intType);

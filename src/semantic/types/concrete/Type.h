@@ -10,6 +10,7 @@
 
 #include "TipAbsentField.h"
 #include "TipAlpha.h"
+#include "TipArray.h"
 #include "TipFunction.h"
 #include "TipInt.h"
 #include "TipMu.h"

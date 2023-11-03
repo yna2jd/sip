@@ -3,16 +3,16 @@
 #include "TipType.h"
 
 /*!
- * \class TipRef
+ * \class TipArray
  *
- * \brief A proper type representing a reference
+ * \brief A proper type representing an array
  */
-class TipRef : public TipCons {
+class TipArray : public TipCons {
 public:
-  TipRef() = delete;
-  TipRef(std::shared_ptr<TipType> of);
+  TipArray() = delete;
+  TipArray(std::shared_ptr<TipType> of);
 
-  std::shared_ptr<TipType> getAddressOfField() const;
+  std::shared_ptr<TipType> getElementOfArray() const;
 
   bool operator==(const TipType &other) const override;
   bool operator!=(const TipType &other) const override;
@@ -22,4 +22,3 @@ public:
 protected:
   std::ostream &print(std::ostream &out) const override;
 };
-

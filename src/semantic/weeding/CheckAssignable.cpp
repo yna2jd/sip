@@ -22,6 +22,20 @@ bool isAssignable(ASTExpr *e) {
       return false;
     }
   }
+  if(dynamic_cast<ASTArrayIndexExpr *>(e)){
+      ASTArrayIndexExpr *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
+      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
+          return true;
+      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
+          return true;
+      } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
+          return true;
+      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
+          return true;
+      } else {
+          return false;
+      }
+  }
   return false;
 }
 
@@ -65,4 +79,40 @@ void CheckAssignable::check(ASTProgram *p) {
   LOG_S(1) << "Checking assignability";
   CheckAssignable visitor;
   p->accept(&visitor);
+}
+
+void CheckAssignable::endVisit(ASTArrayIndexExpr *element) {
+    LOG_S(1) << "Checking assignability of " << *element;
+
+    if (isAssignable(element->getArray()))
+        return;
+
+    std::ostringstream oss;
+    oss << "Address of error on line " << element->getLine() << ": ";
+    oss << *element->getArray() << " not an l-value\n";
+    throw SemanticError(oss.str());
+}
+
+void CheckAssignable::endVisit(ASTForItrStmt *element) {
+    LOG_S(1) << "Checking assignability of " << *element;
+
+    if (isAssignable(element->getVar()))
+        return;
+
+    std::ostringstream oss;
+    oss << "Address of error on line " << element->getLine() << ": ";
+    oss << *element->getVar() << " not an l-value\n";
+    throw SemanticError(oss.str());
+}
+
+void CheckAssignable::endVisit(ASTForRngStmt *element) {
+    LOG_S(1) << "Checking assignability of " << *element;
+
+    if (isAssignable(element->getVar()))
+        return;
+
+    std::ostringstream oss;
+    oss << "Address of error on line " << element->getLine() << ": ";
+    oss << *element->getVar() << " not an l-value\n";
+    throw SemanticError(oss.str());
 }
