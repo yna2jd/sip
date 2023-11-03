@@ -196,6 +196,8 @@ TEST_CASE("TypeConstraintVisitor: <= ", "[TypeConstraintVisitor]") {
       "\u27E6(x<=0)@4:12\u27E7 = bool",                // if condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
+  runtest(program, expected);
+}
 
 TEST_CASE("TypeConstraintVisitor: Boolean Literal, == ", "[TypeConstraintVisitor]") {
   std::stringstream program;
