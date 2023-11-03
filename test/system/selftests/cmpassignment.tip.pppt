@@ -6,9 +6,9 @@ main()
 }
 
 Functions : {
-  main : () -> int
+  main : () -> bool
 }
 
 Locals for function main : {
-  x : int
+  x : bool
 }
