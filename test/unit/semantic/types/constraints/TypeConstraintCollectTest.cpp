@@ -125,7 +125,6 @@ TEST_CASE("TypeConstraintVisitor: if ", "[TypeConstraintVisitor]") {
       "\u27E6x@3:12\u27E7 = int",                    // operands is int
       "\u27E61@5:18\u27E7 = int",                    // operands is int
       "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
-      "\u27E6x@3:12\u27E7 = \u27E60@4:16\u27E7", 
       "\u27E6(x>0)@4:12\u27E7 = bool",                // if condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
@@ -159,7 +158,6 @@ TEST_CASE("TypeConstraintVisitor: >= ", "[TypeConstraintVisitor]") {
       "\u27E6x@3:12\u27E7 = int",                    // operands is int
       "\u27E61@5:18\u27E7 = int",                    // operands is int
       "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
-      "\u27E6x@3:12\u27E7 = \u27E60@4:17\u27E7", 
       "\u27E6(x>=0)@4:12\u27E7 = bool",                // if condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
@@ -192,7 +190,6 @@ TEST_CASE("TypeConstraintVisitor: <= ", "[TypeConstraintVisitor]") {
       "\u27E6x@3:12\u27E7 = int",                    // operands is int
       "\u27E61@5:18\u27E7 = int",                    // operands is int
       "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
-      "\u27E6x@3:12\u27E7 = \u27E60@4:17\u27E7", 
       "\u27E6(x<=0)@4:12\u27E7 = bool",                // if condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
@@ -303,7 +300,6 @@ TEST_CASE("TypeConstraintVisitor: while ", "[TypeConstraintVisitor]") {
       "\u27E61@5:18\u27E7 = int",                    // operands is int
       "\u27E6x@3:12\u27E7 = \u27E6(x-1)@5:14\u27E7", // sides of assignment have
                                                      // same type
-      "\u27E6x@3:12\u27E7 = \u27E60@4:19\u27E7", 
       "\u27E6(x>0)@4:15\u27E7 = bool",                // while condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
