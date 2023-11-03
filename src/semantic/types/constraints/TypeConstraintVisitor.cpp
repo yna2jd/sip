@@ -50,16 +50,22 @@ bool TypeConstraintVisitor::visit(ASTFunction *element) {
 void TypeConstraintVisitor::endVisit(ASTFunction *element) {
   if (element->getName() == "main") {
     std::vector<std::shared_ptr<TipType>> formals;
+    auto bool first = true
+    auto ftype = std::make_shared<TipInt>();
     for (auto &f : element->getFormals()) {
+      if (first) {
+          ftype= astToVar(first);
+          first = false
+      }
       formals.push_back(astToVar(f));
-      // all formals are int
-      constraintHandler->handle(astToVar(f), std::make_shared<TipInt>());
+      constraintHandler->handle(astToVar(f), astToVar(ftype));
     }
-
+   
     // Return is the last statement and must be int
     auto ret = dynamic_cast<ASTReturnStmt *>(element->getStmts().back());
     constraintHandler->handle(astToVar(ret->getArg()),
-                              std::make_shared<TipInt>());
+                              ftype);
+        
 
     constraintHandler->handle(
         astToVar(element->getDecl()),
