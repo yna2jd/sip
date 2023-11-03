@@ -18,3 +18,4 @@
 #include "TipRef.h"
 #include "TipType.h"
 #include "TipVar.h"
+#include "TipBool.h"
