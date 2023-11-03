@@ -4,9 +4,11 @@ target_sources(
   typeinference_unit_tests
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipAlphaTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipArrayTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipConsTest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipFunctionTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipFunctionTest.cpp    
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipIntTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipBoolTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipMuTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipRecordTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/concrete/TipAbsentFieldTest.cpp

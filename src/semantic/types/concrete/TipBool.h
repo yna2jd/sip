@@ -1,18 +1,12 @@
 #pragma once
+
 #include "TipCons.h"
 #include "TipType.h"
+#include <string>
 
-/*!
- * \class TipRef
- *
- * \brief A proper type representing a reference
- */
-class TipRef : public TipCons {
+class TipBool : public TipCons {
 public:
-  TipRef() = delete;
-  TipRef(std::shared_ptr<TipType> of);
-
-  std::shared_ptr<TipType> getAddressOfField() const;
+  TipBool();
 
   bool operator==(const TipType &other) const override;
   bool operator!=(const TipType &other) const override;
@@ -22,4 +16,3 @@ public:
 protected:
   std::ostream &print(std::ostream &out) const override;
 };
-
