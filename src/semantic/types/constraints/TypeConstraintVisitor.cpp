@@ -126,14 +126,18 @@ void TypeConstraintVisitor::endVisit(ASTAndExpr *element) {
   auto boolType = std::make_shared<TipBool>();
   constraintHandler->handle(astToVar(element), boolType);
   constraintHandler->handle(astToVar(element->getLeft()),
-                              astToVar(element->getRight()));
+                              boolType);
+  constraintHandler->handle(astToVar(element->getRight()),
+                              boolType);
 }
 
 void TypeConstraintVisitor::endVisit(ASTOrExpr *element) {
   auto boolType = std::make_shared<TipBool>();
   constraintHandler->handle(astToVar(element), boolType);
   constraintHandler->handle(astToVar(element->getLeft()),
-                              astToVar(element->getRight()));
+                              boolType);
+  constraintHandler->handle(astToVar(element->getRight()),
+                              boolType);
 }
 
 void TypeConstraintVisitor::endVisit(ASTLogicalNotExpr *element) {
