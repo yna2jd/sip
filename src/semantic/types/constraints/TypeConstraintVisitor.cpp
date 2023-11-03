@@ -54,7 +54,7 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
     std::shared_ptr<TipType> ftype = astToVar(element->getFormals().front());
     for (auto &f : element->getFormals()) {
       formals.push_back(astToVar(f));
-      constraintHandler->handle(astToVar(f), std::make_shared<TipType>(ftype));
+      constraintHandler->handle(astToVar(f), ftype);
     }
    
     // Return is the last statement and must be int
