@@ -1,4 +1,4 @@
-main() 
+foo() 
 {
   var x;
   x = 42 > 41;
@@ -6,9 +6,9 @@ main()
 }
 
 Functions : {
-  main : () -> bool
+  foo : () -> bool
 }
 
 Locals for function main : {
-  x : bool
+  foo : bool
 }
