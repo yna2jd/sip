@@ -1,14 +1,14 @@
 main() 
 {
   var x;
-  x = (42 > 41);
+  x = 42 > 41;
   return x;
 }
 
 Functions : {
-  main : () -> int
+  main : () -> bool
 }
 
 Locals for function main : {
-  x : int
+  x : bool
 }
