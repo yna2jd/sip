@@ -90,10 +90,9 @@ TEST_CASE("TypeConstraintVisitor: function reference",
   std::vector<std::string> expected{
       "\u27E65@4:12\u27E7 = int",
       "\u27E6x@3:12\u27E7 = \u27E65@4:12\u27E7",
-      "\u27E6x@3:12\u27E7 = int"
-      "\u27E6x@3:12\u27E7 = int"
-      "\u27E6&y@5:12\u27E7 = \u2B61\u27E6y@3:15\u27E7",
-      "\u27E6y@3:15\u27E7 = \u27E6&y@5:12\u27E7",
+      "\u27E6x@3:12\u27E7 = int",
+      "\u27E6&y@7:12\u27E7 = \u2B61\u27E6y@3:15\u27E7",
+      "\u27E6y@3:15\u27E7 = \u27E6&y@7:12\u27E7",
       "\u27E6z@3:18\u27E7 = \u27E6foo@2:6\u27E7",
       "\u27E6foo@2:6\u27E7 = () -> \u27E6z@3:18\u27E7"};
 
@@ -120,13 +119,13 @@ TEST_CASE("TypeConstraintVisitor: if ", "[TypeConstraintVisitor]") {
   std::vector<std::string> expected{
       "\u27E6(x>0)@4:12\u27E7 = bool",                // binexpr is int
       "\u27E6x@3:12\u27E7 = int",                    // operand is int
-      "\u27E60@4:17\u27E7 = int",                    // operand is int
+      "\u27E60@4:16\u27E7 = int",                    // operand is int
       "\u27E61@5:18\u27E7 = int",                    // const is int
       "\u27E6(x+1)@5:14\u27E7 = int",                // binexpr is int
       "\u27E6x@3:12\u27E7 = int",                    // operands is int
       "\u27E61@5:18\u27E7 = int",                    // operands is int
       "\u27E6x@3:12\u27E7 = \u27E6(x+1)@5:14\u27E7", // sides of assignment have
-      "\u27E6x@3:12\u27E7 = \u27E60@4:17\u27E7", 
+      "\u27E6x@3:12\u27E7 = \u27E60@4:16\u27E7", 
       "\u27E6(x>0)@4:12\u27E7 = bool",                // if condition is int
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
@@ -152,10 +151,9 @@ TEST_CASE("TypeConstraintVisitor: >= ", "[TypeConstraintVisitor]") {
    * constraints in isolation.
    */
   std::vector<std::string> expected{
-      "\u27E60@4:16\u27E7 = int",                    // const is int
+      "\u27E60@4:17\u27E7 = int",                    // const is int
       "\u27E6(x>=0)@4:12\u27E7 = bool",                // binexpr is int
       "\u27E6x@3:12\u27E7 = int",                    // operand is int
-      "\u27E60@4:17\u27E7 = int",                    // operand is int
       "\u27E61@5:18\u27E7 = int",                    // const is int
       "\u27E6(x+1)@5:14\u27E7 = int",                // binexpr is int
       "\u27E6x@3:12\u27E7 = int",                    // operands is int
@@ -173,7 +171,7 @@ TEST_CASE("TypeConstraintVisitor: <= ", "[TypeConstraintVisitor]") {
   program << R"(
       foo() {
         var x;
-        if (x >= 0) {
+        if (x <= 0) {
           x = x + 1;
         }
         return x;
@@ -245,12 +243,11 @@ TEST_CASE("TypeConstraintVisitor: And, Or ", "[TypeConstraintVisitor]") {
   std::vector<std::string> expected{
       "\u27E6(aand1)@4:12\u27E7 = bool",                // binexpr is int
       "\u27E6(aor0)@5:14\u27E7 = bool",                // binexpr is int
-      "\u27E6a@3:15\u27E7 = bool",                    // operand is int
       "\u27E61@4:18\u27E7 = bool",                    // operand is int
       "\u27E60@5:19\u27E7 = bool",                    // const is int
       "\u27E6a@3:15\u27E7 = \u27E6(aor0)@5:14\u27E7", 
-      "\u27E6a@3:15\u27E7 = \u27E60@5:19\u27E7", 
-      "\u27E6a@3:15\u27E7 = \u27E61@4:18\u27E7", 
+      "\u27E6a@3:15\u27E7 = bool", 
+      "\u27E60@5:19\u27E7 = bool",
       "\u27E6foo@2:6\u27E7 = () -> \u27E6x@3:12\u27E7" // function type
   };
 
