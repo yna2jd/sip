@@ -11,8 +11,7 @@ bool TipArray::operator==(const TipType &other) const {
   if (!otherTipArray) {
     return false;
   }
-
-  return *arguments.front() == *otherTipArray->getElementOfArray();
+  return *(arguments.front()) == *(otherTipArray)->getElementOfArray();
 }
 
 bool TipArray::operator!=(const TipType &other) const {
@@ -20,7 +19,7 @@ bool TipArray::operator!=(const TipType &other) const {
 }
 
 std::ostream &TipArray::print(std::ostream &out) const {
-  out << "\u27E6array" << *arguments.front() << "\u27E7";
+  out << "array(" << *arguments.front() << ")";
   return out;
 }
 

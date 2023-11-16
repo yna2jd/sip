@@ -59,8 +59,8 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
 
     // Return is the last statement and must be int
     auto ret = dynamic_cast<ASTReturnStmt *>(element->getStmts().back());
-    constraintHandler->handle(astToVar(ret->getArg()),
-                              std::make_shared<TipInt>());
+
+    constraintHandler->handle(astToVar(ret->getArg()), std::make_shared<TipInt>());
 
     constraintHandler->handle(
         astToVar(element->getDecl()),
@@ -76,7 +76,8 @@ void TypeConstraintVisitor::endVisit(ASTFunction *element) {
 
     constraintHandler->handle(
         astToVar(element->getDecl()),
-        std::make_shared<TipFunction>(formals, astToVar(ret->getArg())));
+        std::make_shared<TipFunction>(formals, astToVar(ret->getArg()))
+    );
   }
 }
 
@@ -102,23 +103,23 @@ void TypeConstraintVisitor::endVisit(ASTBoolLiteralExpr *element) {
  *   [[E1]] = [[E2]]
  */
 void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
-  auto op = element->getOp();
-  if (op != "==" && op != "!=" && op != ">" && op != "<" && op != ">=" && op != "<=") {
-    // operands are integer
-    auto intType = std::make_shared<TipInt>();
-    constraintHandler->handle(astToVar(element), intType);
-    constraintHandler->handle(astToVar(element->getLeft()), intType);
-    constraintHandler->handle(astToVar(element->getRight()), intType);
-  } else if (op == ">" && op == "<" && op == ">=" && op == "<=") {
-    constraintHandler->handle(astToVar(element), std::make_shared<TipBool>());
-    constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
-    constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
-  } else {
-    auto boolType = std::make_shared<TipBool>();
-    constraintHandler->handle(astToVar(element), boolType);
-    constraintHandler->handle(astToVar(element->getLeft()),
-                              astToVar(element->getRight()));
-  }
+    auto op = element->getOp();
+    if (op != "==" && op != "!=" && op != ">" && op != "<" && op != ">=" && op != "<=") {
+        // operands are integer
+        auto intType = std::make_shared<TipInt>();
+        constraintHandler->handle(astToVar(element), intType);
+        constraintHandler->handle(astToVar(element->getLeft()), intType);
+        constraintHandler->handle(astToVar(element->getRight()), intType);
+    } else if (op == ">" || op == "<" || op == ">=" || op == "<=") {
+        constraintHandler->handle(astToVar(element), std::make_shared<TipBool>());
+        constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
+        constraintHandler->handle(astToVar(element->getRight()), std::make_shared<TipInt>());
+    } else {
+        auto boolType = std::make_shared<TipBool>();
+        constraintHandler->handle(astToVar(element), boolType);
+        constraintHandler->handle(astToVar(element->getLeft()),
+                                  astToVar(element->getRight()));
+    }
 }
 
 void TypeConstraintVisitor::endVisit(ASTAndExpr *element) {
@@ -216,13 +217,15 @@ void TypeConstraintVisitor::endVisit(ASTNullExpr *element) {
 /*! \brief Type constraints for index of array.
  *
  * Type Rules for "E1[E2]":
- *   [[E1]] = \alpha
+ *   [[E1]] = ~array of \alpha
  *   [[E2]] = int
  *
  */
 void TypeConstraintVisitor::endVisit(ASTArrayIndexExpr *element) {
-    constraintHandler->handle(astToVar(element->getSubscript()),
-                              std::make_shared<TipInt>());
+    auto arrayElementType = std::make_shared<TipAlpha>(element->getArray());
+    constraintHandler->handle(astToVar(element->getArray()), std::make_shared<TipArray>(arrayElementType));
+    constraintHandler->handle(astToVar(element->getSubscript()), std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element), arrayElementType);
 }
 
 /*! \brief Type constraints for array of.
@@ -234,6 +237,7 @@ void TypeConstraintVisitor::endVisit(ASTArrayIndexExpr *element) {
  */
 void TypeConstraintVisitor::endVisit(ASTArrayOfExpr *element) {
     constraintHandler->handle(astToVar(element->getLeft()), std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element), std::make_shared<TipArray>(astToVar(element->getRight())));
 }
 
 /*! \brief Type constraints for array list.
@@ -246,7 +250,7 @@ void TypeConstraintVisitor::endVisit(ASTArrayListExpr *element) {
     auto arrayElements = element->getElements();
     std::shared_ptr<TipType> arrayType;
     if(arrayElements.empty()){
-        std::make_shared<TipAlpha>(element);
+        arrayType = std::make_shared<TipAlpha>(element);
     }else{
         auto firstElement = arrayElements.front();
         arrayType = astToVar(firstElement);
@@ -261,10 +265,12 @@ void TypeConstraintVisitor::endVisit(ASTArrayListExpr *element) {
  *
  * Type Rules for "#E1":
  *   [[E1]] = array
- *
+ *   [[#E1]] = int
+ *s
  */
 void TypeConstraintVisitor::endVisit(ASTLengthExpr *element) {
-    constraintHandler->handle(astToVar(element->getCollection()), std::make_shared<TipArray>(std::make_shared<TipAlpha>(element)));
+
+    constraintHandler->handle(astToVar(element->getCollection()), std::make_shared<TipArray>(std::make_shared<TipAlpha>(element->getCollection())));
     constraintHandler->handle(astToVar(element), std::make_shared<TipInt>());
 }
 
@@ -339,8 +345,11 @@ void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTIfStmt *element) {
-    constraintHandler->handle(astToVar(element->getCondition()),
-                        std::make_shared<TipBool>());
+  if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+  } else {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+  }  
 }
 
 /*! \brief Type constraints for output statement.

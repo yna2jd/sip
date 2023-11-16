@@ -54,9 +54,9 @@ void Substituter::endVisit(TipMu *element) {
 }
 
 void Substituter::endVisit(TipArray *element) {
-    auto pointedToType = visitedTypes.back();
+    auto typeOfArray = visitedTypes.back();
     visitedTypes.pop_back();
-    visitedTypes.push_back(std::make_shared<TipRef>(pointedToType));
+    visitedTypes.push_back(std::make_shared<TipArray>(typeOfArray));
 }
 
 void Substituter::endVisit(TipRecord *element) {

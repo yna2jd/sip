@@ -6,11 +6,12 @@ declare -r UNIT_TEST_DIR=${ROOT_DIR}/build/test/unit
 declare -r SYSTEM_TEST_DIR=${ROOT_DIR}/test/system
 
 usage() { 
-  echo "usage: $0 [-h] [-s] [-u]" 1>&2;
+  echo "usage: $0 [-h] [-s] [-w] [-u]" 1>&2;
   echo "run the complete unit and system test suite"
   echo
   echo "-h  display help"
   echo "-s  runs system tests only"
+  echo "-w  runs only whitelisted system tests"
   echo "-u  runs unit tests only"
 }
 
@@ -39,7 +40,12 @@ run_system_tests() {
 
   echo running the system test suite
   pushd ${SYSTEM_TEST_DIR} &> /dev/null
-  ./run.sh
+  ./run_whitelist.sh
+  if [ -n $1 ]; then
+    ./run_whitelist.sh
+  else
+    ./run.sh
+  fi
   if [ $? -ne 0 ]; then
     echo error while running system tests
     exit 1
@@ -50,7 +56,8 @@ run_system_tests() {
 
 run_system_tests="true"
 run_unit_tests="true"
-while getopts ":hsu" opt; do
+run_single=""
+while getopts ":hswu" opt; do
   case "${opt}" in
     h)
       usage
@@ -63,6 +70,11 @@ while getopts ":hsu" opt; do
     u)
       echo Preparing to run only the unit tests suite
       run_system_tests=""
+      ;;
+    w)
+      echo Preparing to run a single system test
+      run_single="true"
+      run_unit_tests=""
       ;;
     *)
       echo $0 illegal option
@@ -79,5 +91,5 @@ if [ -n "${run_unit_tests}" ]; then
 fi
 
 if [ -n "${run_system_tests}" ]; then
-  run_system_tests
+  run_system_tests run_single
 fi
