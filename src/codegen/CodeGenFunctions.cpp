@@ -1108,3 +1108,46 @@ llvm::Value *ASTReturnStmt::codegen() {
   Value *argVal = getArg()->codegen();
   return Builder.CreateRet(argVal);
 } // LCOV_EXCL_LINE
+
+llvm::Value *ASTIncrStmt::codegen() {
+  LOG_S(1) << "Generating code for " << *this;
+
+  // trigger code generation for l-value expressions
+  lValueGen = true;
+  Value *lValue = getLHS()->codegen();
+  lValueGen = false;
+
+  if (lValue == nullptr) {
+    throw InternalError(
+        "failed to generate bitcode for the lhs of the assignment");
+  }
+
+  Value *rValue = Builder.CreateAdd(lValue,oneV, "addtmp");
+  if (rValue == nullptr) {
+    throw InternalError(
+        "failed to generate bitcode for the rhs of the assignment");
+  }
+
+  return Builder.CreateStore(rValue, lValue);
+}
+
+llvm::Value *ASTDecrStmt::codegen() {
+  LOG_S(1) << "Generating code for " << *this;
+
+  // trigger code generation for l-value expressions
+  lValueGen = true;
+  Value *lValue = getLHS()->codegen();
+  lValueGen = false;
+
+  if (lValue == nullptr) {
+    throw InternalError(
+        "failed to generate bitcode for the lhs of the assignment");
+  }
+
+  Value *rValue = Builder.CreateSub(lValue,oneV, "subtmp");
+  if (rValue == nullptr) {
+    throw InternalError(
+        "failed to generate bitcode for the rhs of the assignment");
+  }
+  return Builder.CreateStore(rValue, lValue);
+}
