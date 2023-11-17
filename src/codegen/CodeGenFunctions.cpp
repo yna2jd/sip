@@ -1151,3 +1151,79 @@ llvm::Value *ASTDecrStmt::codegen() {
   }
   return Builder.CreateStore(rValue, lValue);
 }
+
+llvm::Value *ASTArrayListExpr::codegen() {
+  length = getChildren().size();
+  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1);
+
+  // Create an array
+  std::vector<Value *> twoArg;
+  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
+  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
+  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+
+  //Store size in index 0
+  std::vector<Value *> indices1;
+  indices1.push_back(zeroV);
+  indices1.push_back(zeroV);
+
+  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
+                                        indices1, "arrayidx");
+  Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1)
+
+  int index = 1;
+  for (auto const &child : getChildren()) {   
+    // Store pointer in array index
+      std::vector<Value *> indices;
+      indices.push_back(zeroV);
+      indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
+      auto value = child->codegen();
+      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
+                                            arrayPtr, indices, "arrayidx");
+     
+     Builder.CreateStore(value,gep);
+     index = index+1;
+  }
+  // return pointer to array?
+  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+}
+
+llvm::Value *ASTArrayOfExpr::codegen() {
+  length = getLeft()->codegen();
+  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1);
+
+  // Create an array
+  std::vector<Value *> twoArg;
+  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
+  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
+  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+
+  //Store size in index 0
+  std::vector<Value *> indices1;
+  indices1.push_back(zeroV);
+  indices1.push_back(zeroV);
+
+  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
+                                        indices1, "arrayidx");
+  Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1)
+
+  int index = 1;
+  auto value = getRight()->codegen();
+  for (auto const &child : getChildren()) {   
+    // Store pointer in array index
+      std::vector<Value *> indices;
+      indices.push_back(zeroV);
+      indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
+      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
+                                            arrayPtr, indices, "arrayidx"); 
+     Builder.CreateStore(value,gep);
+     index = index+1;
+  }
+  // return pointer to array?
+  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+}
+
+
+
