@@ -49,7 +49,6 @@ void Substituter::endVisit(TipMu *element) {
   // The second element on the LIFO is always a TipVar
   auto vType = std::dynamic_pointer_cast<TipVar>(visitedTypes.back());
   visitedTypes.pop_back();
-
   visitedTypes.push_back(std::make_shared<TipMu>(vType, tType));
 }
 

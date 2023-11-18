@@ -4,5 +4,4 @@ cd ${ROOT_DIR}/build/
 cmake .. >  ${ROOT_DIR}/build/.buildall
 echo cmake done
 make -j6 all > ${ROOT_DIR}/build/.buildall
-${ROOT_DIR}/bin/runtests.sh -w
-
+echo completed

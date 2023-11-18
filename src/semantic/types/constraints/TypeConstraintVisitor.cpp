@@ -8,6 +8,7 @@
 #include "TipRecord.h"
 #include "TipRef.h"
 #include "TipVar.h"
+#include "loguru.hpp"
 
 TypeConstraintVisitor::TypeConstraintVisitor(
     SymbolTable *st, std::shared_ptr<ConstraintHandler> handler)
@@ -345,22 +346,14 @@ void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTIfStmt *element) {
-  if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
-    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
-  } else {
-    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
-  }  
+  constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
 }
 
 /*! \brief Type constraints for output statement.
  *
  * Type rules for "output E":
- *   [[E]] = int
+ *   [[E]] = int | bool
  */
-void TypeConstraintVisitor::endVisit(ASTOutputStmt *element) {
-  constraintHandler->handle(astToVar(element->getArg()),
-                            std::make_shared<TipInt>());
-}
 
 /*! \brief Type constraints for record expression.
  *
@@ -417,9 +410,13 @@ void TypeConstraintVisitor::endVisit(ASTAccessExpr *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTErrorStmt *element) {
-  constraintHandler->handle(astToVar(element->getArg()),
-                            std::make_shared<TipInt>());
+    constraintHandler->handle(astToVar(element->getArg()), std::make_shared<TipInt>());
 }
+
+void TypeConstraintVisitor::endVisit(ASTOutputStmt *element) {
+    constraintHandler->handle(astToVar(element->getArg()), std::make_shared<TipInt>());
+}
+
 
 /*! \brief Type constraints for increment statement.
  *

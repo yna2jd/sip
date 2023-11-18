@@ -10,7 +10,3 @@ std::ostream &ASTBoolLiteralExpr::print(std::ostream &out) const {
   out << getValue();
   return out;
 }
-
-llvm::Value *ASTBoolLiteralExpr::codegen() {
-    return nullptr;
-}

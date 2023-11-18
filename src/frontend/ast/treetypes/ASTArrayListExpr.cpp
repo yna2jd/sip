@@ -45,7 +45,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTArrayListExpr::getChildren() {
   }
   return children;
 }
-
-llvm::Value *ASTArrayListExpr::codegen() {
-    return nullptr;
-}

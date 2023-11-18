@@ -22,8 +22,8 @@ bool isAssignable(ASTExpr *e) {
       return false;
     }
   }
-  if (dynamic_cast<ASTFunction *>(e)) {
-      auto *access = dynamic_cast<ASTFunction *>(e);
+  if (dynamic_cast<ASTFunAppExpr *>(e)) {
+      // auto funApp = dynamic_cast<ASTFunAppExpr *>(e);
       return isAssignable(e);
   }
   if(dynamic_cast<ASTArrayIndexExpr *>(e)){

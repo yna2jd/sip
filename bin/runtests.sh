@@ -40,8 +40,7 @@ run_system_tests() {
 
   echo running the system test suite
   pushd ${SYSTEM_TEST_DIR} &> /dev/null
-  ./run_whitelist.sh
-  if [ -n $1 ]; then
+  if [ -n "${1}" ]; then
     ./run_whitelist.sh
   else
     ./run.sh
@@ -91,5 +90,5 @@ if [ -n "${run_unit_tests}" ]; then
 fi
 
 if [ -n "${run_system_tests}" ]; then
-  run_system_tests run_single
+  run_system_tests $run_single
 fi

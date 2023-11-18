@@ -28,7 +28,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTForRngStmt::getChildren() {
     children.push_back(BODY);
     return children;
 }
-
-llvm::Value *ASTForRngStmt::codegen() {
-    return nullptr;
-}

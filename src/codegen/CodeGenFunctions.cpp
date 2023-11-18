@@ -1108,3 +1108,68 @@ llvm::Value *ASTReturnStmt::codegen() {
   Value *argVal = getArg()->codegen();
   return Builder.CreateRet(argVal);
 } // LCOV_EXCL_LINE
+
+//SIPC
+
+// Don't forget to add to new binary expression codegen
+// fix function codegen
+
+//TODO: IMPLEMENT THESE FUNCTIONS
+
+//Exprs
+llvm::Value *ASTArrayListExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTArrayOfExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTBoolLiteralExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+
+llvm::Value *ASTLengthExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTArrayIndexExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTNegationExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTTernaryExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+//Stmts
+llvm::Value *ASTIncrStmt::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTDecrStmt::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTForItrStmt::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTForRngStmt::codegen() {
+    //TODO
+    return nullptr;
+}
