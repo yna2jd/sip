@@ -1192,11 +1192,11 @@ llvm::Value *ASTArrayListExpr::codegen() {
 llvm::Value *ASTArrayOfExpr::codegen() {
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
-  auto *arrayType = ArrayType::get(arrlen->getType(),arrlen);
+  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),arrlen);
 
   // Create an array
   std::vector<Value *> twoArg;
-  twoArg.push_back(ConstantInt::get(arrlen->getType(), arrlen));
+  twoArg.push_back(arrlen);
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
 
@@ -1207,7 +1207,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
 
   auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
                                         indices1, "arrayidx");
-  Builder.CreateStore(ConstantInt::get(length->getType(), length), gep1);
+  Builder.CreateStore(length, gep1);
 
   int index = 1;
   auto value = getRight()->codegen();
