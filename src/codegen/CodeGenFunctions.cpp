@@ -496,7 +496,20 @@ llvm::Value *ASTBinaryExpr::codegen() {
     auto *cmp = Builder.CreateICmpSGT(L, R, "_gttmp");
     return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
                                  false, "gttmp");
-  } else if (getOp() == "==") {
+  } else if (getOp() == "<") {
+    auto *cmp = Builder.CreateICmpSLT(L, R, "_lttmp");
+    return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
+                                 false, "lttmp");
+  } else if (getOp() == "<=") {
+    auto *cmp = Builder.CreateICmpSLE(L, R, "_letmp");
+    return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
+                                 false, "letmp");
+  } else if (getOp() == ">=") {
+    auto *cmp = Builder.CreateICmpSGE(L, R, "_getmp");
+    return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
+                                 false, "getmp");
+  } 
+  else if (getOp() == "==") {
     auto *cmp = Builder.CreateICmpEQ(L, R, "_eqtmp");
     return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
                                  false, "eqtmp");
@@ -504,7 +517,12 @@ llvm::Value *ASTBinaryExpr::codegen() {
     auto *cmp = Builder.CreateICmpNE(L, R, "_neqtmp");
     return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
                                  false, "neqtmp");
-  } else {
+  }  else if (getOp() == "%") {
+    auto *factor = Builder.CreateSDiv(L, R, "divtmp");
+    auto *product = Builder.CreateMul(factor, R,"multmp");
+    return Builder.CreateSub(L, product, "modtmp");
+  } 
+  else {
     throw InternalError("Invalid binary operator: " + OP);
   }
 }
