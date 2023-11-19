@@ -1143,8 +1143,13 @@ llvm::Value *ASTLengthExpr::codegen() {
 
 llvm::Value *ASTArrayIndexExpr::codegen() {
     LOG_S(1) << "Generating code for " << *this;
-    // Length
     // Get current field and check if it exists
+    bool isLValue = lValueGen;
+
+    if (isLValue) {
+    // This flag is reset here so that sub-expressions are treated as r-values
+       lValueGen = false;
+    }
     Value *arr = this->getArray()->codegen();
     Value *arrIndex = this->getSubscript()->codegen();
     // Generate the location of the field
@@ -1152,7 +1157,9 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
     auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
-
+    if (isLValue) {
+      return gep;
+    }
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
