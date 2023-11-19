@@ -1154,7 +1154,7 @@ llvm::Value *ASTDecrStmt::codegen() {
 
 llvm::Value *ASTArrayListExpr::codegen() {
   int length = getChildren().size();
-  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1);
+  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1));
 
   // Create an array
   std::vector<Value *> twoArg;
@@ -1169,7 +1169,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
 
   auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
                                         indices1, "arrayidx");
-  Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1)
+  Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
 
   int index = 1;
   for (auto const &child : getChildren()) {   
@@ -1192,7 +1192,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
 llvm::Value *ASTArrayOfExpr::codegen() {
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
-  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),arrlen);
+  auto *arrayType = ArrayType::get(ConstantInt::get(arrlen->getType(),arrlen));
 
   // Create an array
   std::vector<Value *> twoArg;
