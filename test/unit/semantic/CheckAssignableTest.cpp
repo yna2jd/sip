@@ -83,7 +83,7 @@ TEST_CASE("Check Assignable: array lhs sub with pointer", "[Symbol]") {
 
 TEST_CASE("Check Assignable: array lhs sub with function", "[Symbol]") {
     std::stringstream stream;
-    stream << R"(foo(x) { return x; } varlhs() { var x; x = [10]; foo(x)[1] = 1; return 0; })";
+    stream << R"(foo(x) { return x; } varlhs() { var x; x = [10]; foo(x)[0] = 1; return 0; })";
     auto ast = ASTHelper::build_ast(stream);
     REQUIRE_NOTHROW(CheckAssignable::check(ast.get()));
 }
