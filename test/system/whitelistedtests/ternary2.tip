@@ -1,9 +1,0 @@
-main() {
-  var x;
-  x = foo() ? 34 : 1
-  return x;
-}
-
-foo(){
-    return false;
-}
