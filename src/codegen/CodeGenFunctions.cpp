@@ -1177,6 +1177,19 @@ llvm::Value *ASTForRngStmt::codegen() {
     return nullptr;
 }
 
+llvm::Value *ASTOrExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+llvm::Value *ASTAndExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+llvm::Value *ASTLogicalNotExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
 llvm::Value *ASTIncrStmt::codegen() {
   LOG_S(1) << "Generating code for " << *this;
 
@@ -1293,5 +1306,6 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
 }
+
 
 
