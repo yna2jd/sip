@@ -104,6 +104,7 @@ void TypeConstraintVisitor::endVisit(ASTBoolLiteralExpr *element) {
  *   [[E1]] = [[E2]]
  */
 void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
+
     auto op = element->getOp();
     if (op != "==" && op != "!=" && op != ">" && op != "<" && op != ">=" && op != "<=") {
         // operands are integer
@@ -121,6 +122,7 @@ void TypeConstraintVisitor::endVisit(ASTBinaryExpr *element) {
         constraintHandler->handle(astToVar(element->getLeft()),
                                   astToVar(element->getRight()));
     }
+
 }
 
 void TypeConstraintVisitor::endVisit(ASTAndExpr *element) {
@@ -336,8 +338,11 @@ void TypeConstraintVisitor::endVisit(ASTAssignStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
-    constraintHandler->handle(astToVar(element->getCondition()),
-                        std::make_shared<TipBool>());
+  if (astToVar(element->getCondition()) == std::make_shared<TipInt>()) {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipInt>());
+  } else {
+    constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+  }  
 }
 
 /*! \brief Type constraints for if statement.
@@ -346,7 +351,9 @@ void TypeConstraintVisitor::endVisit(ASTWhileStmt *element) {
  *   [[E]] = int
  */
 void TypeConstraintVisitor::endVisit(ASTIfStmt *element) {
+
   constraintHandler->handle(astToVar(element->getCondition()), std::make_shared<TipBool>());
+
 }
 
 /*! \brief Type constraints for output statement.
