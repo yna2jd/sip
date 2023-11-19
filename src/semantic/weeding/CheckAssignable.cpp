@@ -22,19 +22,26 @@ bool isAssignable(ASTExpr *e) {
       return false;
     }
   }
+  if (dynamic_cast<ASTFunAppExpr *>(e)) {
+      // auto funApp = dynamic_cast<ASTFunAppExpr *>(e);
+      return isAssignable(e);
+  }
   if(dynamic_cast<ASTArrayIndexExpr *>(e)){
       auto *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
-      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else {
-          return false;
-      }
+      return isAssignable(arrayIndex->getArray());
+//      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
+//          return true;
+//      } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      } else {
+//          return false;
+//      }
   }
   return false;
 }
@@ -86,7 +93,7 @@ void CheckAssignable::endVisit(ASTArrayIndexExpr *element) {
 
     if (isAssignable(element->getArray()))
         return;
-
+    LOG_S(1) << "type: " << *element->getArray();
     std::ostringstream oss;
     oss << "Address of error on line " << element->getLine() << ": ";
     oss << *element->getArray() << " not an l-value\n";

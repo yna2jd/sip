@@ -18,7 +18,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTNegationExpr::getChildren() {
   children.push_back(EXPR);
   return children;
 }
-
-llvm::Value *ASTNegationExpr::codegen() {
-    return nullptr;
-}

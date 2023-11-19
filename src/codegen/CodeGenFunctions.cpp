@@ -1109,6 +1109,52 @@ llvm::Value *ASTReturnStmt::codegen() {
   return Builder.CreateRet(argVal);
 } // LCOV_EXCL_LINE
 
+//SIPC
+
+// Don't forget to add to new binary expression codegen
+// fix function codegen
+
+//TODO: IMPLEMENT THESE FUNCTIONS
+
+//Exprs
+
+
+llvm::Value *ASTBoolLiteralExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+
+llvm::Value *ASTLengthExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTArrayIndexExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTNegationExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTTernaryExpr::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTForItrStmt::codegen() {
+    //TODO
+    return nullptr;
+}
+
+llvm::Value *ASTForRngStmt::codegen() {
+    //TODO
+    return nullptr;
+}
+
 llvm::Value *ASTIncrStmt::codegen() {
   LOG_S(1) << "Generating code for " << *this;
 
@@ -1225,6 +1271,5 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
 }
-
 
 

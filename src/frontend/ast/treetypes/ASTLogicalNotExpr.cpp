@@ -18,7 +18,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTLogicalNotExpr::getChildren() {
   children.push_back(BOOLEXPR);
   return children;
 }
-
-llvm::Value *ASTLogicalNotExpr::codegen() {
-    return nullptr;
-}
