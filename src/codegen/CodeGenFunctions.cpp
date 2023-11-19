@@ -1126,13 +1126,35 @@ llvm::Value *ASTBoolLiteralExpr::codegen() {
 
 
 llvm::Value *ASTLengthExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    // Length
+    // Get current field and check if it exists
+    Value *arr = this->getCollection()->codegen();
+
+    // Generate the location of the field
+    std::vector<Value *> indices;
+    indices.push_back(zeroV);
+    indices.push_back(zeroV);
+    auto *gep = Builder.CreateInBoundsGEP(arr->getValueType(),arr, indices, "arrayidx");
+
+    // Load value at GEP and return it
+    return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
 
 llvm::Value *ASTArrayIndexExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    // Length
+    // Get current field and check if it exists
+    Value *arr = this->getArray()->codegen();
+    Value *arrIndex = this->getSubscript()->codegen();
+    // Generate the location of the field
+    std::vector<Value *> indices;
+    indices.push_back(zeroV);
+    indices.push_back(arrIndex);
+    auto *gep = Builder.CreateInBoundsGEP(arr->getValueType(),arr, indices, "arrayidx");
+
+    // Load value at GEP and return it
+    return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
 
 llvm::Value *ASTNegationExpr::codegen() {
