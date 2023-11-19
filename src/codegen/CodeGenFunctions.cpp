@@ -1192,7 +1192,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
 llvm::Value *ASTArrayOfExpr::codegen() {
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
-  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),cast<llvm::ConstantInt>(arrlen));
+  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen)).getZExtValue());
 
   // Create an array
   std::vector<Value *> twoArg;
