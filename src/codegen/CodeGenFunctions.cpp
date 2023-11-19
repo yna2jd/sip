@@ -1135,7 +1135,7 @@ llvm::Value *ASTLengthExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(zeroV);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getValueType(),arr, indices, "arrayidx");
+    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
 
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
@@ -1151,7 +1151,7 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getValueType(),arr, indices, "arrayidx");
+    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
 
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
