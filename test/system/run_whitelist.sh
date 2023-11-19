@@ -48,9 +48,8 @@ do
 
   # test unoptimized program
   initialize_test
-  :> ${ROOT_DIR}/.log
-  :> ${ROOT_DIR}/.pcg
-  ${TIPC} -do --log=${ROOT_DIR}/.log --pt --verbose=2 $i
+  :> ${ROOT_DIR}${1}/.log
+  ${TIPC} -do --log=${ROOT_DIR}/${1}.log --pt --verbose=2 $i
   ${TIPCLANG} -w $i.bc ${RTLIB}/tip_rtlib.bc -o $base
 
   ./${base} &>/dev/null

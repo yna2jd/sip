@@ -1,0 +1,5 @@
+main() {
+  var x;
+  x = true ? 34 : 1
+  return x;
+}

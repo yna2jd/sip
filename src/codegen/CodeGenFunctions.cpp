@@ -492,7 +492,9 @@ llvm::Value *ASTBinaryExpr::codegen() {
     return Builder.CreateMul(L, R, "multmp");
   } else if (getOp() == "/") {
     return Builder.CreateSDiv(L, R, "divtmp");
-  } else if (getOp() == ">") {
+  }  else if (getOp() == "%") {
+      return Builder.CreateSRem(L, R, "modtmp");
+  }else if (getOp() == ">") {
     auto *cmp = Builder.CreateICmpSGT(L, R, "_gttmp");
     return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
                                  false, "gttmp");
@@ -514,14 +516,10 @@ llvm::Value *ASTBinaryExpr::codegen() {
     return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
                                  false, "eqtmp");
   } else if (getOp() == "!=") {
-    auto *cmp = Builder.CreateICmpNE(L, R, "_neqtmp");
-    return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
-                                 false, "neqtmp");
-  }  else if (getOp() == "%") {
-    auto *factor = Builder.CreateSDiv(L, R, "divtmp");
-    auto *product = Builder.CreateMul(factor, R,"multmp");
-    return Builder.CreateSub(L, product, "modtmp");
-  } 
+      auto *cmp = Builder.CreateICmpNE(L, R, "_neqtmp");
+      return Builder.CreateIntCast(cmp, IntegerType::getInt64Ty(TheContext),
+                                   false, "neqtmp");
+  }
   else {
     throw InternalError("Invalid binary operator: " + OP);
   }
@@ -1138,8 +1136,8 @@ llvm::Value *ASTReturnStmt::codegen() {
 
 
 llvm::Value *ASTBoolLiteralExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return ConstantInt::get(Type::getInt1Ty(TheContext), getValue());
 }
 
 
@@ -1183,13 +1181,13 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
 }
 
 llvm::Value *ASTNegationExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return Builder.CreateNeg(getExpr()->codegen(), "negtmp");
 }
 
 llvm::Value *ASTTernaryExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return Builder.CreateSelect(getCondition()->codegen(), getTrue()->codegen(), getFalse()->codegen(), "trntmp");
 }
 
 llvm::Value *ASTForItrStmt::codegen() {
@@ -1203,16 +1201,16 @@ llvm::Value *ASTForRngStmt::codegen() {
 }
 
 llvm::Value *ASTOrExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return Builder.CreateLogicalOr(getLeft()->codegen(), getRight()->codegen(), "ortmp");
 }
 llvm::Value *ASTAndExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return Builder.CreateLogicalAnd(getLeft()->codegen(), getRight()->codegen(), "andtmp");
 }
 llvm::Value *ASTLogicalNotExpr::codegen() {
-    //TODO
-    return nullptr;
+    LOG_S(1) << "Generating code for " << *this;
+    return Builder.CreateNot(getExpr()->codegen(), "nottmp");
 }
 
 llvm::Value *ASTIncrStmt::codegen() {

@@ -1,0 +1,9 @@
+main() {
+  var x;
+  x = foo() ? [1,2,3] : [4,3]
+  return x[1];
+}
+
+foo(){
+    return false;
+}
