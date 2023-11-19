@@ -1114,7 +1114,7 @@ llvm::Value *ASTIncrStmt::codegen() {
 
   // trigger code generation for l-value expressions
   lValueGen = true;
-  Value *lValue = getLHS()->codegen();
+  Value *lValue = getExpr()->codegen();
   lValueGen = false;
 
   if (lValue == nullptr) {
@@ -1136,7 +1136,7 @@ llvm::Value *ASTDecrStmt::codegen() {
 
   // trigger code generation for l-value expressions
   lValueGen = true;
-  Value *lValue = getLHS()->codegen();
+  Value *lValue = getExpr()->codegen();
   lValueGen = false;
 
   if (lValue == nullptr) {
@@ -1153,7 +1153,7 @@ llvm::Value *ASTDecrStmt::codegen() {
 }
 
 llvm::Value *ASTArrayListExpr::codegen() {
-  length = getChildren().size();
+  int length = getChildren().size();
   auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1);
 
   // Create an array
@@ -1182,7 +1182,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
                                             arrayPtr, indices, "arrayidx");
      
      Builder.CreateStore(value,gep);
-     index = index+1;
+     index++;
   }
   // return pointer to array?
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
@@ -1190,12 +1190,13 @@ llvm::Value *ASTArrayListExpr::codegen() {
 }
 
 llvm::Value *ASTArrayOfExpr::codegen() {
-  length = getLeft()->codegen();
-  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),length +1);
+  auto length = getLeft()->codegen();
+  auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
+  auto *arrayType = ArrayType::get(ConstantInt::get(Type::getInt64Ty(TheContext),arrlen);
 
   // Create an array
   std::vector<Value *> twoArg;
-  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
+  twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), arrlen));
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
 
@@ -1218,7 +1219,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
       auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
                                             arrayPtr, indices, "arrayidx"); 
      Builder.CreateStore(value,gep);
-     index = index+1;
+     index++;
   }
   // return pointer to array?
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
