@@ -1151,7 +1151,7 @@ llvm::Value *ASTLengthExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(zeroV);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
+    auto *gep = Builder.CreateGEP(arr->getType(),arr, indices, "arrayidx");
     LOG_S(1) << "ret load " << *this;
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
@@ -1174,7 +1174,7 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
+    auto *gep = Builder.CreateGEP(arr->getType(),arr, indices, "arrayidx");
     if (isLValue) {
       LOG_S(1) << "Ret gep " << *this;
       return gep;
@@ -1285,7 +1285,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
   LOG_S(1) << "indices " << *this;
   std::vector<Value *> indices1;
   indices1.push_back(zeroV);
-  indices1.push_back(zeroV);
+  indices1.push_back(oneV);
 
   auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), allocaArray,
                                         indices1, "arrayidx");
@@ -1300,7 +1300,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
       indices.push_back(zeroV);
       indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
       auto value = child->codegen();
-      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
+      auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
                                             arrayPtr, indices, "arrayidx");
      
      Builder.CreateStore(value,gep);
@@ -1332,7 +1332,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
+  auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
                                         indices1, "arrayidx");
   LOG_S(1) << "createstore" << *this;
   Builder.CreateStore(length, gep1);
@@ -1345,7 +1345,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
       std::vector<Value *> indices;
       indices.push_back(zeroV);
       indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
-      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
+      auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
                                             arrayPtr, indices, "arrayidx"); 
      Builder.CreateStore(value,gep);
      index++;
