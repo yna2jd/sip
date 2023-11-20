@@ -1167,7 +1167,8 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
        lValueGen = false;
     }
     Value *arr = this->getArray()->codegen();
-    Value *arrIndex = this->getSubscript()->codegen();
+    Value *arrInd = this->getSubscript()->codegen();
+    auto arrIndex = Builder.CreateAdd(arrInd, oneV, "addtmp");
     // Generate the location of the field
     std::vector<Value *> indices;
     indices.push_back(zeroV);
