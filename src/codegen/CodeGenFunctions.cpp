@@ -1152,7 +1152,7 @@ llvm::Value *ASTLengthExpr::codegen() {
     indices.push_back(zeroV);
     indices.push_back(zeroV);
     auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
-
+    LOG_S(1) << "ret load " << *this;
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
@@ -1170,15 +1170,19 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     Value *arrInd = this->getSubscript()->codegen();
     auto arrIndex = Builder.CreateAdd(arrInd, oneV, "addtmp");
     // Generate the location of the field
+    LOG_S(1) << "indices " << *this;
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
     auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
     if (isLValue) {
+      LOG_S(1) << "Ret gep " << *this;
       return gep;
     }
     // Load value at GEP and return it
+   LOG_S(1) << "createload " << *this;
    auto val = Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+   LOG_S(1) << "ret pointer " << *this;
    return Builder.CreatePtrToInt(val, Type::getInt64Ty(TheContext),
                                 "arrayAccess");
    // return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
@@ -1261,25 +1265,30 @@ llvm::Value *ASTDecrStmt::codegen() {
 }
 
 llvm::Value *ASTArrayListExpr::codegen() {
+  LOG_S(1) << "Generating code for " << *this;
   int length = getChildren().size();
  // auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
 
   // Create an array
+  LOG_S(1) << "twoarg " << *this;
   std::vector<Value *> twoArg;
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
 
   //Store size in index 0
+  LOG_S(1) << "indices " << *this;
   std::vector<Value *> indices1;
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
   auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
                                         indices1, "arrayidx");
+  LOG_S(1) << "Create store " << *this;
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
 
   int index = 1;
+  LOG_S(1) << "Children " << *this;
   for (auto const &child : getChildren()) {   
     // Store pointer in array index
       std::vector<Value *> indices;
@@ -1293,32 +1302,38 @@ llvm::Value *ASTArrayListExpr::codegen() {
      index++;
   }
   // return pointer to array?
+  LOG_S(1) << "ret " << *this;
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
 }
 
 llvm::Value *ASTArrayOfExpr::codegen() {
+  LOG_S(1) << "Generating code for " << *this;
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
   //auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen))->getZExtValue());
 
   // Create an array
+  LOG_S(1) << "twoarg " << *this;
   std::vector<Value *> twoArg;
   twoArg.push_back(arrlen);
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
 
   //Store size in index 0
+  LOG_S(1) << "indices" << *this;
   std::vector<Value *> indices1;
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
   auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
                                         indices1, "arrayidx");
+  LOG_S(1) << "createstore" << *this;
   Builder.CreateStore(length, gep1);
 
   int index = 1;
   auto value = getRight()->codegen();
+  LOG_S(1) << "Children " << *this;
   for (auto const &child : getChildren()) {   
     // Store pointer in array index
       std::vector<Value *> indices;
@@ -1330,6 +1345,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
      index++;
   }
   // return pointer to array?
+  LOG_S(1) << "Ret " << *this;
   auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
 }
