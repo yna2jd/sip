@@ -1216,13 +1216,7 @@ llvm::Value *ASTForItrStmt::codegen() {
     }
     Type *varType = varExpr->codegen()->getType();
     AllocaInst* loopVar = NamedValues[varExpr->getName()];
-    Value *begin = getBegin()->codegen();
-    if (begin == nullptr) {
-        throw InternalError(                                 // LCOV_EXCL_LINE
-                "failed to generate bitcode for forrng begin"); // LCOV_EXCL_LINE
-    }
-    Builder.CreateStore(begin, loopVar);
-
+    Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), 0), loopVar);
     BasicBlock *HeaderBB = BasicBlock::Create(
             TheContext, "header" + std::to_string(labelNum), TheFunction);
     BasicBlock *BodyBB =
@@ -1236,7 +1230,8 @@ llvm::Value *ASTForItrStmt::codegen() {
     // Emit loop header
     {
         Builder.SetInsertPoint(HeaderBB);
-        Value *end = getEnd()->codegen();
+
+        Value *end = ConstantInt::get(Type::getInt64Ty(TheContext), getCollection()->getChildren().size());
         if (end == nullptr) {
             throw InternalError(                                 // LCOV_EXCL_LINE
                     "failed to generate bitcode for forrng end"); // LCOV_EXCL_LINE

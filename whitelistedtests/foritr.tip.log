@@ -199,15 +199,15 @@ ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ =
             Unifier.cpp:158      3| Unifying representatives to () -> ⟦0@7:11⟧
             Unifier.cpp:178      3| Close starting var ⟦main@1:0⟧ with visited { }
             Unifier.cpp:180      3| Close starting var ⟦main@1:0⟧ with union-find UnionFind edges {
-  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
-  int(0x56012b0c3520) => int
-  ⟦0@7:11⟧(0x56012b0c1120) => int
-  ⟦15@3:8⟧(0x56012b0c1ca0) => int
-  ⟦1@0:0⟧(0x56012b0c0b70) => int
-  ⟦1@4:13⟧(0x56012b0cb650) => int
-  ⟦5@4:18⟧(0x56012b0d5fb0) => int
-  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
-  ⟦x@2:8⟧(0x56012b0c8830) => int
+  () -> ⟦0@7:11⟧(0x558836874000) => () -> ⟦0@7:11⟧
+  int(0x558836861520) => int
+  ⟦0@7:11⟧(0x55883685f120) => int
+  ⟦15@3:8⟧(0x55883685fca0) => int
+  ⟦1@0:0⟧(0x55883685eb70) => int
+  ⟦1@4:13⟧(0x558836869650) => int
+  ⟦5@4:18⟧(0x558836873fb0) => int
+  ⟦main@1:0⟧(0x55883683cc30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x558836866830) => int
 }
           UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
           UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
@@ -221,15 +221,15 @@ ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ =
             Unifier.cpp:234      3| Close starting cons () -> ⟦0@7:11⟧ with visited { ⟦main@1:0⟧ }
             Unifier.cpp:178      3| Close starting var ⟦0@7:11⟧ with visited { ⟦main@1:0⟧ }
             Unifier.cpp:180      3| Close starting var ⟦0@7:11⟧ with union-find UnionFind edges {
-  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
-  int(0x56012b0c3520) => int
-  ⟦0@7:11⟧(0x56012b0c1120) => int
-  ⟦15@3:8⟧(0x56012b0c1ca0) => int
-  ⟦1@0:0⟧(0x56012b0c0b70) => int
-  ⟦1@4:13⟧(0x56012b0cb650) => int
-  ⟦5@4:18⟧(0x56012b0d5fb0) => int
-  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
-  ⟦x@2:8⟧(0x56012b0c8830) => int
+  () -> ⟦0@7:11⟧(0x558836874000) => () -> ⟦0@7:11⟧
+  int(0x558836861520) => int
+  ⟦0@7:11⟧(0x55883685f120) => int
+  ⟦15@3:8⟧(0x55883685fca0) => int
+  ⟦1@0:0⟧(0x55883685eb70) => int
+  ⟦1@4:13⟧(0x558836869650) => int
+  ⟦5@4:18⟧(0x558836873fb0) => int
+  ⟦main@1:0⟧(0x55883683cc30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x558836866830) => int
 }
           UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
           UnionFind.cpp:89       3| UnionFind found representative int
@@ -252,16 +252,16 @@ ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ =
             Unifier.cpp:218      3| Close making () -> int to end var ⟦main@1:0⟧
             Unifier.cpp:178      3| Close starting var ⟦x@2:8⟧ with visited { }
             Unifier.cpp:180      3| Close starting var ⟦x@2:8⟧ with union-find UnionFind edges {
-  () -> int(0x56012b0c1ea0) => () -> int
-  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
-  int(0x56012b0c3520) => int
-  ⟦0@7:11⟧(0x56012b0c1120) => int
-  ⟦15@3:8⟧(0x56012b0c1ca0) => int
-  ⟦1@0:0⟧(0x56012b0c0b70) => int
-  ⟦1@4:13⟧(0x56012b0cb650) => int
-  ⟦5@4:18⟧(0x56012b0d5fb0) => int
-  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
-  ⟦x@2:8⟧(0x56012b0c8830) => int
+  () -> int(0x55883685fea0) => () -> int
+  () -> ⟦0@7:11⟧(0x558836874000) => () -> ⟦0@7:11⟧
+  int(0x558836861520) => int
+  ⟦0@7:11⟧(0x55883685f120) => int
+  ⟦15@3:8⟧(0x55883685fca0) => int
+  ⟦1@0:0⟧(0x55883685eb70) => int
+  ⟦1@4:13⟧(0x558836869650) => int
+  ⟦5@4:18⟧(0x558836873fb0) => int
+  ⟦main@1:0⟧(0x55883683cc30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x558836866830) => int
 }
           UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
           UnionFind.cpp:89       3| UnionFind found representative int
@@ -278,16 +278,16 @@ ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ =
             Unifier.cpp:218      3| Close making int to end var ⟦x@2:8⟧
             Unifier.cpp:178      3| Close starting var ⟦y@2:11⟧ with visited { }
             Unifier.cpp:180      3| Close starting var ⟦y@2:11⟧ with union-find UnionFind edges {
-  () -> int(0x56012b0c1ea0) => () -> int
-  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
-  int(0x56012b0c3520) => int
-  ⟦0@7:11⟧(0x56012b0c1120) => int
-  ⟦15@3:8⟧(0x56012b0c1ca0) => int
-  ⟦1@0:0⟧(0x56012b0c0b70) => int
-  ⟦1@4:13⟧(0x56012b0cb650) => int
-  ⟦5@4:18⟧(0x56012b0d5fb0) => int
-  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
-  ⟦x@2:8⟧(0x56012b0c8830) => int
+  () -> int(0x55883685fea0) => () -> int
+  () -> ⟦0@7:11⟧(0x558836874000) => () -> ⟦0@7:11⟧
+  int(0x558836861520) => int
+  ⟦0@7:11⟧(0x55883685f120) => int
+  ⟦15@3:8⟧(0x55883685fca0) => int
+  ⟦1@0:0⟧(0x55883685eb70) => int
+  ⟦1@4:13⟧(0x558836869650) => int
+  ⟦5@4:18⟧(0x558836873fb0) => int
+  ⟦main@1:0⟧(0x55883683cc30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x558836866830) => int
 }
           UnionFind.cpp:80       3| UnionFind looking for representive of ⟦y@2:11⟧
           UnionFind.cpp:157      3| UnionFind adding ⟦y@2:11⟧ to graph
@@ -295,17 +295,17 @@ ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ =
             Unifier.cpp:226      3| Close making α<y@2:11> to end var ⟦y@2:11⟧
             Unifier.cpp:178      3| Close starting var ⟦z@2:14⟧ with visited { }
             Unifier.cpp:180      3| Close starting var ⟦z@2:14⟧ with union-find UnionFind edges {
-  () -> int(0x56012b0c1ea0) => () -> int
-  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
-  int(0x56012b0c3520) => int
-  ⟦0@7:11⟧(0x56012b0c1120) => int
-  ⟦15@3:8⟧(0x56012b0c1ca0) => int
-  ⟦1@0:0⟧(0x56012b0c0b70) => int
-  ⟦1@4:13⟧(0x56012b0cb650) => int
-  ⟦5@4:18⟧(0x56012b0d5fb0) => int
-  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
-  ⟦x@2:8⟧(0x56012b0c8830) => int
-  ⟦y@2:11⟧(0x56012b0d3ea0) => ⟦y@2:11⟧
+  () -> int(0x55883685fea0) => () -> int
+  () -> ⟦0@7:11⟧(0x558836874000) => () -> ⟦0@7:11⟧
+  int(0x558836861520) => int
+  ⟦0@7:11⟧(0x55883685f120) => int
+  ⟦15@3:8⟧(0x55883685fca0) => int
+  ⟦1@0:0⟧(0x55883685eb70) => int
+  ⟦1@4:13⟧(0x558836869650) => int
+  ⟦5@4:18⟧(0x558836873fb0) => int
+  ⟦main@1:0⟧(0x55883683cc30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x558836866830) => int
+  ⟦y@2:11⟧(0x558836871ea0) => ⟦y@2:11⟧
 }
           UnionFind.cpp:80       3| UnionFind looking for representive of ⟦z@2:14⟧
           UnionFind.cpp:157      3| UnionFind adding ⟦z@2:14⟧ to graph
