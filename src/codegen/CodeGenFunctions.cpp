@@ -1178,9 +1178,11 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
    LOG_S(1) << "createload " << *this;
    auto val = Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
    LOG_S(1) << "ret pointer " << *this;
-   return Builder.CreatePtrToInt(val, Type::getInt64Ty(TheContext),
+   return val;
+  //return Builder.CreatePtrToInt(val, Type::getInt64Ty(TheContext),
                                 "arrayAccess");
    // return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+
 }
 
 llvm::Value *ASTNegationExpr::codegen() {
