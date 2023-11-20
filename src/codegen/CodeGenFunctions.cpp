@@ -1265,6 +1265,7 @@ llvm::Value *ASTDecrStmt::codegen() {
 }
 
 llvm::Value *ASTArrayListExpr::codegen() {
+  auto *allocaArray = Builder.CreateAlloca(Type::getInt64Ty(TheContext));
   LOG_S(1) << "Generating code for " << *this;
   int length = getChildren().size();
  // auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
@@ -1276,13 +1277,17 @@ llvm::Value *ASTArrayListExpr::codegen() {
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
   auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+
+  LOG_S(1) << "store " << *this;
+  // Store the ptr to the record in the record alloc
+  Builder.CreateStore(arrayPtr, allocaArray);
   //Store size in index 0
   LOG_S(1) << "indices " << *this;
   std::vector<Value *> indices1;
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
+  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), allocaArray,
                                         indices1, "arrayidx");
   LOG_S(1) << "Create store " << *this;
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
@@ -1320,7 +1325,8 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
   auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
   auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  //Store size in index 0
+  // Store size in index 0
+
   LOG_S(1) << "indices" << *this;
   std::vector<Value *> indices1;
   indices1.push_back(zeroV);
