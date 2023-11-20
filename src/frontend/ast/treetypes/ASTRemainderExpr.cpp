@@ -18,7 +18,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTRemainderExpr::getChildren() {
   children.push_back(NUMBEREXPR);
   return children;
 }
-
-llvm::Value *ASTRemainderExpr::codegen() {
-    return nullptr;
-}

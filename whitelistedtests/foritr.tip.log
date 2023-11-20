@@ -1,0 +1,330 @@
+
+
+
+
+
+arguments: /home/ignaz/sipc-fugle_miller/build/src/tipc -do --log=/home/ignaz/sipc-fugle_miller/whitelistedtests/foritr.tip.log --pt --verbose=2 whitelistedtests/foritr.tip
+Current dir: /home/ignaz/sipc-fugle_miller/test/system
+File verbosity level: 9
+                   file:line     v| 
+             loguru.cpp:785   INFO| Logging to '/home/ignaz/sipc-fugle_miller/whitelistedtests/foritr.tip.log', mode: 'a', verbosity: 9
+           FrontEnd.cpp:49       1| Parsing program
+           FrontEnd.cpp:53       1| Building AST
+         ASTBuilder.cpp:490      1| Built AST node main
+         ASTBuilder.cpp:490      1| Built AST node x
+         ASTBuilder.cpp:490      1| Built AST node y
+         ASTBuilder.cpp:490      1| Built AST node z
+         ASTBuilder.cpp:478      1| Built AST node var x, y, z;
+         ASTBuilder.cpp:243      1| Built AST node x
+         ASTBuilder.cpp:231      1| Built AST node 15
+         ASTBuilder.cpp:635      1| Built AST node x = 15;
+         ASTBuilder.cpp:243      1| Built AST node x
+         ASTBuilder.cpp:231      1| Built AST node 1
+         ASTBuilder.cpp:231      1| Built AST node 5
+         ASTBuilder.cpp:243      1| Built AST node x
+         ASTBuilder.cpp:556      1| Built AST node output x;
+         ASTBuilder.cpp:506      1| Built AST node { output x; }
+         ASTBuilder.cpp:620      1| Built AST node for (x:1..5 by 1) { output x; }
+         ASTBuilder.cpp:231      1| Built AST node 0
+         ASTBuilder.cpp:580      1| Built AST node return 0;
+         ASTBuilder.cpp:147      1| Built AST node for function main() {...}
+        SymbolTable.cpp:11       1| Building symbol table
+ LocalNameCollector.cpp:36       1| Adding var [[x@2:8]] to symbol table.
+ LocalNameCollector.cpp:36       1| Adding var [[y@2:11]] to symbol table.
+ LocalNameCollector.cpp:36       1| Adding var [[z@2:14]] to symbol table.
+ LocalNameCollector.cpp:22       1| Adding fun [[main@1:0]] to symbol table.
+    CheckAssignable.cpp:86       1| Checking assignability
+    CheckAssignable.cpp:52       1| Checking assignability of x = 15;
+    CheckAssignable.cpp:116      1| Checking assignability of for (x:1..5 by 1) { output x; }
+          CallGraph.cpp:5        1| Generating Control Flow Constraints
+        CubicSolver.cpp:29       1| Generating control flow constraint: main ∈ ⟦main⟧
+        CubicSolver.cpp:50       1| Generating control flow constraint: ⟦15⟧ ⊆ ⟦x⟧
+      TypeInference.cpp:170      1| Generating Monomorphic Type Constraints
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦15@3:8⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦x@2:8⟧ = ⟦15@3:8⟧
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦1@4:13⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦5@4:18⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦1@0:0⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦x@2:8⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦x@2:8⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦1@0:0⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦1@4:13⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦5@4:18⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦0@7:11⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦0@7:11⟧ = int
+ConstraintCollector.cpp:9        1| Generating type constraint: ⟦main@1:0⟧ = () -> ⟦0@7:11⟧
+      TypeInference.cpp:175      1| Solving type constraints
+          UnionFind.cpp:157      3| UnionFind adding ⟦15@3:8⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding int to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦x@2:8⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦1@4:13⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦5@4:18⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦1@0:0⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦0@7:11⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding ⟦main@1:0⟧ to graph
+          UnionFind.cpp:157      3| UnionFind adding () -> ⟦0@7:11⟧ to graph
+            Unifier.cpp:122      3| Unifying ⟦15@3:8⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦15@3:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦15@3:8⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦15@3:8⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦15@3:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦15@3:8⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦15@3:8⟧ => ⟦15@3:8⟧ with ⟦15@3:8⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦15@3:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦x@2:8⟧ and ⟦15@3:8⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦x@2:8⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦15@3:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦x@2:8⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦x@2:8⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦x@2:8⟧ => ⟦x@2:8⟧ with ⟦x@2:8⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦1@4:13⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@4:13⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦1@4:13⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦1@4:13⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@4:13⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦1@4:13⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦1@4:13⟧ => ⟦1@4:13⟧ with ⟦1@4:13⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@4:13⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦5@4:18⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦5@4:18⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦5@4:18⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦5@4:18⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦5@4:18⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦5@4:18⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦5@4:18⟧ => ⟦5@4:18⟧ with ⟦5@4:18⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦5@4:18⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦1@0:0⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@0:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦1@0:0⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦1@0:0⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@0:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦1@0:0⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦1@0:0⟧ => ⟦1@0:0⟧ with ⟦1@0:0⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@0:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦x@2:8⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦x@2:8⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦1@0:0⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@0:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦1@4:13⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦1@4:13⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦5@4:18⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦5@4:18⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦0@7:11⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives ⟦0@7:11⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:108      3| UnionFind replacing ⟦0@7:11⟧ => ⟦0@7:11⟧ with ⟦0@7:11⟧ => int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:158      3| Unifying representatives to int
+            Unifier.cpp:122      3| Unifying ⟦0@7:11⟧ and int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of int
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:127      3| Unifying with representatives int and int
+            Unifier.cpp:122      3| Unifying ⟦main@1:0⟧ and () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦main@1:0⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of () -> ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+            Unifier.cpp:127      3| Unifying with representatives ⟦main@1:0⟧ and () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative ⟦main@1:0⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of () -> ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+          UnionFind.cpp:108      3| UnionFind replacing ⟦main@1:0⟧ => ⟦main@1:0⟧ with ⟦main@1:0⟧ => () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+            Unifier.cpp:158      3| Unifying representatives to () -> ⟦0@7:11⟧
+            Unifier.cpp:178      3| Close starting var ⟦main@1:0⟧ with visited { }
+            Unifier.cpp:180      3| Close starting var ⟦main@1:0⟧ with union-find UnionFind edges {
+  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
+  int(0x56012b0c3520) => int
+  ⟦0@7:11⟧(0x56012b0c1120) => int
+  ⟦15@3:8⟧(0x56012b0c1ca0) => int
+  ⟦1@0:0⟧(0x56012b0c0b70) => int
+  ⟦1@4:13⟧(0x56012b0cb650) => int
+  ⟦5@4:18⟧(0x56012b0d5fb0) => int
+  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x56012b0c8830) => int
+}
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+            Unifier.cpp:188      3| Close var ⟦main@1:0⟧ does not map to itself, it maps to () -> ⟦0@7:11⟧
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦main@1:0⟧
+          UnionFind.cpp:89       3| UnionFind found representative () -> ⟦0@7:11⟧
+            Unifier.cpp:234      3| Close starting cons () -> ⟦0@7:11⟧ with visited { ⟦main@1:0⟧ }
+            Unifier.cpp:178      3| Close starting var ⟦0@7:11⟧ with visited { ⟦main@1:0⟧ }
+            Unifier.cpp:180      3| Close starting var ⟦0@7:11⟧ with union-find UnionFind edges {
+  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
+  int(0x56012b0c3520) => int
+  ⟦0@7:11⟧(0x56012b0c1120) => int
+  ⟦15@3:8⟧(0x56012b0c1ca0) => int
+  ⟦1@0:0⟧(0x56012b0c0b70) => int
+  ⟦1@4:13⟧(0x56012b0cb650) => int
+  ⟦5@4:18⟧(0x56012b0d5fb0) => int
+  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x56012b0c8830) => int
+}
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:188      3| Close var ⟦0@7:11⟧ does not map to itself, it maps to int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦0@7:11⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:234      3| Close starting cons int with visited { ⟦0@7:11⟧ ⟦main@1:0⟧ }
+            Unifier.cpp:263      3| Close making int to end cons int
+            Unifier.cpp:198      3| Close var ⟦0@7:11⟧ using new var α<0@7:11> and closed var int
+            Unifier.cpp:218      3| Close making int to end var ⟦0@7:11⟧
+            Unifier.cpp:246      3| Close cons substituting int for ⟦0@7:11⟧ in ⟦0@7:11⟧
+            Unifier.cpp:249      3| Close cons substitution yielded int
+          UnionFind.cpp:157      3| UnionFind adding () -> int to graph
+            Unifier.cpp:263      3| Close making () -> int to end cons () -> ⟦0@7:11⟧
+            Unifier.cpp:198      3| Close var ⟦main@1:0⟧ using new var α<main@1:0> and closed var () -> int
+            Unifier.cpp:218      3| Close making () -> int to end var ⟦main@1:0⟧
+            Unifier.cpp:178      3| Close starting var ⟦x@2:8⟧ with visited { }
+            Unifier.cpp:180      3| Close starting var ⟦x@2:8⟧ with union-find UnionFind edges {
+  () -> int(0x56012b0c1ea0) => () -> int
+  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
+  int(0x56012b0c3520) => int
+  ⟦0@7:11⟧(0x56012b0c1120) => int
+  ⟦15@3:8⟧(0x56012b0c1ca0) => int
+  ⟦1@0:0⟧(0x56012b0c0b70) => int
+  ⟦1@4:13⟧(0x56012b0cb650) => int
+  ⟦5@4:18⟧(0x56012b0d5fb0) => int
+  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x56012b0c8830) => int
+}
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:188      3| Close var ⟦x@2:8⟧ does not map to itself, it maps to int
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦x@2:8⟧
+          UnionFind.cpp:89       3| UnionFind found representative int
+            Unifier.cpp:234      3| Close starting cons int with visited { ⟦x@2:8⟧ }
+            Unifier.cpp:263      3| Close making int to end cons int
+            Unifier.cpp:198      3| Close var ⟦x@2:8⟧ using new var α<x@2:8> and closed var int
+            Unifier.cpp:218      3| Close making int to end var ⟦x@2:8⟧
+            Unifier.cpp:178      3| Close starting var ⟦y@2:11⟧ with visited { }
+            Unifier.cpp:180      3| Close starting var ⟦y@2:11⟧ with union-find UnionFind edges {
+  () -> int(0x56012b0c1ea0) => () -> int
+  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
+  int(0x56012b0c3520) => int
+  ⟦0@7:11⟧(0x56012b0c1120) => int
+  ⟦15@3:8⟧(0x56012b0c1ca0) => int
+  ⟦1@0:0⟧(0x56012b0c0b70) => int
+  ⟦1@4:13⟧(0x56012b0cb650) => int
+  ⟦5@4:18⟧(0x56012b0d5fb0) => int
+  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x56012b0c8830) => int
+}
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦y@2:11⟧
+          UnionFind.cpp:157      3| UnionFind adding ⟦y@2:11⟧ to graph
+          UnionFind.cpp:89       3| UnionFind found representative ⟦y@2:11⟧
+            Unifier.cpp:226      3| Close making α<y@2:11> to end var ⟦y@2:11⟧
+            Unifier.cpp:178      3| Close starting var ⟦z@2:14⟧ with visited { }
+            Unifier.cpp:180      3| Close starting var ⟦z@2:14⟧ with union-find UnionFind edges {
+  () -> int(0x56012b0c1ea0) => () -> int
+  () -> ⟦0@7:11⟧(0x56012b0d6000) => () -> ⟦0@7:11⟧
+  int(0x56012b0c3520) => int
+  ⟦0@7:11⟧(0x56012b0c1120) => int
+  ⟦15@3:8⟧(0x56012b0c1ca0) => int
+  ⟦1@0:0⟧(0x56012b0c0b70) => int
+  ⟦1@4:13⟧(0x56012b0cb650) => int
+  ⟦5@4:18⟧(0x56012b0d5fb0) => int
+  ⟦main@1:0⟧(0x56012b09ec30) => () -> ⟦0@7:11⟧
+  ⟦x@2:8⟧(0x56012b0c8830) => int
+  ⟦y@2:11⟧(0x56012b0d3ea0) => ⟦y@2:11⟧
+}
+          UnionFind.cpp:80       3| UnionFind looking for representive of ⟦z@2:14⟧
+          UnionFind.cpp:157      3| UnionFind adding ⟦z@2:14⟧ to graph
+          UnionFind.cpp:89       3| UnionFind found representative ⟦z@2:14⟧
+            Unifier.cpp:226      3| Close making α<z@2:14> to end var ⟦z@2:14⟧
+   CodeGenFunctions.cpp:225      1| Generating code for program whitelistedtests/foritr.tip
+   CodeGenFunctions.cpp:393      1| Generating code for main() {...}
+   CodeGenFunctions.cpp:852      1| Generating code for var x, y, z;
+   CodeGenFunctions.cpp:875      1| Generating code for x = 15;
+   CodeGenFunctions.cpp:535      1| Generating code for x
+   CodeGenFunctions.cpp:472      1| Generating code for 15
+   CodeGenFunctions.cpp:1264     1| Generating code for for (x:1..5 by 1) { output x; }
+   CodeGenFunctions.cpp:535      1| Generating code for x
+   CodeGenFunctions.cpp:472      1| Generating code for 1
+   CodeGenFunctions.cpp:472      1| Generating code for 5
+   CodeGenFunctions.cpp:897      1| Generating code for { output x; }
+   CodeGenFunctions.cpp:1078     1| Generating code for output x;
+   CodeGenFunctions.cpp:535      1| Generating code for x
+   CodeGenFunctions.cpp:472      1| Generating code for 5
+   CodeGenFunctions.cpp:1121     1| Generating code for return 0;
+   CodeGenFunctions.cpp:472      1| Generating code for 0
+             loguru.cpp:496   INFO| atexit

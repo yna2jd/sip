@@ -22,21 +22,28 @@ bool isAssignable(ASTExpr *e) {
       return false;
     }
   }
+  if (dynamic_cast<ASTFunAppExpr *>(e)) {
+      // auto funApp = dynamic_cast<ASTFunAppExpr *>(e);
+      return isAssignable(e);
+  }
   if(dynamic_cast<ASTArrayIndexExpr *>(e)){
       auto *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
-      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
-          return true;
-      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
+      return isAssignable(arrayIndex->getArray());
+//      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
+//          return true;
+//      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
           return true;
       } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
-          return true;
-      } else {
-          return false;
-      }
+//          return true;
+//      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
+//          return true;
+//      } else {
+//          return false;
+//      }
   }
   return false;
 }

@@ -38,3 +38,4 @@ coverage.out/
 corretto.key*
 kitware-archive.sh*
 llvm.sh*
+/.log

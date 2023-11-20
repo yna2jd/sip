@@ -20,7 +20,3 @@ std::vector<std::shared_ptr<ASTNode>> ASTAndExpr::getChildren() {
   children.push_back(RIGHT);
   return children;
 }
-
-llvm::Value *ASTAndExpr::codegen() {
-    return nullptr;
-}
