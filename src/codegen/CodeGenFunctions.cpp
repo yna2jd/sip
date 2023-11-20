@@ -1145,13 +1145,9 @@ llvm::Value *ASTLengthExpr::codegen() {
     // Length
     // Get current field and check if it exists
     Value *arr = this->getCollection()->codegen();
-
-    // Generate the location of the field
-    std::vector<Value *> indices;
-    indices.push_back(zeroV);
-    indices.push_back(zeroV);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
-
+    Value *arrAddress = Builder.CreateIntToPtr(arr,Type::getInt64PtrTy(TheContext));
+    auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, zeroV);
+    LOG_S(1) << "ret load " << *this;
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
@@ -1166,17 +1162,23 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
        lValueGen = false;
     }
     Value *arr = this->getArray()->codegen();
-    Value *arrIndex = this->getSubscript()->codegen();
+    Value *arrInd = this->getSubscript()->codegen();
+    Value *arrAddress = Builder.CreateIntToPtr(arr,IntegerType::getInt64PtrTy(TheContext));
+    auto arrIndex = Builder.CreateAdd(arrInd, oneV, "addtmp");
     // Generate the location of the field
-    std::vector<Value *> indices;
-    indices.push_back(zeroV);
-    indices.push_back(arrIndex);
-    auto *gep = Builder.CreateInBoundsGEP(arr->getType(),arr, indices, "arrayidx");
+    LOG_S(1) << "indices " << *this;
+    // PointerType::get(IntegerType::getInt64Ty(TheContext), 0)
+    auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, arrIndex);
     if (isLValue) {
+      LOG_S(1) << "Ret gep " << *this;
       return gep;
     }
     // Load value at GEP and return it
-    return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+   LOG_S(1) << "createload " << *this;
+   auto val = Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+   LOG_S(1) << "ret pointer " << *this;
+   //return val;
+   return Builder.CreatePtrToInt(val, Type::getInt64Ty(TheContext),"arrayAccess");
 }
 
 llvm::Value *ASTNegationExpr::codegen() {
@@ -1420,79 +1422,95 @@ llvm::Value *ASTDecrStmt::codegen() {
 }
 
 llvm::Value *ASTArrayListExpr::codegen() {
+
+  auto *allocaArray = Builder.CreateAlloca(Type::getInt64Ty(TheContext));
+
   LOG_S(1) << "Generating code for " << *this;
   int length = getChildren().size();
-  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
+ // auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
 
   // Create an array
+  LOG_S(1) << "twoarg " << *this;
   std::vector<Value *> twoArg;
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
-  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+  auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+  auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
 
+  LOG_S(1) << "store " << *this;
+  // Store the ptr to the record in the record alloc
+  Builder.CreateStore(arrayPtr, allocaArray);
   //Store size in index 0
-  std::vector<Value *> indices1;
-  indices1.push_back(zeroV);
-  indices1.push_back(zeroV);
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
-                                        indices1, "arrayidx");
+
+  LOG_S(1) << "indices " << *this;
+  //std::vector<Value *> indices1;
+  //indices1.push_back(zeroV);
+  //indices1.push_back(oneV);
+
+  auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), allocaArray,zeroV);
+  LOG_S(1) << "Create store " << *this;
+
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
 
   int index = 1;
+  LOG_S(1) << "Children " << *this;
   for (auto const &child : getChildren()) {   
     // Store pointer in array index
-      std::vector<Value *> indices;
-      indices.push_back(zeroV);
-      indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
       auto value = child->codegen();
-      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
-                                            arrayPtr, indices, "arrayidx");
-     
+      auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext),arrayPtr, ConstantInt::get(Type::getInt64Ty(TheContext), index));
      Builder.CreateStore(value,gep);
      index++;
   }
   // return pointer to array?
-  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+  LOG_S(1) << "ret " << *this;
+  //auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  
+  return Builder.CreatePtrToInt(allocaArray, Type::getInt64Ty(TheContext),"array");
 }
 
 llvm::Value *ASTArrayOfExpr::codegen() {
-  std::cout << "Generating code for " << *this;
+
+  LOG_S(1) << "Generating code for " << *this;
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
-  std::cout << "cast goes next" << *this;
-  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen))->getZExtValue());
-  std::cout << "setup twoarg";
+  //auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen))->getZExtValue());
+  auto *allocaArray = Builder.CreateAlloca(Type::getInt64Ty(TheContext));
   // Create an array
+  LOG_S(1) << "twoarg " << *this;
   std::vector<Value *> twoArg;
   twoArg.push_back(arrlen);
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
-  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
-    LOG_S(1) << "pushback indices";
-  //Store size in index 0
-  std::vector<Value *> indices1;
-  indices1.push_back(zeroV);
-  indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
-                                        indices1, "arrayidx");
+  auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+  auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+
+  Builder.CreateStore(arrayPtr, allocaArray);
+  // Store size in index 0
+
+  LOG_S(1) << "indices" << *this;
+
+  auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
+                                        zeroV, "arrayidx");
+  LOG_S(1) << "createstore" << *this;
   Builder.CreateStore(length, gep1);
 
   int index = 1;
   auto value = getRight()->codegen();
+  LOG_S(1) << "Children " << *this;
   for (auto const &child : getChildren()) {   
     // Store pointer in array index
       std::vector<Value *> indices;
       indices.push_back(zeroV);
       indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
-      auto *gep = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
-                                            arrayPtr, indices, "arrayidx"); 
+      auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext)/*elementType | arrayPtr->getValueType()*/,
+                                            arrayPtr, ConstantInt::get(Type::getInt64Ty(TheContext), index), "arrayidx"); 
      Builder.CreateStore(value,gep);
      index++;
   }
   // return pointer to array?
-  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+  LOG_S(1) << "Ret " << *this;
+  //auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  return Builder.CreatePtrToInt(allocaArray, Type::getInt64Ty(TheContext),"array");
 }
 
 
