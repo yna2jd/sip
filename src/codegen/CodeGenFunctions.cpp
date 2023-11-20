@@ -1300,8 +1300,8 @@ llvm::Value *ASTArrayListExpr::codegen() {
   // return pointer to array?
   LOG_S(1) << "ret " << *this;
   //auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  return allocaArray;
-  //return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+  
+  return Builder.CreatePtrToInt(allocaArray, Type::getInt64Ty(TheContext),"array");
 }
 
 llvm::Value *ASTArrayOfExpr::codegen() {
