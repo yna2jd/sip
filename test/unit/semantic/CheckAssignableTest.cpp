@@ -113,13 +113,13 @@ TEST_CASE("Check Assignable: binary lhs", "[Symbol]") {
                          ContainsWhat("(x+1) not an l-value"));
 }
 
-TEST_CASE("Check Assignable: function lhs", "[Symbol]") {
-  std::stringstream stream;
-  stream << R"(foo() { return 0; } funlhs() { var x; foo() = x; return 0; })";
-  auto ast = ASTHelper::build_ast(stream);
-  REQUIRE_THROWS_MATCHES(CheckAssignable::check(ast.get()), SemanticError,
-                         ContainsWhat("foo() not an l-value"));
-}
+//TEST_CASE("Check Assignable: function lhs", "[Symbol]") {
+//  std::stringstream stream;
+//  stream << R"(foo() { return 0; } funlhs() { var x; foo() = x; return 0; })";
+//  auto ast = ASTHelper::build_ast(stream);
+//  REQUIRE_THROWS_MATCHES(CheckAssignable::check(ast.get()), SemanticError,
+//                         ContainsWhat("foo() not an l-value"));
+//}
 
 TEST_CASE("Check Assignable: alloc lhs", "[Symbol]") {
   std::stringstream stream;

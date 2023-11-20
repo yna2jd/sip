@@ -1250,7 +1250,6 @@ llvm::Value *ASTForItrStmt::codegen() {
     {
         TheFunction->getBasicBlockList().push_back(BodyBB);
         Builder.SetInsertPoint(BodyBB);
-
         Value *BodyV = getBody()->codegen();
         if (BodyV == nullptr) {
             throw InternalError(                                 // LCOV_EXCL_LINE

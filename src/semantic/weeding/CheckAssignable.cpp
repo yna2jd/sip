@@ -29,21 +29,6 @@ bool isAssignable(ASTExpr *e) {
   if(dynamic_cast<ASTArrayIndexExpr *>(e)){
       auto *arrayIndex = dynamic_cast<ASTArrayIndexExpr *>(e);
       return isAssignable(arrayIndex->getArray());
-//      if (dynamic_cast<ASTArrayOfExpr *>(arrayIndex->getArray())) {
-//          return true;
-//      } else if (dynamic_cast<ASTArrayIndexExpr *>(arrayIndex->getArray())) {
-//          return true;
-//      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
-//          return true;
-//      }else if(dynamic_cast<ASTFunction *>(arrayIndex->getArray())){
-          return true;
-      } else if (dynamic_cast<ASTVariableExpr *>(arrayIndex->getArray())) {
-//          return true;
-//      } else if (dynamic_cast<ASTDeRefExpr *>(arrayIndex->getArray())) {
-//          return true;
-//      } else {
-//          return false;
-//      }
   }
   return false;
 }
