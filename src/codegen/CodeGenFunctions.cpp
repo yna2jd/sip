@@ -1287,7 +1287,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), allocaArray,
+  auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), allocaArray,
                                         indices1, "arrayidx");
   LOG_S(1) << "Create store " << *this;
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
