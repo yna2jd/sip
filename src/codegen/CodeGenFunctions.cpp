@@ -1274,8 +1274,8 @@ llvm::Value *ASTArrayListExpr::codegen() {
   std::vector<Value *> twoArg;
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), length+1));
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
-  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
-
+  auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+  auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   //Store size in index 0
   LOG_S(1) << "indices " << *this;
   std::vector<Value *> indices1;
@@ -1318,8 +1318,8 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   std::vector<Value *> twoArg;
   twoArg.push_back(arrlen);
   twoArg.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), 8)); // Might need diff size here
-  auto *arrayPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
-
+  auto *arrPtr = Builder.CreateCall(callocFun, twoArg, "arrayPtr");
+  auto *arrayPtr = Builder.CreatePointerCast(arrPtr, Type::getInt64PtrTy(TheContext), "castPtr");
   //Store size in index 0
   LOG_S(1) << "indices" << *this;
   std::vector<Value *> indices1;
