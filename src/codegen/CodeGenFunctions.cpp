@@ -1177,7 +1177,10 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
       return gep;
     }
     // Load value at GEP and return it
-    return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+   auto val = Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
+   return Builder.CreatePtrToInt(val, Type::getInt64Ty(TheContext),
+                                "arrayAccess");
+   // return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
 }
 
 llvm::Value *ASTNegationExpr::codegen() {
