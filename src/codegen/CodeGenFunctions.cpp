@@ -1282,7 +1282,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
+  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
                                         indices1, "arrayidx");
   LOG_S(1) << "Create store " << *this;
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
@@ -1326,7 +1326,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
+  auto *gep1 = Builder.CreateInBoundsGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
                                         indices1, "arrayidx");
   LOG_S(1) << "createstore" << *this;
   Builder.CreateStore(length, gep1);
