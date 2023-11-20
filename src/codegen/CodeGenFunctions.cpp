@@ -1262,7 +1262,7 @@ llvm::Value *ASTDecrStmt::codegen() {
 
 llvm::Value *ASTArrayListExpr::codegen() {
   int length = getChildren().size();
-  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
+ // auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),length +1);
 
   // Create an array
   std::vector<Value *> twoArg;
@@ -1275,7 +1275,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
+  auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
                                         indices1, "arrayidx");
   Builder.CreateStore(ConstantInt::get(Type::getInt64Ty(TheContext), length), gep1);
 
@@ -1300,7 +1300,7 @@ llvm::Value *ASTArrayListExpr::codegen() {
 llvm::Value *ASTArrayOfExpr::codegen() {
   auto length = getLeft()->codegen();
   auto arrlen = Builder.CreateAdd(length, oneV, "addtmp");
-  auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen))->getZExtValue());
+  //auto *arrayType = ArrayType::get(Type::getInt64Ty(TheContext),(cast<llvm::ConstantInt>(arrlen))->getZExtValue());
 
   // Create an array
   std::vector<Value *> twoArg;
@@ -1313,7 +1313,7 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   indices1.push_back(zeroV);
   indices1.push_back(zeroV);
 
-  auto *gep1 = Builder.CreateInBoundsGEP(arrayType, arrayPtr,
+  auto *gep1 = Builder.CreateInBoundsGEP(Type::getInt64Ty(TheContext), arrayPtr,
                                         indices1, "arrayidx");
   Builder.CreateStore(length, gep1);
 
