@@ -1146,8 +1146,8 @@ llvm::Value *ASTLengthExpr::codegen() {
     // Length
     // Get current field and check if it exists
     Value *arr = this->getCollection()->codegen();
-
-    auto *gep = Builder.CreateGEP(arr->getType(),arr, zeroV, "arrayidx");
+    Value *arrAddress = Builder.CreateIntToPtr(arr,Type::getInt64Ty(TheContext));
+    auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, zeroV);
     LOG_S(1) << "ret load " << *this;
     // Load value at GEP and return it
     return Builder.CreateLoad(IntegerType::getInt64Ty(TheContext), gep);
@@ -1171,7 +1171,7 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
-    auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext),arrAddress, arrIndex);
+    auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, arrIndex);
     if (isLValue) {
       LOG_S(1) << "Ret gep " << *this;
       return gep;
