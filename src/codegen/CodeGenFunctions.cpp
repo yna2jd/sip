@@ -1291,9 +1291,6 @@ llvm::Value *ASTArrayListExpr::codegen() {
   LOG_S(1) << "Children " << *this;
   for (auto const &child : getChildren()) {   
     // Store pointer in array index
-      std::vector<Value *> indices;
-      indices.push_back(zeroV);
-      indices.push_back(ConstantInt::get(Type::getInt64Ty(TheContext), index));
       auto value = child->codegen();
       auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext),arrayPtr, ConstantInt::get(Type::getInt64Ty(TheContext), index));
      Builder.CreateStore(value,gep);
@@ -1301,8 +1298,9 @@ llvm::Value *ASTArrayListExpr::codegen() {
   }
   // return pointer to array?
   LOG_S(1) << "ret " << *this;
-  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+  //auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  return allocaArray;
+  //return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
 }
 
 llvm::Value *ASTArrayOfExpr::codegen() {
