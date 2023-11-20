@@ -40,11 +40,27 @@ run_system_tests() {
 
   echo running the system test suite
   pushd ${SYSTEM_TEST_DIR} &> /dev/null
-  if [ -n "${1}" ]; then
-    ./run_whitelist.sh
-  else
-    ./run.sh
+  ./run.sh
+  if [ $? -ne 0 ]; then
+    echo error while running system tests
+    exit 1
   fi
+  popd &> /dev/null
+  echo system test suite complete
+}
+
+run_whitelisted_tests() {
+  pushd ${RTLIB_DIR} &> /dev/null
+  ./build.sh
+  if [ $? -ne 0 ]; then
+    echo error: could not build the runtime library
+    exit 1
+  fi
+  popd &> /dev/null
+
+  echo running the system test suite
+  pushd ${SYSTEM_TEST_DIR} &> /dev/null
+  ./run_whitelist.sh
   if [ $? -ne 0 ]; then
     echo error while running system tests
     exit 1
@@ -55,25 +71,28 @@ run_system_tests() {
 
 run_system_tests="true"
 run_unit_tests="true"
-run_single=""
-while getopts ":hswu" opt; do
+run_whitelisted_tests=""
+while getopts ":hwsu" opt; do
   case "${opt}" in
     h)
       usage
       exit 0
       ;;
+    w)
+      echo Preparing to run only the whitelisted tests
+      run_whitelisted_tests="true"
+      run_unit_tests=""
+      run_system_tests=""
+      ;;
     s)
       echo Preparing to run only the system tests suite
       run_unit_tests=""
+      run_whitelisted_tests = ""
       ;;
     u)
       echo Preparing to run only the unit tests suite
       run_system_tests=""
-      ;;
-    w)
-      echo Preparing to run a single system test
-      run_single="true"
-      run_unit_tests=""
+      run_whitelisted_tests = ""
       ;;
     *)
       echo $0 illegal option
@@ -90,5 +109,9 @@ if [ -n "${run_unit_tests}" ]; then
 fi
 
 if [ -n "${run_system_tests}" ]; then
-  run_system_tests $run_single
+  run_system_tests
+fi
+
+if [ -n "${run_whitelisted_tests}" ]; then
+  run_whitelisted_tests
 fi
