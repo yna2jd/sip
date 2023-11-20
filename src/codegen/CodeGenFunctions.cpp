@@ -1170,7 +1170,7 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     std::vector<Value *> indices;
     indices.push_back(zeroV);
     indices.push_back(arrIndex);
-    auto *gep = Builder.CreateGEP(arr->getType()->getPointerElementType(),arr, arrIndex);
+    auto *gep = Builder.CreateGEP(Type::getInt64Ty(TheContext),arr, arrIndex);
     if (isLValue) {
       LOG_S(1) << "Ret gep " << *this;
       return gep;
