@@ -1146,7 +1146,7 @@ llvm::Value *ASTLengthExpr::codegen() {
     // Length
     // Get current field and check if it exists
     Value *arr = this->getCollection()->codegen();
-    Value *arrAddress = Builder.CreateIntToPtr(arr,Type::getInt64Ty(TheContext));
+    Value *arrAddress = Builder.CreateIntToPtr(arr,Type::getInt64PtrTy(TheContext));
     auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, zeroV);
     LOG_S(1) << "ret load " << *this;
     // Load value at GEP and return it
@@ -1320,9 +1320,6 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   // Store size in index 0
 
   LOG_S(1) << "indices" << *this;
-  std::vector<Value *> indices1;
-  indices1.push_back(zeroV);
-  indices1.push_back(zeroV);
 
   auto *gep1 = Builder.CreateGEP(arrayPtr->getType()->getPointerElementType(), arrayPtr,
                                         zeroV, "arrayidx");
@@ -1344,8 +1341,8 @@ llvm::Value *ASTArrayOfExpr::codegen() {
   }
   // return pointer to array?
   LOG_S(1) << "Ret " << *this;
-  auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
-  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),"arrayPtr");
+  //auto *castPtr = Builder.CreatePointerCast(arrayPtr, Type::getInt64PtrTy(TheContext), "castPtr");
+  return Builder.CreatePtrToInt(allocaArray, Type::getInt64Ty(TheContext),"array");
 }
 
 
