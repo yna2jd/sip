@@ -1164,12 +1164,12 @@ llvm::Value *ASTArrayIndexExpr::codegen() {
     }
     Value *arr = this->getArray()->codegen();
     Value *arrInd = this->getSubscript()->codegen();
-    Value *arrAddress = Builder.CreateIntToPtr(arr,IntegerType::getInt64Ty(TheContext));
+    Value *arrAddress = Builder.CreateIntToPtr(arr,IntegerType::getInt64PtrTy(TheContext));
     auto arrIndex = Builder.CreateAdd(arrInd, oneV, "addtmp");
     // Generate the location of the field
     LOG_S(1) << "indices " << *this;
     // PointerType::get(IntegerType::getInt64Ty(TheContext), 0)
-    auto *gep = Builder.CreateGEP(arrAddress->getType(),arrAddress, arrIndex);
+    auto *gep = Builder.CreateGEP(arrAddress->getType()->getPointerElementType(),arrAddress, arrIndex);
     if (isLValue) {
       LOG_S(1) << "Ret gep " << *this;
       return gep;
