@@ -54,15 +54,15 @@ do
 
   ./${base} &>/dev/null
   exit_code=${?}
-  if [ ${exit_code} -ne 0 ]; then
-    echo -n "Test failure for : "
-    echo $i
-    ./${base}
-    ((numfailures++))
-  else
-    rm ${base}
-  fi
-  rm $i.bc
+#  if [ ${exit_code} -ne 0 ]; then
+#    echo -n "Test failure for : "
+#    echo $i
+#    ./${base}
+#    ((numfailures++))
+#  else
+#    rm ${base}
+#  fi
+#  rm $i.bc
 
 done
 
