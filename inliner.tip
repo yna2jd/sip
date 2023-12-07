@@ -1,0 +1,15 @@
+main(n) {
+  var i, r, v;
+  i = 0;
+  v = 42;
+  r = 0;
+  while (n > i) { 
+    r = getPlus(r,r); 
+    i = i + 1;
+  }
+  return r;
+}
+
+getPlus(n,m) {
+  return n+m;
+}
