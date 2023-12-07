@@ -56,8 +56,10 @@ static cl::opt<std::string> outputfile("o", cl::value_desc("outputfile"),
 static cl::list<Optimization> OptimizationList(
 		cl::desc("Available Optimizations:"),
 		cl::values(
+            clEnumVal(inln, "Function Inlining"),
             clEnumVal(tail, "Tail Call Recursion"),
 			clEnumVal(licm, "Loop Invariant Code Motion"),
+            clEnumVal(recomb, "Repeat Instruction Combination"),
 			clEnumVal(del, "Loop Deletion")),
 		cl::cat(TIPcat));
 
