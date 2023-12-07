@@ -11,15 +11,19 @@ if [ "${1}" == "help" ]; then
   exit 1
 fi
 
-base="$(basename $2 .tip)"
-
+# unoptimized
+exec="$(dirname "${2}")/$(basename "${2}" .tip)"
 echo ""
 echo "without ${1}"
-${TIPC} $2
-${TIPCLANG} -w $2.bc ${RTLIB}/tip_rtlib.bc -o $base
-time "$(dirname $2)/"${base} 20000
+${TIPC} "${2}"
+${TIPCLANG} -w "${2}".bc "${RTLIB}"/tip_rtlib.bc -o "${exec}"
+time "${exec}" 20000
+# optimized
 echo ""
 echo  "with ${1}"
-${TIPC} $1 $2
-${TIPCLANG} -w $2.bc ${RTLIB}/tip_rtlib.bc -o $base
-time "$(dirname $2)/"${base} 20000
+${TIPC} "$1" "${2}"
+${TIPCLANG} -w "${2}".bc "${RTLIB}"/tip_rtlib.bc -o "${exec}"
+time "${exec}" 20000
+# cleanup
+rm "$(dirname "${2}")/${2}.bc"
+rm "${exec}"

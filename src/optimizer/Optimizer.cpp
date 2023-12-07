@@ -14,6 +14,7 @@
 // P5 passes
 #include "llvm/Transforms/Scalar/LICM.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
+#include "llvm/Transforms/Scalar/TailRecursionElimination.h"
 
 // For logging
 #include "loguru.hpp"
@@ -80,6 +81,11 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     functionPassManager.addPass(llvm::GVNPass());
     // Simplify the control flow graph (deleting unreachable blocks, etc).
     functionPassManager.addPass(llvm::SimplifyCFGPass());
+
+    if (contains(tail, enabledOpts)) {
+        // Add loop deletion pass
+        functionPassManager.addPass(llvm::TailCallElimPass());
+    }
 
     if (contains(licm, enabledOpts)) {
         // Add loop invariant code motion
