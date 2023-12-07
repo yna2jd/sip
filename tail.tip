@@ -1,11 +1,10 @@
 main(n) {
-  var i, m, o, r;
+  var i, o, r;
   i = 0;
   r = 0;
   while (n > i) {
-    m = 0;
     o = tail;
-    r = r + tail(m, n, o);
+    r = r + tail(0, n, o);
     i = i + 1;
   }
   return r;
@@ -15,7 +14,6 @@ tail(m, n, o) {
     if(m > n){
         o = bail;
     }
-
     return o(m + 10, n, o);
 }
 

@@ -12,6 +12,7 @@
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
 // P5 passes
+#include "llvm/Transforms/IPO/Inliner.h"
 #include "llvm/Transforms/Scalar/LICM.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
