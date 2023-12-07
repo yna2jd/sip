@@ -19,13 +19,13 @@
 #include "loguru.hpp"
 
 namespace { // Anonymous namespace for local function
-	    
-bool contains(Optimization o, llvm::cl::list<Optimization> &l) {
-  for (unsigned i = 0; i != l.size(); ++i) {
-    if (o == l[i]) return true;
-  }
-  return false;
-}
+
+    bool contains(Optimization o, llvm::cl::list<Optimization> &l) {
+        for (unsigned i = 0; i != l.size(); ++i) {
+            if (o == l[i]) return true;
+        }
+        return false;
+    }
 
 }
 
@@ -39,71 +39,72 @@ bool contains(Optimization o, llvm::cl::list<Optimization> &l) {
 //  eg: To run a loop pass on a module ->
 //  ModulePassManager.add(functionAdaptor(LoopAdaptor(llvm::LoopPass())))
 
-void Optimizer::optimize(llvm::Module *theModule, 
-		llvm::cl::list<Optimization> &enabledOpts) {
-  LOG_S(1) << "Optimizing program " << theModule->getName().str();
+void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &enabledOpts) {
+    LOG_S(1) << "Optimizing program " << theModule->getName().str();
 
-  // New pass builder
+    // New pass builder
 
-  llvm::PassBuilder passBuilder;
+    llvm::PassBuilder passBuilder;
 
-  // Setting-up Analysis Managers
+    // Setting-up Analysis Managers
 
-  llvm::FunctionAnalysisManager functionAnalysisManager;
-  llvm::ModuleAnalysisManager moduleAnalysisManager;
-  llvm::LoopAnalysisManager loopAnalysisManager;
-  llvm::CGSCCAnalysisManager cgsccAnalysisManager;
+    llvm::FunctionAnalysisManager functionAnalysisManager;
+    llvm::ModuleAnalysisManager moduleAnalysisManager;
+    llvm::LoopAnalysisManager loopAnalysisManager;
+    llvm::CGSCCAnalysisManager cgsccAnalysisManager;
 
-  // Registering the analysis managers with the pass builder
+    // Registering the analysis managers with the pass builder
 
-  passBuilder.registerModuleAnalyses(moduleAnalysisManager);
-  passBuilder.registerCGSCCAnalyses(cgsccAnalysisManager);
-  passBuilder.registerFunctionAnalyses(functionAnalysisManager);
-  passBuilder.registerLoopAnalyses(loopAnalysisManager);
-  // Cross Register Proxies
-  passBuilder.crossRegisterProxies(loopAnalysisManager, functionAnalysisManager,
-                                   cgsccAnalysisManager, moduleAnalysisManager);
+    passBuilder.registerModuleAnalyses(moduleAnalysisManager);
+    passBuilder.registerCGSCCAnalyses(cgsccAnalysisManager);
+    passBuilder.registerFunctionAnalyses(functionAnalysisManager);
+    passBuilder.registerLoopAnalyses(loopAnalysisManager);
+    // Cross Register Proxies
+    passBuilder.crossRegisterProxies(loopAnalysisManager, functionAnalysisManager,
+                                     cgsccAnalysisManager, moduleAnalysisManager);
 
-  // Initiating Function and Module level PassManagers
+    // Initiating Function and Module level PassManagers
 
-  llvm::ModulePassManager modulePassManager;
-  llvm::FunctionPassManager functionPassManager;
-  llvm::LoopPassManager loopPassManagerWithMSSA;
-  llvm::LoopPassManager loopPassManager;
+    llvm::ModulePassManager modulePassManager;
+    llvm::FunctionPassManager functionPassManager;
+    llvm::LoopPassManager loopPassManagerWithMSSA;
+    llvm::LoopPassManager loopPassManager;
 
-  // Adding passes to the pipeline
+    // Adding passes to the pipeline
 
-  functionPassManager.addPass(llvm::PromotePass()); // New Reg2Mem
-  functionPassManager.addPass(llvm::InstCombinePass());
-  // Reassociate expressions.
-  functionPassManager.addPass(llvm::ReassociatePass());
-  // Eliminate Common SubExpressions.
-  functionPassManager.addPass(llvm::GVNPass());
-  // Simplify the control flow graph (deleting unreachable blocks, etc).
-  functionPassManager.addPass(llvm::SimplifyCFGPass());
+    functionPassManager.addPass(llvm::PromotePass()); // New Reg2Mem
+    functionPassManager.addPass(llvm::InstCombinePass());
+    // Reassociate expressions.
+    functionPassManager.addPass(llvm::ReassociatePass());
+    // Eliminate Common SubExpressions.
+    functionPassManager.addPass(llvm::GVNPass());
+    // Simplify the control flow graph (deleting unreachable blocks, etc).
+    functionPassManager.addPass(llvm::SimplifyCFGPass());
 
-  if (contains(licm, enabledOpts)) {
-    // Add loop invariant code motion 
-    loopPassManagerWithMSSA.addPass(llvm::LICMPass()); 
-  }
+    if (contains(licm, enabledOpts)) {
+        // Add loop invariant code motion
+        loopPassManagerWithMSSA.addPass(llvm::LICMPass());
+    }
 
-  if (contains(del, enabledOpts)) {
-    // Add loop deletion pass
-    loopPassManager.addPass(llvm::LoopDeletionPass()); 
-  }   
+    if (contains(del, enabledOpts)) {
+        // Add loop deletion pass
+        loopPassManager.addPass(llvm::LoopDeletionPass());
+    }
 
-  // Add loop pass managers with and w/out MemorySSA
-  functionPassManager.addPass(
-      createFunctionToLoopPassAdaptor(std::move(loopPassManagerWithMSSA),true));
+    // Add loop pass managers with and w/out MemorySSA
+    functionPassManager.addPass(
+            createFunctionToLoopPassAdaptor(std::move(loopPassManagerWithMSSA),true));
 
-  functionPassManager.addPass(
-      createFunctionToLoopPassAdaptor(std::move(loopPassManager)));
+    functionPassManager.addPass(
+            createFunctionToLoopPassAdaptor(std::move(loopPassManager)));
 
-  // Passing the function pass manager to the modulePassManager using a function
-  // adaptor, then passing theModule to the ModulePassManager along with
-  // ModuleAnalysisManager.
+    // Passing the function pass manager to the modulePassManager using a function
+    // adaptor, then passing theModule to the ModulePassManager along with
+    // ModuleAnalysisManager.
 
-  modulePassManager.addPass(
-      createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
-  modulePassManager.run(*theModule, moduleAnalysisManager);
+    functionPassManager.addPass(llvm::InstCombinePass());
+
+    modulePassManager.addPass(
+            createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
+    modulePassManager.run(*theModule, moduleAnalysisManager);
 }
