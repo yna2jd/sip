@@ -69,6 +69,7 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
 
     llvm::ModulePassManager modulePassManager;
     llvm::FunctionPassManager functionPassManager;
+    llvm::FunctionPassManager functionPassManager2;
     llvm::LoopPassManager loopPassManagerWithMSSA;
     llvm::LoopPassManager loopPassManager;
 
@@ -109,18 +110,22 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     // adaptor, then passing theModule to the ModulePassManager along with
     // ModuleAnalysisManager.
 
-    if (contains(inln, enabledOpts)) {
-        
-     }
+    
 
     // Passing the function pass manager to the modulePassManager using a function
     // adaptor, then passing theModule to the ModulePassManager along with
     // ModuleAnalysisManager.
- if (contains(recomb, enabledOpts)) {
-    functionPassManager.addPass(llvm::InstCombinePass());
- }
-
+ 
     modulePassManager.addPass(
             createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
+    if (contains(inln, enabledOpts)) {
+        modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams(250)));
+    }
+    
+    if (contains(recomb, enabledOpts)) {
+        functionPassManager2.addPass(llvm::InstCombinePass());
+    }
+    modulePassManager.addPass(createModuleToFunctionPassAdaptor(std::move(functionPassManager2), true));
+
     modulePassManager.run(*theModule, moduleAnalysisManager);
 }
