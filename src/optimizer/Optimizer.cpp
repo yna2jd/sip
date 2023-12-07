@@ -109,7 +109,16 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     // adaptor, then passing theModule to the ModulePassManager along with
     // ModuleAnalysisManager.
 
+    if (contains(inln, enabledOpts)) {
+        
+     }
+
+    // Passing the function pass manager to the modulePassManager using a function
+    // adaptor, then passing theModule to the ModulePassManager along with
+    // ModuleAnalysisManager.
+ if (contains(recomb, enabledOpts)) {
     functionPassManager.addPass(llvm::InstCombinePass());
+ }
 
     modulePassManager.addPass(
             createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
