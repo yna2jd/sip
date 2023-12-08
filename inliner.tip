@@ -17,18 +17,18 @@ main(n) {
   i = 0;
   x = 1;
   while (1000 > i) { 
-    x = getOne(x,i); 
+    x = getPlus(x,i); 
     i = getPlus(i,1); 
   }
   i=1;
   while (1000 > i) { 
-    x = getOne(x,1);
+    x = getPlus(x,1);
     i = getPlus(i,1); 
   }
   y=getPlus(y,1);
   }
   x=getPlus(y,x);
-  return getOne(r,x);
+  return getPlus(r,x);
 }
 
 getOne(n,m) {
