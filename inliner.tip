@@ -1,9 +1,8 @@
 main(n) {
-  var i, r, v;
+  var i, r;
   i = 0;
-  v = 42;
-  r = 0;
-  while (n > i) { 
+  r = 1;
+  while (100 > i) { 
     r = getPlus(r,r); 
     i = i + 1;
   }
