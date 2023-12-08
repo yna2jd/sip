@@ -124,8 +124,8 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     modulePassManager.addPass(
             createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
     if (contains(inln, enabledOpts)) {
-        modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams()));
-        //modulePassManager.addPass(passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
+        //modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams()));
+        modulePassManager.addPass(passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
 
     }
 
