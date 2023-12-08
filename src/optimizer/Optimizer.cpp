@@ -17,6 +17,7 @@
 #include "llvm/Transforms/Scalar/LoopUnrollPass.h"
 #include "llvm/Transforms/Scalar/LoopUnrollAndJamPass.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
+#include "llvm/Transforms/Scalar/LoopBoundSplit.h"
 
 // For logging
 #include "loguru.hpp"
@@ -104,6 +105,10 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
 //        not including deletion pass
 //        loopPassManager.addPass(llvm::LoopDeletionPass());
 //    }
+
+    if (contains(split, enabledOpts)) {
+        loopPassManager.addPass(llvm::LoopBoundSplitPass());
+    }
 
     // Add loop pass managers with and w/out MemorySSA
     functionPassManager.addPass(
