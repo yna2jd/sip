@@ -15,6 +15,7 @@
 #include "llvm/Transforms/IPO/Inliner.h"
 #include "llvm/Transforms/Scalar/LICM.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
+#include "llvm/Transforms/Scalar/LoopUnrollAndJamPass.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
 
 // For logging
@@ -85,7 +86,7 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     functionPassManager.addPass(llvm::SimplifyCFGPass());
 
     if (contains(tail, enabledOpts)) {
-        // Add loop deletion pass
+        // Add tail call recursion elimination pass
         functionPassManager.addPass(llvm::TailCallElimPass());
     }
 
@@ -94,10 +95,10 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         loopPassManagerWithMSSA.addPass(llvm::LICMPass());
     }
 
-    if (contains(del, enabledOpts)) {
-        // Add loop deletion pass
-        loopPassManager.addPass(llvm::LoopDeletionPass());
-    }
+//    if (contains(del, enabledOpts)) {
+//        not including deletion pass
+//        loopPassManager.addPass(llvm::LoopDeletionPass());
+//    }
 
     // Add loop pass managers with and w/out MemorySSA
     functionPassManager.addPass(
@@ -119,9 +120,10 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     modulePassManager.addPass(
             createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
     if (contains(inln, enabledOpts)) {
-        modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams(250)));
+        modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams()));
+        //modulePassManager.addPass(passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
+
     }
-    //modulePassManager.addPass(passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
 
     if (contains(recomb, enabledOpts)) {
         functionPassManager2.addPass(llvm::InstCombinePass());
