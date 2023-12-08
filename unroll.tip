@@ -1,3 +1,12 @@
+/*
+ * Benchmark for loop unroll optimization.
+ *
+ * Compile with and without the -unroll optimization then run:
+ *   time ./unroll 20000
+ * to observe the execution time of the benchmark.
+ * You should be able to see a 12x speedup with loop unrolling.
+ */
+
 main(n){
     var i, k, r;
     r = 0;

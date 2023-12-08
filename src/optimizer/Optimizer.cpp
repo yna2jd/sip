@@ -14,8 +14,8 @@
 #include "llvm/Transforms/Scalar/LICM.h"
 #include "llvm/Transforms/Scalar/ADCE.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
+#include "llvm/Transforms/Scalar/LoopRotation.h"
 #include "llvm/Transforms/Scalar/LoopUnrollPass.h"
-#include "llvm/Transforms/Scalar/LoopUnrollAndJamPass.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
 #include "llvm/Transforms/Scalar/LoopBoundSplit.h"
 
@@ -81,6 +81,12 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     functionPassManager.addPass(llvm::InstCombinePass());
     // Reassociate expressions.
     functionPassManager.addPass(llvm::ReassociatePass());
+
+    if (contains(unroll, enabledOpts)) {
+        // Add unroll and jam pass
+        functionPassManager.addPass(llvm::LoopUnrollPass());
+    }
+
     // Eliminate Common SubExpressions.
     functionPassManager.addPass(llvm::GVNPass());
     // Simplify the control flow graph (deleting unreachable blocks, etc).
@@ -91,20 +97,11 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         functionPassManager.addPass(llvm::TailCallElimPass());
     }
 
-    if (contains(unroll, enabledOpts)) {
-        // Add unroll and jam pass
-        functionPassManager.addPass(llvm::LoopUnrollPass());
+    if (contains(rot, enabledOpts)) {
+        // Add loop rotation
+        loopPassManager.addPass(llvm::LoopRotatePass());
     }
 
-    if (contains(licm, enabledOpts)) {
-        // Add loop invariant code motion
-        loopPassManagerWithMSSA.addPass(llvm::LICMPass());
-    }
-
-//    if (contains(del, enabledOpts)) {
-//        not including deletion pass
-//        loopPassManager.addPass(llvm::LoopDeletionPass());
-//    }
 
     if (contains(bounds, enabledOpts)) {
         loopPassManager.addPass(llvm::LoopBoundSplitPass());
@@ -131,12 +128,9 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
             createModuleToFunctionPassAdaptor(std::move(functionPassManager), true));
     if (contains(inln, enabledOpts)) {
         //modulePassManager.addPass(llvm::ModuleInlinerPass(llvm::getInlineParams()));
-        modulePassManager.addPass(passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
+        modulePassManager.addPass(
+                passBuilder.buildInlinerPipeline(llvm::OptimizationLevel::O3, llvm::ThinOrFullLTOPhase::None));
 
-    }
-
-    if (contains(recomb, enabledOpts)) {
-        functionPassManager2.addPass(llvm::InstCombinePass());
     }
 
 

@@ -1,0 +1,37 @@
+/*
+ * Benchmark for loop rotating optimization.
+ *
+ * Compile with and without the -rot optimization then run:
+ *   time ./rotate 20000
+ * to observe the execution time of the benchmark.
+ * You should be able to see a 2x speedup with loop rotation.
+ */
+
+main(n){
+    var i, r, e;
+    i = 0;
+    if(0 > n) n = 2;
+    while(n > i){
+       r = r + rotate(i);
+       i = i + 1;
+    }
+    return r;
+}
+
+rotate(d){
+    var l, m, n, o, p;
+    l = 0;
+    m = 0;
+    o = 0;
+    p = 0;
+    while(500 > n){
+        n = n + 1;
+        l = 0;
+        while(2 > l){
+            l = l + 1;
+            m = m + 1;
+            o = 0;
+        }
+    }
+    return n;
+}

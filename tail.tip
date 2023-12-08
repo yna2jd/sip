@@ -1,3 +1,12 @@
+/*
+ * Benchmark for tail call recursion elimination optimization.
+ *
+ * Compile with and without the -tail optimization then run:
+ *   time ./tail 20000
+ * to observe the execution time of the benchmark.
+ * You should be able to see a 10x speedup with tail call elimination.
+ */
+
 main(n) {
   var i, o, r;
   i = 0;

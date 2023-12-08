@@ -57,11 +57,9 @@ static cl::list<Optimization> OptimizationList(
 		cl::desc("Available Optimizations:"),
 		cl::values(
             clEnumVal(inln, "Function Inlining"),
-            clEnumVal(dead, "Dead Code Deletion"),
-	    clEnumVal(bounds, "Loop Bound Split"),
+	        clEnumVal(bounds, "Loop Bound Split"),
             clEnumVal(tail, "Tail Call Recursion"),
-			clEnumVal(licm, "Loop Invariant Code Motion"),
-            clEnumVal(recomb, "Repeat Instruction Combination"),
+			clEnumVal(rot, "Loop Rotation"),
 			clEnumVal(unroll, "Loop Unroll")),
 		cl::cat(TIPcat));
 
@@ -71,7 +69,7 @@ static cl::list<Optimization> OptimizationList(
  * using LLVM CommandLine support.  It runs the phases of the compiler in
  * sequence. If an error is detected, via an exception, it reports the error and
  * exits. If there is no error, then the LLVM bitcode is emitted to a file whose
- * name is the providvvved source file suffixed by ".bc".
+ * name is the provided source file suffixed by ".bc".
  */
 int main(int argc, char *argv[]) {
   cl::HideUnrelatedOptions(TIPcat);

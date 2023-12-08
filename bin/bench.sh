@@ -21,7 +21,7 @@ time "${exec}" 20000
 # optimized
 echo ""
 echo  "with ${1}"
-${TIPC} "$1" "${2}"
+${TIPC} "${1}" -unroll "${2}"
 ${TIPCLANG} -w "${2}".bc "${RTLIB}"/tip_rtlib.bc -o "${exec}"
 time "${exec}" 20000
 # cleanup
