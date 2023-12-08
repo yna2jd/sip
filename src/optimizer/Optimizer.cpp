@@ -10,10 +10,9 @@
 #include "llvm/Transforms/Scalar/Reassociate.h"
 #include "llvm/Transforms/Scalar/SimplifyCFG.h"
 #include "llvm/Transforms/Utils/Mem2Reg.h"
-
-// P5 passes
 #include "llvm/Transforms/IPO/Inliner.h"
 #include "llvm/Transforms/Scalar/LICM.h"
+#include "llvm/Transforms/Scalar/DCE.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
 #include "llvm/Transforms/Scalar/LoopUnrollAndJamPass.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
@@ -133,6 +132,12 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
     if (contains(recomb, enabledOpts)) {
         functionPassManager2.addPass(llvm::InstCombinePass());
     }
+
+    if (contains(dead, enabledOpts)) {
+        functionPassManager2.addPass(llvm::DCEPass());
+    }
+
+
     modulePassManager.addPass(createModuleToFunctionPassAdaptor(std::move(functionPassManager2), true));
 
     modulePassManager.run(*theModule, moduleAnalysisManager);
