@@ -1,5 +1,5 @@
 main(n) {
-  var i, r;
+  var i, r, x;
   i = 0;
   r = 1;
   while (1000 > i) { 
