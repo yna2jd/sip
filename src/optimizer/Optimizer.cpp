@@ -90,6 +90,11 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         functionPassManager.addPass(llvm::TailCallElimPass());
     }
 
+    if (contains(jam, enabledOpts)) {
+        // Add unroll and jam pass
+        loopPassManagerWithMSSA.addPass(llvm::LoopUnrollAndJamPass());
+    }
+
     if (contains(licm, enabledOpts)) {
         // Add loop invariant code motion
         loopPassManagerWithMSSA.addPass(llvm::LICMPass());
