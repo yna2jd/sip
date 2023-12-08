@@ -106,7 +106,7 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
 //        loopPassManager.addPass(llvm::LoopDeletionPass());
 //    }
 
-    if (contains(split, enabledOpts)) {
+    if (contains(bounds, enabledOpts)) {
         loopPassManager.addPass(llvm::LoopBoundSplitPass());
     }
 
