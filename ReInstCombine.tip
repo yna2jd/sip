@@ -1,0 +1,17 @@
+main(n) {
+  var i, r;
+  while (n > y) {
+    i = 0;
+    r = n/1000+1;
+    while (1000 > i) { 
+      r = getPlus(r);
+      r = r/2; 
+      i = i+1; 
+    }
+  }
+  return r;
+}
+
+getPlus(r) {
+  return r*2;
+}
