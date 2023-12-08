@@ -15,5 +15,7 @@ main(n) {
 }
 
 getPlus(r) {
+  if (r!=1) {
   return r*2;
+}
 }
