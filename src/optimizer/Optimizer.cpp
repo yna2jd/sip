@@ -14,6 +14,7 @@
 #include "llvm/Transforms/Scalar/LICM.h"
 #include "llvm/Transforms/Scalar/ADCE.h"
 #include "llvm/Transforms/Scalar/LoopDeletion.h"
+#include "llvm/Transforms/Scalar/LoopUnrollPass.h"
 #include "llvm/Transforms/Scalar/LoopUnrollAndJamPass.h"
 #include "llvm/Transforms/Scalar/TailRecursionElimination.h"
 
@@ -89,9 +90,9 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         functionPassManager.addPass(llvm::TailCallElimPass());
     }
 
-    if (contains(jam, enabledOpts)) {
+    if (contains(unroll, enabledOpts)) {
         // Add unroll and jam pass
-        loopPassManagerWithMSSA.addPass(llvm::LoopUnrollAndJamPass());
+        functionPassManager.addPass(llvm::LoopUnrollPass());
     }
 
     if (contains(licm, enabledOpts)) {
