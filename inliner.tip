@@ -6,7 +6,7 @@ main(n) {
     r = getPlus(r,i); 
     i = getPlus(i,1); 
   }
-  i=0;
+  i=1;
   while (10 > i) { 
     r = getPlus(r,r);
     r = getDiv(r,i); 
