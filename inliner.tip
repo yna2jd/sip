@@ -28,15 +28,15 @@ main(n) {
   y=getPlus(y,1);
   }
   x=getPlus(y,x);
-  return getPlus(r,x);
-}
-
-getPlus(n,m) {
-  return n+m;
+  return getOne(r,x);
 }
 
 getOne(n,m) {
   return 1;
+}
+
+getPlus(n,m) {
+  return n+m;
 }
 
 getDiv(n,m) {
