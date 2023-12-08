@@ -58,6 +58,7 @@ static cl::list<Optimization> OptimizationList(
 		cl::values(
             clEnumVal(inln, "Function Inlining"),
             clEnumVal(dead, "Dead Code Deletion"),
+	    clEnumVal(split, "Loop Bound Split"),
             clEnumVal(tail, "Tail Call Recursion"),
 			clEnumVal(licm, "Loop Invariant Code Motion"),
             clEnumVal(recomb, "Repeat Instruction Combination"),
