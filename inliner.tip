@@ -18,7 +18,7 @@ main(n) {
     x = getPlus(x,i); 
     i = getPlus(i,1); 
   }
-  i=0;
+  i=1;
   while (10 > i) { 
     x = getPlus(x,x);
     x = getDiv(x,i); 
