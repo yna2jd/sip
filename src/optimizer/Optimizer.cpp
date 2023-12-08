@@ -90,6 +90,9 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         // Add tail call recursion elimination pass
         functionPassManager.addPass(llvm::TailCallElimPass());
     }
+    if (contains(bounds, enabledOpts)) {
+        loopPassManager.addPass(llvm::LoopBoundSplitPass());
+    }
 
     if (contains(unroll, enabledOpts)) {
         // Add unroll and jam pass
@@ -106,9 +109,7 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
 //        loopPassManager.addPass(llvm::LoopDeletionPass());
 //    }
 
-    if (contains(bounds, enabledOpts)) {
-        loopPassManager.addPass(llvm::LoopBoundSplitPass());
-    }
+
 
     // Add loop pass managers with and w/out MemorySSA
     functionPassManager.addPass(
