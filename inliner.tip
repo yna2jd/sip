@@ -2,13 +2,21 @@ main(n) {
   var i, r;
   i = 0;
   r = 1;
-  while (100 > i) { 
-    r = getPlus(r,r); 
+  while (1000 > i) { 
+    r = getPlus(r,i); 
     i = i + 1;
   }
-  return r;
+  while (10 > i) { 
+    return getPlus(r,r);
+    r = getDiv(r,i); 
+  }
+  return getPlus(r,r);
 }
 
 getPlus(n,m) {
   return n+m;
+}
+
+getDiv(n,m) {
+  return n/m;
 }
