@@ -61,7 +61,7 @@ static cl::list<Optimization> OptimizationList(
             clEnumVal(tail, "Tail Call Recursion"),
 			clEnumVal(licm, "Loop Invariant Code Motion"),
             clEnumVal(recomb, "Repeat Instruction Combination"),
-			clEnumVal(jam, "Loop Unroll And Jam")),
+			clEnumVal(unroll, "Loop Unroll")),
 		cl::cat(TIPcat));
 
 /*! \brief tipc driver.
