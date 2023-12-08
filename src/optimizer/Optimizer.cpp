@@ -139,10 +139,6 @@ void Optimizer::optimize(llvm::Module *theModule,llvm::cl::list<Optimization> &e
         functionPassManager2.addPass(llvm::InstCombinePass());
     }
 
-    if (contains(dead, enabledOpts)) {
-        functionPassManager2.addPass(llvm::ADCEPass());
-    }
-
 
     modulePassManager.addPass(createModuleToFunctionPassAdaptor(std::move(functionPassManager2), true));
 
