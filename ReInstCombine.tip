@@ -1,5 +1,6 @@
 main(n) {
-  var i, r;
+  var i, r, y;
+  y=0;
   while (n > y) {
     i = 0;
     r = n/1000+1;
@@ -8,6 +9,7 @@ main(n) {
       r = r/2; 
       i = i+1; 
     }
+    y=y+1;
   }
   return r;
 }
